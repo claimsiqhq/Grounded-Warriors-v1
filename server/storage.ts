@@ -1,4 +1,4 @@
-import { type User, type InsertUser, type ContactSubmission, type InsertContactSubmission, users, contactSubmissions } from "@shared/schema";
+import { type User, type InsertUser, type ContactSubmission, type InsertContactSubmission, type NewsletterSubscription, type InsertNewsletterSubscription, users, contactSubmissions, newsletterSubscriptions } from "@shared/schema";
 import { db } from "./db";
 import { eq } from "drizzle-orm";
 
@@ -8,6 +8,8 @@ export interface IStorage {
   createUser(user: InsertUser): Promise<User>;
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
   getContactSubmissions(): Promise<ContactSubmission[]>;
+  createNewsletterSubscription(subscription: InsertNewsletterSubscription): Promise<NewsletterSubscription>;
+  getNewsletterSubscriptions(): Promise<NewsletterSubscription[]>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -33,6 +35,15 @@ export class DatabaseStorage implements IStorage {
 
   async getContactSubmissions(): Promise<ContactSubmission[]> {
     return await db.select().from(contactSubmissions).orderBy(contactSubmissions.createdAt);
+  }
+
+  async createNewsletterSubscription(subscription: InsertNewsletterSubscription): Promise<NewsletterSubscription> {
+    const [newsletterSubscription] = await db.insert(newsletterSubscriptions).values(subscription).returning();
+    return newsletterSubscription;
+  }
+
+  async getNewsletterSubscriptions(): Promise<NewsletterSubscription[]> {
+    return await db.select().from(newsletterSubscriptions).orderBy(newsletterSubscriptions.createdAt);
   }
 }
 

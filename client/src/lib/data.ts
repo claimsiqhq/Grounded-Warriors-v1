@@ -106,4 +106,27 @@ export const testimonials = [
     text: "The cold water woke me up. The fire kept me warm. The men kept me honest.",
     author: "Marcus R.",
   },
+  {
+    text: "For the first time in years, I felt permission to just be. No performance. No mask. Just presence.",
+    author: "David K.",
+  },
+  {
+    text: "The descent changed everything. I returned home a different man—more grounded, more alive.",
+    author: "Andrew P.",
+  },
+];
+
+export const facilitators = [
+  {
+    name: "John Shoust",
+    role: "Co-Founder & Lead Facilitator",
+    bio: "John has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines somatic practices, breathwork, and ancient fire ceremony traditions.",
+    image: mayCircle,
+  },
+  {
+    name: "Brian Coones",
+    role: "Co-Founder & Facilitator",
+    bio: "Brian brings expertise in cold water therapy and men's work. A certified breathwork facilitator, he creates space for men to reconnect with their bodies and find strength through surrender.",
+    image: marchWinterHike,
+  },
 ];
