@@ -1,3 +1,6 @@
+import hikingImg from "@assets/generated_images/men_hiking_through_moody_misty_forest.png";
+import mugImg from "@assets/generated_images/close_up_of_hands_holding_a_metal_mug_by_a_fire.png";
+import riverImg from "@assets/generated_images/man_sitting_alone_in_contemplation_by_a_river.png";
 import heroBg from "@assets/generated_images/moody_deep_forest_landscape_at_twilight.png";
 import fireImg from "@assets/generated_images/men_around_a_campfire_at_night.png";
 import waterImg from "@assets/generated_images/cold_water_immersion_in_a_dark_lake.png";
@@ -10,6 +13,9 @@ export const images = {
   water: waterImg,
   logo: logoImg,
   badge: badgeImg,
+  hiking: hikingImg,
+  mug: mugImg,
+  river: riverImg,
 };
 
 export const retreats = [

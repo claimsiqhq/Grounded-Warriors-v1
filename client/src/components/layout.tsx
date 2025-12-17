@@ -23,6 +23,7 @@ export function Navbar() {
     { href: "/about", label: "The Work" },
     { href: "/experience", label: "Experience" },
     { href: "/retreats", label: "Retreats" },
+    { href: "/past-retreats", label: "Past Retreats" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -136,6 +137,7 @@ export function Footer() {
           <Link href="/about" className="hover:text-white transition-colors">The Work</Link>
           <Link href="/experience" className="hover:text-white transition-colors">Experience</Link>
           <Link href="/retreats" className="hover:text-white transition-colors">Retreats</Link>
+          <Link href="/past-retreats" className="hover:text-white transition-colors">Past Retreats</Link>
           <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
         </div>
 
