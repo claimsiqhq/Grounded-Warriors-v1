@@ -29,6 +29,19 @@ export default function PastRetreats() {
         { src: images.julyTipi, alt: "Tipi in forest", position: "center 40%" },
         { src: images.julyCommunalMeal, alt: "Communal meal", position: "center 30%" },
       ],
+    },
+    {
+      id: 3,
+      date: "May 2025",
+      location: "Muskoka, ON",
+      images: [
+        { src: images.mayCircle, alt: "Circle practice", position: "center 40%" },
+        { src: images.mayColdPlunge, alt: "Cold plunge meditation", position: "center 25%" },
+        { src: images.mayLogBalance, alt: "Log balance challenge", position: "center 35%" },
+        { src: images.mayForestWalk, alt: "Forest walk", position: "center 40%" },
+        { src: images.mayMeditation, alt: "Group meditation", position: "center 40%" },
+        { src: images.mayConversation, alt: "Deep conversation", position: "center 30%" },
+      ],
     }
   ];
 

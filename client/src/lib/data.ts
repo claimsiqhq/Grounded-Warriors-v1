@@ -24,6 +24,14 @@ import julyColdPlunge from "@assets/febb25ac-27e4-43b8-9ff9-e676a71caf6e_1766010
 import julyTipi from "@assets/IMG_2831_1766010770475.JPG";
 import julyGroupDeck from "@assets/IMG_2832_1766010770475.JPG";
 
+// May 2025 retreat photos
+import mayCircle from "@assets/DSC03480_1766011513258.JPG";
+import mayForestWalk from "@assets/DSC03647_1766011513259.JPG";
+import mayColdPlunge from "@assets/DSC03772_1766011513259.JPG";
+import mayLogBalance from "@assets/DSC03683_1766011513259.JPG";
+import mayConversation from "@assets/DSC03458_1766011513259.JPG";
+import mayMeditation from "@assets/DSC03744_1766011513259.JPG";
+
 export const images = {
   hero: heroBg,
   fire: fireImg,
@@ -48,6 +56,13 @@ export const images = {
   julyColdPlunge,
   julyTipi,
   julyGroupDeck,
+  // May 2025 retreat photos
+  mayCircle,
+  mayForestWalk,
+  mayColdPlunge,
+  mayLogBalance,
+  mayConversation,
+  mayMeditation,
 };
 
 export const retreats = [
