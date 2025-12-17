@@ -1,0 +1,135 @@
+import { Link, useLocation } from "wouter";
+import { images } from "@/lib/data";
+import { Menu, X } from "lucide-react";
+import { useState, useEffect } from "react";
+import { Button } from "@/components/ui/button";
+import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { motion, AnimatePresence } from "framer-motion";
+
+export function Navbar() {
+  const [location] = useLocation();
+  const [scrolled, setScrolled] = useState(false);
+  const [isOpen, setIsOpen] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      setScrolled(window.scrollY > 50);
+    };
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
+  }, []);
+
+  const links = [
+    { href: "/about", label: "The Work" },
+    { href: "/experience", label: "Experience" },
+    { href: "/retreats", label: "Retreats" },
+    { href: "/contact", label: "Contact" },
+  ];
+
+  return (
+    <nav
+      className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
+        scrolled ? "bg-background/95 backdrop-blur-md py-4 shadow-lg border-b border-white/5" : "bg-transparent py-6"
+      }`}
+    >
+      <div className="container mx-auto px-6 flex items-center justify-between">
+        <Link href="/" className="flex items-center gap-3 group">
+            <img 
+              src={images.logo} 
+              alt="Grounded Warriors" 
+              className="h-10 w-10 object-contain opacity-90 group-hover:opacity-100 transition-opacity invert" 
+            />
+            <span className="font-serif text-xl tracking-widest uppercase font-semibold text-foreground hidden sm:block">
+              Grounded Warriors
+            </span>
+        </Link>
+
+        {/* Desktop Nav */}
+        <div className="hidden md:flex items-center gap-8">
+          {links.map((link) => (
+            <Link key={link.href} href={link.href} className={`text-sm tracking-widest uppercase hover:text-white transition-colors duration-300 ${
+                  location === link.href ? "text-white border-b border-primary" : "text-muted-foreground"
+                }`}>
+                {link.label}
+            </Link>
+          ))}
+          <Link href="/retreats">
+            <Button variant="outline" className="ml-4 border-primary/30 hover:bg-primary hover:text-primary-foreground text-primary uppercase tracking-widest text-xs font-semibold px-6">
+              Apply Now
+            </Button>
+          </Link>
+        </div>
+
+        {/* Mobile Nav */}
+        <div className="md:hidden">
+          <Sheet open={isOpen} onOpenChange={setIsOpen}>
+            <SheetTrigger asChild>
+              <Button variant="ghost" size="icon" className="text-foreground">
+                <Menu className="h-6 w-6" />
+              </Button>
+            </SheetTrigger>
+            <SheetContent side="right" className="bg-background border-l border-white/10 w-full sm:w-[400px]">
+              <div className="flex flex-col h-full justify-center items-center gap-8">
+                {links.map((link) => (
+                  <Link key={link.href} href={link.href} className="font-serif text-3xl text-foreground hover:text-white transition-colors" onClick={() => setIsOpen(false)}>
+                      {link.label}
+                  </Link>
+                ))}
+                <div className="mt-8">
+                  <Link href="/retreats">
+                    <Button 
+                      onClick={() => setIsOpen(false)}
+                      className="bg-primary text-primary-foreground text-lg px-8 py-6 uppercase tracking-widest"
+                    >
+                      Apply Now
+                    </Button>
+                  </Link>
+                </div>
+              </div>
+            </SheetContent>
+          </Sheet>
+        </div>
+      </div>
+    </nav>
+  );
+}
+
+export function Footer() {
+  return (
+    <footer className="bg-card py-20 border-t border-white/5 relative overflow-hidden">
+      {/* Texture overlay could go here */}
+      <div className="container mx-auto px-6 text-center">
+        <img 
+          src={images.logo} 
+          alt="Logo" 
+          className="h-16 w-16 mx-auto mb-8 opacity-50 invert" 
+        />
+        
+        <h3 className="font-serif text-2xl md:text-3xl text-primary mb-8 tracking-wide">
+          "The way down is the way through."
+        </h3>
+
+        <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 text-muted-foreground text-sm tracking-widest uppercase">
+          <Link href="/about" className="hover:text-white transition-colors">The Work</Link>
+          <Link href="/experience" className="hover:text-white transition-colors">Experience</Link>
+          <Link href="/retreats" className="hover:text-white transition-colors">Retreats</Link>
+          <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+        </div>
+
+        <div className="text-white/20 text-xs">
+          &copy; {new Date().getFullYear()} Grounded Warriors. All rights reserved.
+        </div>
+      </div>
+    </footer>
+  );
+}
+
+export function Layout({ children }: { children: React.ReactNode }) {
+  return (
+    <div className="min-h-screen bg-background text-foreground flex flex-col font-sans selection:bg-primary/30 selection:text-white">
+      <Navbar />
+      <main className="flex-grow">{children}</main>
+      <Footer />
+    </div>
+  );
+}
