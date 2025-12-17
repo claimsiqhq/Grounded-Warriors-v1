@@ -32,6 +32,14 @@ import mayLogBalance from "@assets/DSC03683_1766011513259.JPG";
 import mayConversation from "@assets/DSC03458_1766011513259.JPG";
 import mayMeditation from "@assets/DSC03744_1766011513259.JPG";
 
+// March 2025 retreat photos
+import marchIcePlunge from "@assets/PXL_20250309_141603234.MP_1766011933410.jpg";
+import marchSauna from "@assets/20250308_084333_1766011948997.jpg";
+import marchRest from "@assets/20250308_182718_1766011948998.jpg";
+import marchSnowTraining from "@assets/IMG_4074_1766011897386.JPG";
+import marchWinterHike from "@assets/IMG_4108_1766011897387.JPG";
+import marchContemplation from "@assets/IMG_4127_1766011897387.JPG";
+
 export const images = {
   hero: heroBg,
   fire: fireImg,
@@ -63,6 +71,13 @@ export const images = {
   mayLogBalance,
   mayConversation,
   mayMeditation,
+  // March 2025 retreat photos
+  marchIcePlunge,
+  marchSauna,
+  marchRest,
+  marchSnowTraining,
+  marchWinterHike,
+  marchContemplation,
 };
 
 export const retreats = [

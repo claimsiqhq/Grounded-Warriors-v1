@@ -42,6 +42,19 @@ export default function PastRetreats() {
         { src: images.mayMeditation, alt: "Group meditation", position: "center 40%" },
         { src: images.mayConversation, alt: "Deep conversation", position: "center 30%" },
       ],
+    },
+    {
+      id: 4,
+      date: "March 2025",
+      location: "Marmora, ON",
+      images: [
+        { src: images.marchIcePlunge, alt: "Ice plunge", position: "center 35%" },
+        { src: images.marchSauna, alt: "Sauna", position: "center 50%" },
+        { src: images.marchWinterHike, alt: "Winter hike", position: "center 25%" },
+        { src: images.marchContemplation, alt: "Contemplation", position: "center 30%" },
+        { src: images.marchRest, alt: "Rest and recovery", position: "center 50%" },
+        { src: images.marchSnowTraining, alt: "Snow training", position: "center 40%" },
+      ],
     }
   ];
 
