@@ -111,7 +111,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h3 className="text-white text-lg font-serif mb-2">Location</h3>
-                  <p className="text-muted-foreground">Retreats held in WA, NY, and CO.</p>
+                  <p className="text-muted-foreground">Retreats held in Gravenhurst, Marmora, Muskoka, and Algonquin, Ontario.</p>
                 </div>
               </div>
             </div>

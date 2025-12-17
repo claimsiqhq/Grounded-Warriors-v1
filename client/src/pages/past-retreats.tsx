@@ -7,7 +7,7 @@ export default function PastRetreats() {
     {
       id: 1,
       title: "Winter Solstice 2024",
-      location: "Olympic Peninsula, WA",
+      location: "Muskoka, ON",
       images: [
         { src: images.manByFire, alt: "Man by the fire", position: "center 30%" },
         { src: images.coldWaterImmersion, alt: "Cold water immersion", position: "center 20%" },
@@ -18,7 +18,7 @@ export default function PastRetreats() {
     {
       id: 2,
       title: "River's Edge Spring 2024",
-      location: "Catskills, NY",
+      location: "Gravenhurst, ON",
       images: [
         { src: images.coldPlungeCelebration, alt: "Cold plunge celebration", position: "center 25%" },
         { src: images.groundingOutdoors, alt: "Grounding outdoors", position: "center 60%" },
