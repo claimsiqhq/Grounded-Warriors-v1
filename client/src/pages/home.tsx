@@ -3,7 +3,7 @@ import { images, testimonials, retreats } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowDown, Flame, Droplets, Trees, Users } from "lucide-react";
+import { ArrowDown, Flame, Droplets, Wind, Users } from "lucide-react";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -43,7 +43,7 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.2 }}
           >
             <img src={images.logo} alt="Logo" className="w-24 h-auto mx-auto mb-8 opacity-90" />
-            <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight uppercase">
+            <h1 className="font-serif text-4xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight uppercase">
               Transform Through <br className="hidden md:block" /> Descent
             </h1>
             <p className="text-xl md:text-2xl text-primary/80 font-serif italic mb-10 max-w-2xl mx-auto">
@@ -98,12 +98,12 @@ export default function Home() {
             initial="hidden"
             whileInView="show"
             viewport={{ once: true }}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-12"
+            className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12"
           >
             {[
               { icon: Flame, title: "Fire", desc: "Ceremonial spaces to burn what no longer serves you." },
               { icon: Droplets, title: "Water", desc: "Cold immersion to awaken the nervous system and build resilience." },
-              { icon: Trees, title: "Earth", desc: "Deep forest immersion to ground your energy and slow your mind." },
+              { icon: Wind, title: "Air", desc: "Breathwork practices to release tension and expand awareness." },
               { icon: Users, title: "Brotherhood", desc: "A circle of men committed to truth, without posturing." }
             ].map((el, i) => (
               <motion.div 
@@ -111,11 +111,11 @@ export default function Home() {
                 variants={{ hidden: { opacity: 0, y: 20 }, show: { opacity: 1, y: 0 } }}
                 className="text-center group"
               >
-                <div className="w-16 h-16 mx-auto mb-6 rounded-full border border-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
-                  <el.icon size={28} strokeWidth={1.5} />
+                <div className="w-12 h-12 md:w-16 md:h-16 mx-auto mb-4 md:mb-6 rounded-full border border-primary/20 flex items-center justify-center text-primary group-hover:bg-primary group-hover:text-primary-foreground transition-all duration-500">
+                  <el.icon className="w-5 h-5 md:w-7 md:h-7" strokeWidth={1.5} />
                 </div>
-                <h3 className="font-serif text-2xl text-white mb-3">{el.title}</h3>
-                <p className="text-muted-foreground leading-relaxed">{el.desc}</p>
+                <h3 className="font-serif text-lg md:text-2xl text-white mb-2 md:mb-3">{el.title}</h3>
+                <p className="text-muted-foreground text-sm md:text-base leading-relaxed">{el.desc}</p>
               </motion.div>
             ))}
           </motion.div>
@@ -155,7 +155,7 @@ export default function Home() {
             </Link>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
             {retreats.map((retreat) => (
               <motion.div 
                 key={retreat.id}
@@ -167,23 +167,20 @@ export default function Home() {
                     src={retreat.image} 
                     alt={retreat.title} 
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
+                    style={{ objectPosition: "center 35%" }}
                   />
                 </div>
-                <div className="p-8">
-                  <div className="flex justify-between items-start mb-4">
-                    <span className="text-primary text-xs uppercase tracking-widest border border-primary/20 px-3 py-1 rounded-full">
-                      {retreat.date}
-                    </span>
-                    <span className="text-muted-foreground text-sm">{retreat.spots} spots left</span>
-                  </div>
-                  <h4 className="font-serif text-3xl text-white mb-2 group-hover:text-primary transition-colors">{retreat.title}</h4>
-                  <p className="text-muted-foreground mb-6">{retreat.location}</p>
-                  <div className="flex justify-between items-center border-t border-white/5 pt-6">
-                    <span className="text-xl text-white">{retreat.price}</span>
-                    <Button variant="outline" className="border-white/20 text-white hover:bg-white hover:text-black rounded-none uppercase text-xs tracking-widest">
-                      Details
+                <div className="p-6 md:p-8">
+                  <span className="text-primary text-xs uppercase tracking-widest border border-primary/20 px-3 py-1 rounded-full inline-block mb-4">
+                    {retreat.date}
+                  </span>
+                  <h4 className="font-serif text-2xl md:text-3xl text-white mb-2 group-hover:text-primary transition-colors">{retreat.title}</h4>
+                  <p className="text-muted-foreground mb-4">{retreat.location}</p>
+                  <Link href="/contact">
+                    <Button variant="outline" className="w-full md:w-auto border-white/20 text-white hover:bg-white hover:text-black rounded-none uppercase text-xs tracking-widest">
+                      Apply Now
                     </Button>
-                  </div>
+                  </Link>
                 </div>
               </motion.div>
             ))}

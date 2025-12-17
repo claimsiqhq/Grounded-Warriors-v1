@@ -96,9 +96,9 @@ export default function Contact() {
     <Layout>
       <div className="pt-32 pb-20 bg-background min-h-screen">
         <div className="container px-6 mx-auto">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-16 lg:gap-24 mb-32">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-24 mb-20 md:mb-32">
             <div>
-              <h1 className="font-serif text-5xl md:text-7xl text-white mb-6">Begin the Descent</h1>
+              <h1 className="font-serif text-4xl md:text-7xl text-white mb-6">Begin the Descent</h1>
               <p className="text-xl text-muted-foreground leading-relaxed mb-12">
                 Questions about the retreat? Or ready to apply? 
                 Send us a message. We read every single one personally.

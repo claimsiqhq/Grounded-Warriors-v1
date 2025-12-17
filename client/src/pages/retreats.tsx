@@ -10,7 +10,7 @@ export default function Retreats() {
       <div className="pt-32 pb-20 bg-background min-h-screen">
         <div className="container px-6 mx-auto">
           <div className="text-center mb-20">
-            <h1 className="font-serif text-5xl md:text-7xl text-white mb-6">Upcoming Retreats</h1>
+            <h1 className="font-serif text-4xl md:text-7xl text-white mb-6">Upcoming Retreats</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Choose your descent. Spaces are strictly limited to ensure the integrity of the container.
             </p>

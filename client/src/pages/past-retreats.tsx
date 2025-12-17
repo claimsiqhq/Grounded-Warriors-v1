@@ -67,7 +67,7 @@ export default function PastRetreats() {
             animate={{ opacity: 1, y: 0 }}
             className="text-center mb-20"
           >
-            <h1 className="font-serif text-5xl md:text-7xl text-white mb-6">Past Retreats</h1>
+            <h1 className="font-serif text-4xl md:text-7xl text-white mb-6">Past Retreats</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
               Echoes of the work. Snapshots of the descent.
             </p>
