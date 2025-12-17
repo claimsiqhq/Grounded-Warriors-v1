@@ -83,21 +83,17 @@ export const images = {
 export const retreats = [
   {
     id: 1,
-    title: "The Descent - Winter",
-    date: "Dec 8-12, 2025",
-    location: "Muskoka, ON",
-    price: "$2,400",
-    spots: 4,
-    image: manByFire,
+    title: "Winter Descent",
+    date: "March 2025",
+    location: "Marmora, ON",
+    image: marchIcePlunge,
   },
   {
     id: 2,
     title: "Spring Awakening",
-    date: "Mar 15-19, 2026",
-    location: "Algonquin, ON",
-    price: "$2,400",
-    spots: 12,
-    image: coldPlungeCelebration,
+    date: "May 2025",
+    location: "Algonquin Park, ON",
+    image: mayColdPlunge,
   },
 ];
 
