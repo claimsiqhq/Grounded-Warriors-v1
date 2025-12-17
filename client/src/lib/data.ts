@@ -1,13 +1,15 @@
 import heroBg from "@assets/generated_images/moody_deep_forest_landscape_at_twilight.png";
 import fireImg from "@assets/generated_images/men_around_a_campfire_at_night.png";
 import waterImg from "@assets/generated_images/cold_water_immersion_in_a_dark_lake.png";
-import logoImg from "@assets/generated_images/minimalist_tree_roots_logo_symbol.png";
+import logoImg from "@assets/gw-logo-light-256_1765998189312.png";
+import badgeImg from "@assets/gw-badge-400_1765998189310.png";
 
 export const images = {
   hero: heroBg,
   fire: fireImg,
   water: waterImg,
   logo: logoImg,
+  badge: badgeImg,
 };
 
 export const retreats = [

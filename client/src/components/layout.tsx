@@ -37,7 +37,7 @@ export function Navbar() {
             <img 
               src={images.logo} 
               alt="Grounded Warriors" 
-              className="h-10 w-10 object-contain opacity-90 group-hover:opacity-100 transition-opacity invert" 
+              className="h-10 w-10 object-contain opacity-90 group-hover:opacity-100 transition-opacity" 
             />
             <span className="font-serif text-xl tracking-widest uppercase font-semibold text-foreground hidden sm:block">
               Grounded Warriors
@@ -100,9 +100,9 @@ export function Footer() {
       {/* Texture overlay could go here */}
       <div className="container mx-auto px-6 text-center">
         <img 
-          src={images.logo} 
-          alt="Logo" 
-          className="h-16 w-16 mx-auto mb-8 opacity-50 invert" 
+          src={images.badge} 
+          alt="Grounded Warriors Badge" 
+          className="h-24 w-24 mx-auto mb-8 opacity-80 hover:opacity-100 transition-opacity invert" 
         />
         
         <h3 className="font-serif text-2xl md:text-3xl text-primary mb-8 tracking-wide">

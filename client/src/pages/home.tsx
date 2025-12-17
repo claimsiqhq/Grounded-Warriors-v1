@@ -42,7 +42,7 @@ export default function Home() {
             animate={{ opacity: 1, y: 0 }}
             transition={{ duration: 1, delay: 0.2 }}
           >
-            <img src={images.logo} alt="Logo" className="w-24 h-24 mx-auto mb-8 invert opacity-90" />
+            <img src={images.logo} alt="Logo" className="w-24 h-auto mx-auto mb-8 opacity-90" />
             <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight uppercase">
               Transform Through <br className="hidden md:block" /> Descent
             </h1>
