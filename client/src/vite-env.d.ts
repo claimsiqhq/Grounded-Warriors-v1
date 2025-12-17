@@ -20,6 +20,11 @@ declare module "*.png" {
   export default src;
 }
 
+declare module "*.PNG" {
+  const src: string;
+  export default src;
+}
+
 declare module "*.gif" {
   const src: string;
   export default src;

@@ -21,7 +21,15 @@ export default function PastRetreats() {
       id: 2,
       date: "July 2025",
       location: "Gravenhurst, ON",
-      images: [],
+      images: [
+        { src: images.julyGroupDeck, alt: "Group on deck by lake", position: "center 30%" },
+        { src: images.julyGroupForest, alt: "Group in forest", position: "center 35%" },
+        { src: images.julyColdPlunge, alt: "Cold plunge meditation", position: "center 30%" },
+        { src: images.julyLakeSauna, alt: "Lake and sauna", position: "center 40%" },
+        { src: images.julyTipi, alt: "Tipi in forest", position: "center 40%" },
+        { src: images.julyCommunalMeal, alt: "Communal meal", position: "center 30%" },
+        { src: images.julyGroupIndoor, alt: "Group indoors", position: "center 35%" },
+      ],
     }
   ];
 

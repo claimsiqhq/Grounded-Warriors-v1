@@ -15,6 +15,15 @@ import manByFire from "@assets/IMG_4381_1766007733129.JPG";
 import groundingOutdoors from "@assets/IMG_4238_1766007733129.JPG";
 import handsWithMaterials from "@assets/IMG_4396_1766007733129.JPG";
 
+// July 2025 retreat photos
+import julyGroupIndoor from "@assets/IMG_7190_1766009456061.PNG";
+import julyGroupForest from "@assets/1bcda273-0203-4b6a-867d-4e2fadf1cb0e_1766010770474.JPG";
+import julyCommunalMeal from "@assets/IMG_2841_1766010770475.JPG";
+import julyLakeSauna from "@assets/IMG_2843_1766010770475.JPG";
+import julyColdPlunge from "@assets/febb25ac-27e4-43b8-9ff9-e676a71caf6e_1766010770475.JPG";
+import julyTipi from "@assets/IMG_2831_1766010770475.JPG";
+import julyGroupDeck from "@assets/IMG_2832_1766010770475.JPG";
+
 export const images = {
   hero: heroBg,
   fire: fireImg,
@@ -24,13 +33,21 @@ export const images = {
   hiking: hikingImg,
   mug: mugImg,
   river: riverImg,
-  // Real retreat photos
+  // Real retreat photos - November 2025
   coldPlungeCelebration,
   coldWaterImmersion,
   fireBuildingPrep,
   manByFire,
   groundingOutdoors,
   handsWithMaterials,
+  // July 2025 retreat photos
+  julyGroupIndoor,
+  julyGroupForest,
+  julyCommunalMeal,
+  julyLakeSauna,
+  julyColdPlunge,
+  julyTipi,
+  julyGroupDeck,
 };
 
 export const retreats = [
