@@ -7,6 +7,14 @@ import waterImg from "@assets/generated_images/cold_water_immersion_in_a_dark_la
 import logoImg from "@assets/gw-logo-light-256_1765998189312.png";
 import badgeImg from "@assets/gw-badge-400_1765998189310.png";
 
+// Real retreat photos
+import coldPlungeCelebration from "@assets/IMG_4320_1766007733128.JPG";
+import coldWaterImmersion from "@assets/IMG_4292_1766007733129.JPG";
+import fireBuildingPrep from "@assets/IMG_4367_1766007733129.JPG";
+import manByFire from "@assets/IMG_4381_1766007733129.JPG";
+import groundingOutdoors from "@assets/IMG_4238_1766007733129.JPG";
+import handsWithMaterials from "@assets/IMG_4396_1766007733129.JPG";
+
 export const images = {
   hero: heroBg,
   fire: fireImg,
@@ -16,6 +24,13 @@ export const images = {
   hiking: hikingImg,
   mug: mugImg,
   river: riverImg,
+  // Real retreat photos
+  coldPlungeCelebration,
+  coldWaterImmersion,
+  fireBuildingPrep,
+  manByFire,
+  groundingOutdoors,
+  handsWithMaterials,
 };
 
 export const retreats = [
@@ -26,7 +41,7 @@ export const retreats = [
     location: "Olympic Peninsula, WA",
     price: "$2,400",
     spots: 4,
-    image: fireImg,
+    image: manByFire,
   },
   {
     id: 2,
@@ -35,7 +50,7 @@ export const retreats = [
     location: "Catskills, NY",
     price: "$2,400",
     spots: 12,
-    image: heroBg,
+    image: coldPlungeCelebration,
   },
 ];
 

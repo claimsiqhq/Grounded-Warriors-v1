@@ -8,14 +8,14 @@ export default function PastRetreats() {
       id: 1,
       title: "Winter Solstice 2024",
       location: "Olympic Peninsula, WA",
-      images: [images.fire, images.mug, images.hiking],
+      images: [images.manByFire, images.coldWaterImmersion, images.fireBuildingPrep],
       description: "A deep dive into the darkness of winter. We embraced the cold, sat by the fire, and welcomed the return of the light."
     },
     {
       id: 2,
       title: "River's Edge Spring 2024",
       location: "Catskills, NY",
-      images: [images.water, images.river, images.hero],
+      images: [images.coldPlungeCelebration, images.groundingOutdoors, images.handsWithMaterials],
       description: "Washing away the old. Cold plunges at dawn, silence in the forest, and the brotherhood of the circle."
     }
   ];
@@ -53,13 +53,13 @@ export default function PastRetreats() {
                     <p className="text-muted-foreground md:max-w-lg md:ml-auto text-right md:text-left">{event.description}</p>
                  </div>
 
-                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-[500px] md:h-[400px]">
+                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-auto md:h-[500px]">
                     {event.images.map((img, i) => (
-                        <div key={i} className={`relative overflow-hidden group ${i === 0 ? 'md:col-span-2' : ''} h-full`}>
+                        <div key={i} className={`relative overflow-hidden group ${i === 0 ? 'md:col-span-2 md:row-span-1' : ''} h-[300px] md:h-full`}>
                             <img 
                                 src={img} 
                                 alt={`${event.title} photo ${i + 1}`} 
-                                className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 grayscale hover:grayscale-0"
+                                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 grayscale-[30%] hover:grayscale-0"
                             />
                         </div>
                     ))}
