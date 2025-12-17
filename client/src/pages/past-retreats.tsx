@@ -28,7 +28,6 @@ export default function PastRetreats() {
         { src: images.julyLakeSauna, alt: "Lake and sauna", position: "center 40%" },
         { src: images.julyTipi, alt: "Tipi in forest", position: "center 40%" },
         { src: images.julyCommunalMeal, alt: "Communal meal", position: "center 30%" },
-        { src: images.julyGroupIndoor, alt: "Group indoors", position: "center 35%" },
       ],
     }
   ];
