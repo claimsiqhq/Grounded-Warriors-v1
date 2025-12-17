@@ -1,0 +1,239 @@
+# Grounded Warriors Website Design Prompt
+
+## Project Overview
+
+Design a website for **Grounded Warriors**, a men's healing retreat focused on trauma recovery, father wound work, and reconnection through nature. The retreat takes place off-grid in forest settings and includes cold water immersion, fire ceremonies, fitness, and brotherhood.
+
+---
+
+## Brand Essence
+
+**Core Concept:** Strength through descent — the counterintuitive truth that growth comes from going *down* (into the body, into the wound, into the earth) rather than up and out.
+
+**Feeling to Evoke:**
+- Quiet strength, not aggressive masculinity
+- Grounded calm, not anxious energy
+- Warm invitation, not cold exclusivity
+- Ancient wisdom, not trendy wellness
+
+**This is NOT:**
+- A hustle/grind bootcamp
+- Spiritual bypassing retreat
+- Toxic masculinity reinforcement
+- Generic men's group
+
+---
+
+## Color Palette — Forest Depths
+
+| Color | Hex | Usage |
+|-------|-----|-------|
+| Night Forest | #0F1A14 | Primary background, hero sections |
+| Deep Pine | #1E3328 | Cards, containers, secondary backgrounds |
+| Forest Floor | #3D5A47 | Borders, dividers, muted elements |
+| Sage | #8FA68F | Headings, emphasis, icon strokes |
+| Birch | #C9B896 | Body text, CTAs, accent, warmth |
+
+**Background approach:** Dark-dominant. The site should feel like being in a forest at dusk — enveloping, safe, grounded.
+
+---
+
+## Typography
+
+**Headings:** Cormorant Garamond (Google Fonts)
+- Weights: 400, 500, 600, 700
+- Style: Elegant serif with slightly raw character
+- Letter-spacing: Expanded (0.1em - 0.2em for display)
+- Transform: Uppercase for main headings
+
+**Body:** Inter (Google Fonts)
+- Weights: 400, 500, 600
+- Style: Clean, readable sans-serif
+- Provides contrast with serif headings
+
+**Hierarchy Example:**
+```
+GROUNDED WARRIORS          — Cormorant 600, uppercase, 0.15em spacing, Birch
+Transform Through Descent  — Cormorant 400, sentence case, Sage
+Body text paragraph...     — Inter 400, Birch or Sage
+```
+
+---
+
+## Logo Assets (Provided)
+
+- **gw-logo-primary** — Full mark with branches and roots (hero use)
+- **gw-icon** — Simplified for favicon, mobile nav
+- **gw-lockup-vertical** — Mark + wordmark stacked
+- **gw-lockup-horizontal** — Mark + wordmark side by side (header)
+- **gw-badge** — Circular badge (footer, merchandise section)
+- **gw-logo-light** — Single color for dark backgrounds
+- **gw-logo-white** — For photo overlays
+
+---
+
+## Site Structure
+
+### 1. Homepage
+- Hero with atmospheric forest imagery + logo + tagline
+- Brief intro to the mission
+- What to expect (fire, water, brotherhood, nature)
+- Testimonial or quote
+- Upcoming retreat dates
+- CTA to learn more / apply
+
+### 2. About / The Work
+- Philosophy of descent vs. ascent
+- The elements (fire ceremony, cold immersion, forest)
+- Who this is for
+- Who leads the retreats (facilitator bio)
+
+### 3. The Retreat Experience
+- What happens during a retreat
+- Daily rhythm
+- The setting (off-grid, forest)
+- Photo gallery of past retreats (men around fire, forest trails, cold dips — faces can be obscured for privacy)
+
+### 4. Upcoming Retreats
+- List of scheduled retreats with dates, location, pricing
+- Application or registration CTA
+
+### 5. Contact / Apply
+- Application form or inquiry form
+- FAQ section
+- Contact information
+
+---
+
+## Design Direction
+
+### Visual Style
+
+**Photography:**
+- Moody, atmospheric forest imagery
+- Fire at night, embers, smoke
+- Cold water (lakes, rivers, ice)
+- Men in nature (backs, silhouettes, group shots — not corporate headshots)
+- Texture: bark, moss, stone, water
+- Color grade: Cool shadows, warm highlights, desaturated
+
+**Imagery to Avoid:**
+- Stock photo "businessman meditating"
+- Over-produced wellness aesthetics
+- Aggressive/military imagery
+- Anything that feels like a gym or bootcamp
+
+**Texture & Elements:**
+- Subtle grain or noise overlay (organic feel)
+- Soft gradients between dark colors
+- Generous whitespace (or "darkspace")
+- Organic shapes where appropriate (not rigid grids everywhere)
+
+**Icons:**
+- Line-weight icons in Sage or Birch
+- Nature-inspired where possible (fire, water drop, tree, mountain)
+- Simple, not ornate
+
+### Layout Principles
+
+- **Dark-dominant:** Night Forest and Deep Pine backgrounds
+- **Generous spacing:** Let content breathe
+- **Full-bleed imagery:** Hero sections, photo breaks
+- **Cards:** Deep Pine on Night Forest background
+- **Text over images:** Use overlays or choose images with dark areas
+
+### Interactive Elements
+
+**Buttons:**
+- Primary: Birch background, Night Forest text
+- Secondary: Outline in Forest Floor, Sage text
+- Hover: Subtle lightening or border glow
+
+**Links:**
+- Birch with subtle underline
+- Hover: Lighten to #D4C4A6
+
+**Forms:**
+- Dark input fields (Deep Pine background)
+- Birch borders on focus
+- Birch text
+
+---
+
+## Key Sections Detail
+
+### Hero Section
+- Full-viewport height
+- Atmospheric forest/fire background image with dark overlay
+- Logo mark centered or left-aligned
+- Tagline: "Transform Through Descent" or "The Way Down Is The Way Through"
+- Single CTA button
+- Subtle scroll indicator
+
+### The Elements Section
+- 3 or 4 columns/cards for: Fire, Water, Forest, Brotherhood
+- Each with icon, heading, brief description
+- Could use subtle hover animations
+
+### Testimonial Section
+- Large quote in Cormorant Garamond italic
+- Attribution below
+- Background: Subtle texture or blurred forest image
+
+### Retreat Schedule Section
+- Cards for each upcoming retreat
+- Date, location, brief description, price
+- CTA to apply
+- Show "spots remaining" if relevant
+
+### Footer
+- Badge logo centered
+- Navigation links
+- Contact info
+- Social links (Instagram primarily)
+- "The way down is the way through" as closing phrase
+
+---
+
+## Mobile Considerations
+
+- Hamburger menu with full-screen overlay (dark, dramatic)
+- Stack elements vertically
+- Maintain generous spacing
+- Touch-friendly button sizes (min 44px)
+- Logo icon in header, full lockup on menu open
+
+---
+
+## Mood References
+
+**Visual Mood:**
+- Quiet forest at dusk
+- Campfire embers glowing
+- Still water reflecting trees
+- Morning mist through pines
+- Men's silhouettes against firelight
+
+**Tonal Mood:**
+- A deep exhale
+- Coming home
+- Finally being seen
+- Permission to stop performing
+
+---
+
+## Deliverables Needed
+
+1. Homepage (desktop + mobile)
+2. About page
+3. Retreat experience page
+4. Upcoming retreats / schedule page
+5. Contact / apply page
+6. Component library (buttons, cards, forms, navigation)
+7. Style guide summary
+
+---
+
+## Summary
+
+Design a dark, grounded, warm website that feels like an invitation into the forest — not a sales pitch. The aesthetic should communicate quiet strength, ancient wisdom, and genuine welcome. Every element should reinforce the core message: the way to healing is through descent, not escape.
