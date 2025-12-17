@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { images } from "@/lib/data";
-import { Menu, X } from "lucide-react";
+import { Menu, X, Instagram, Facebook, Twitter } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -68,22 +68,45 @@ export function Navbar() {
                 <Menu className="h-6 w-6" />
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="bg-background border-l border-white/10 w-full sm:w-[400px]">
-              <div className="flex flex-col h-full justify-center items-center gap-8">
-                {links.map((link) => (
-                  <Link key={link.href} href={link.href} className="font-serif text-3xl text-foreground hover:text-white transition-colors" onClick={() => setIsOpen(false)}>
-                      {link.label}
-                  </Link>
-                ))}
-                <div className="mt-8">
-                  <Link href="/retreats">
-                    <Button 
-                      onClick={() => setIsOpen(false)}
-                      className="bg-primary text-primary-foreground text-lg px-8 py-6 uppercase tracking-widest"
+            <SheetContent side="right" className="bg-background border-l border-white/10 w-full sm:w-[400px] p-0">
+               <div className="flex flex-col h-full bg-background relative overflow-hidden">
+                 {/* Decorative background logo */}
+                 <div className="absolute -right-20 -bottom-20 opacity-5 pointer-events-none">
+                    <img src={images.logo} className="w-96 h-96 invert" />
+                 </div>
+
+                 <div className="p-8 flex justify-end">
+                    {/* Close button handled by Sheet primitives, but we can add custom if needed */}
+                 </div>
+                 
+                 <div className="flex flex-col justify-center items-center gap-8 flex-1 z-10">
+                  {links.map((link, i) => (
+                    <motion.div
+                      key={link.href}
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: i * 0.1 }}
                     >
-                      Apply Now
-                    </Button>
-                  </Link>
+                      <Link href={link.href} className="font-serif text-3xl text-foreground hover:text-white transition-colors" onClick={() => setIsOpen(false)}>
+                          {link.label}
+                      </Link>
+                    </motion.div>
+                  ))}
+                  <motion.div 
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.4 }}
+                    className="mt-8"
+                  >
+                    <Link href="/retreats">
+                      <Button 
+                        onClick={() => setIsOpen(false)}
+                        className="bg-primary text-primary-foreground text-lg px-8 py-6 uppercase tracking-widest"
+                      >
+                        Apply Now
+                      </Button>
+                    </Link>
+                  </motion.div>
                 </div>
               </div>
             </SheetContent>
@@ -114,6 +137,21 @@ export function Footer() {
           <Link href="/experience" className="hover:text-white transition-colors">Experience</Link>
           <Link href="/retreats" className="hover:text-white transition-colors">Retreats</Link>
           <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+        </div>
+
+        <div className="flex justify-center gap-6 mb-12">
+          <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <Instagram className="w-5 h-5" />
+            <span className="sr-only">Instagram</span>
+          </a>
+          <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <Facebook className="w-5 h-5" />
+            <span className="sr-only">Facebook</span>
+          </a>
+          <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
+            <Twitter className="w-5 h-5" />
+            <span className="sr-only">Twitter</span>
+          </a>
         </div>
 
         <div className="text-white/20 text-xs">
