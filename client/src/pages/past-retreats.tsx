@@ -12,17 +12,16 @@ export default function PastRetreats() {
         { src: images.manByFire, alt: "Man by the fire", position: "center 30%" },
         { src: images.coldWaterImmersion, alt: "Cold water immersion", position: "center 20%" },
         { src: images.fireBuildingPrep, alt: "Fire building preparation", position: "center 25%" },
+        { src: images.coldPlungeCelebration, alt: "Cold plunge celebration", position: "center 25%" },
+        { src: images.groundingOutdoors, alt: "Grounding outdoors", position: "center 60%" },
+        { src: images.handsWithMaterials, alt: "Natural materials", position: "center 40%" },
       ],
     },
     {
       id: 2,
       date: "July 2025",
       location: "Gravenhurst, ON",
-      images: [
-        { src: images.coldPlungeCelebration, alt: "Cold plunge celebration", position: "center 25%" },
-        { src: images.groundingOutdoors, alt: "Grounding outdoors", position: "center 60%" },
-        { src: images.handsWithMaterials, alt: "Natural materials", position: "center 40%" },
-      ],
+      images: [],
     }
   ];
 
@@ -56,18 +55,24 @@ export default function PastRetreats() {
                     <span className="text-primary text-sm uppercase tracking-widest">{event.location}</span>
                  </div>
 
-                 <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-auto md:h-[500px]">
-                    {event.images.map((img, i) => (
-                        <div key={i} className={`relative overflow-hidden group ${i === 0 ? 'md:col-span-2 md:row-span-1' : ''} h-[350px] md:h-full`}>
-                            <img 
-                                src={img.src} 
-                                alt={img.alt}
-                                style={{ objectPosition: img.position }}
-                                className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 grayscale-[30%] hover:grayscale-0"
-                            />
-                        </div>
-                    ))}
-                 </div>
+                 {event.images.length > 0 ? (
+                   <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
+                      {event.images.map((img, i) => (
+                          <div key={i} className="relative overflow-hidden group aspect-[4/5]">
+                              <img 
+                                  src={img.src} 
+                                  alt={img.alt}
+                                  style={{ objectPosition: img.position }}
+                                  className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 grayscale-[30%] hover:grayscale-0"
+                              />
+                          </div>
+                      ))}
+                   </div>
+                 ) : (
+                   <div className="text-center py-16 border border-white/5 bg-card/50">
+                     <p className="text-muted-foreground italic">Photos coming soon</p>
+                   </div>
+                 )}
               </motion.div>
             ))}
           </div>
