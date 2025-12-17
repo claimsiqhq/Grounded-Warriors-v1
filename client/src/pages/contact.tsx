@@ -7,12 +7,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/components/ui/form";
 import { useToast } from "@/hooks/use-toast";
-import {
-  Accordion,
-  AccordionContent,
-  AccordionItem,
-  AccordionTrigger,
-} from "@/components/ui/accordion";
+import { useMutation } from "@tanstack/react-query";
+import { useState } from "react";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -20,9 +16,13 @@ const formSchema = z.object({
   message: z.string().min(10, "Please share a bit more about why you are reaching out"),
 });
 
+type FormValues = z.infer<typeof formSchema>;
+
 export default function Contact() {
   const { toast } = useToast();
-  const form = useForm<z.infer<typeof formSchema>>({
+  const [isSubmitted, setIsSubmitted] = useState(false);
+  
+  const form = useForm<FormValues>({
     resolver: zodResolver(formSchema),
     defaultValues: {
       name: "",
@@ -31,13 +31,42 @@ export default function Contact() {
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
-    toast({
-      title: "Application Received",
-      description: "We will be in touch shortly.",
-    });
-    form.reset();
+  const submitMutation = useMutation({
+    mutationFn: async (values: FormValues) => {
+      const response = await fetch("/api/contact", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify(values),
+      });
+
+      if (!response.ok) {
+        const error = await response.json();
+        throw new Error(error.error || "Failed to submit");
+      }
+
+      return response.json();
+    },
+    onSuccess: () => {
+      setIsSubmitted(true);
+      toast({
+        title: "Application Received",
+        description: "We will be in touch shortly.",
+      });
+      form.reset();
+    },
+    onError: (error: Error) => {
+      toast({
+        title: "Submission Failed",
+        description: error.message,
+        variant: "destructive",
+      });
+    },
+  });
+
+  function onSubmit(values: FormValues) {
+    submitMutation.mutate(values);
   }
 
   const faqs = [
@@ -88,71 +117,105 @@ export default function Contact() {
             </div>
 
             <div className="bg-card border border-white/5 p-8 md:p-12">
-              <Form {...form}>
-                <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-                  <FormField
-                    control={form.control}
-                    name="name"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-primary uppercase tracking-widest text-xs">Name</FormLabel>
-                        <FormControl>
-                          <Input placeholder="Your full name" {...field} className="bg-background border-white/10 focus:border-primary text-white h-12 rounded-none" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="email"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-primary uppercase tracking-widest text-xs">Email</FormLabel>
-                        <FormControl>
-                          <Input placeholder="your@email.com" {...field} className="bg-background border-white/10 focus:border-primary text-white h-12 rounded-none" />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <FormField
-                    control={form.control}
-                    name="message"
-                    render={({ field }) => (
-                      <FormItem>
-                        <FormLabel className="text-primary uppercase tracking-widest text-xs">Why are you here?</FormLabel>
-                        <FormControl>
-                          <Textarea 
-                            placeholder="Tell us a bit about your journey..." 
-                            {...field} 
-                            className="bg-background border-white/10 focus:border-primary text-white min-h-[150px] rounded-none resize-none" 
-                          />
-                        </FormControl>
-                        <FormMessage />
-                      </FormItem>
-                    )}
-                  />
-                  <Button type="submit" className="w-full bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6">
-                    Send Application
+              {isSubmitted ? (
+                <div className="text-center py-12">
+                  <div className="w-16 h-16 rounded-full bg-primary/20 mx-auto mb-6 flex items-center justify-center">
+                    <svg className="w-8 h-8 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+                    </svg>
+                  </div>
+                  <h3 className="font-serif text-2xl text-white mb-3">Thank You</h3>
+                  <p className="text-muted-foreground mb-6">
+                    Your message has been received. We'll be in touch soon.
+                  </p>
+                  <Button 
+                    onClick={() => setIsSubmitted(false)}
+                    variant="outline"
+                    className="border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground"
+                  >
+                    Send Another Message
                   </Button>
-                </form>
-              </Form>
+                </div>
+              ) : (
+                <Form {...form}>
+                  <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
+                    <FormField
+                      control={form.control}
+                      name="name"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-primary uppercase tracking-widest text-xs">Name</FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder="Your full name" 
+                              {...field} 
+                              className="bg-background border-white/10 focus:border-primary text-white h-12 rounded-none" 
+                              disabled={submitMutation.isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="email"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-primary uppercase tracking-widest text-xs">Email</FormLabel>
+                          <FormControl>
+                            <Input 
+                              placeholder="your@email.com" 
+                              {...field} 
+                              className="bg-background border-white/10 focus:border-primary text-white h-12 rounded-none" 
+                              disabled={submitMutation.isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <FormField
+                      control={form.control}
+                      name="message"
+                      render={({ field }) => (
+                        <FormItem>
+                          <FormLabel className="text-primary uppercase tracking-widest text-xs">Why are you here?</FormLabel>
+                          <FormControl>
+                            <Textarea 
+                              placeholder="Tell us a bit about your journey..." 
+                              {...field} 
+                              className="bg-background border-white/10 focus:border-primary text-white min-h-[150px] rounded-none resize-none" 
+                              disabled={submitMutation.isPending}
+                            />
+                          </FormControl>
+                          <FormMessage />
+                        </FormItem>
+                      )}
+                    />
+                    <Button 
+                      type="submit" 
+                      className="w-full bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
+                      disabled={submitMutation.isPending}
+                    >
+                      {submitMutation.isPending ? "Sending..." : "Send Application"}
+                    </Button>
+                  </form>
+                </Form>
+              )}
             </div>
           </div>
 
           <div className="max-w-3xl mx-auto border-t border-white/10 pt-20">
             <h2 className="font-serif text-3xl text-white mb-10 text-center">Frequently Asked Questions</h2>
-            <Accordion type="single" collapsible className="w-full">
+            <div className="space-y-6">
               {faqs.map((faq, index) => (
-                <AccordionItem key={index} value={`item-${index}`} className="border-white/10">
-                  <AccordionTrigger className="text-white hover:text-primary font-serif text-lg py-6">{faq.question}</AccordionTrigger>
-                  <AccordionContent className="text-muted-foreground leading-relaxed pb-6">
-                    {faq.answer}
-                  </AccordionContent>
-                </AccordionItem>
+                <div key={index} className="border-b border-white/10 pb-6">
+                  <h3 className="text-white hover:text-primary font-serif text-lg mb-3 cursor-pointer">{faq.question}</h3>
+                  <p className="text-muted-foreground leading-relaxed">{faq.answer}</p>
+                </div>
               ))}
-            </Accordion>
+            </div>
           </div>
         </div>
       </div>
