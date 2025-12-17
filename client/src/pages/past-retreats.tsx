@@ -8,14 +8,22 @@ export default function PastRetreats() {
       id: 1,
       title: "Winter Solstice 2024",
       location: "Olympic Peninsula, WA",
-      images: [images.manByFire, images.coldWaterImmersion, images.fireBuildingPrep],
+      images: [
+        { src: images.manByFire, alt: "Man by the fire", position: "center 30%" },
+        { src: images.coldWaterImmersion, alt: "Cold water immersion", position: "center 20%" },
+        { src: images.fireBuildingPrep, alt: "Fire building preparation", position: "center 25%" },
+      ],
       description: "A deep dive into the darkness of winter. We embraced the cold, sat by the fire, and welcomed the return of the light."
     },
     {
       id: 2,
       title: "River's Edge Spring 2024",
       location: "Catskills, NY",
-      images: [images.coldPlungeCelebration, images.groundingOutdoors, images.handsWithMaterials],
+      images: [
+        { src: images.coldPlungeCelebration, alt: "Cold plunge celebration", position: "center 25%" },
+        { src: images.groundingOutdoors, alt: "Grounding outdoors", position: "center 60%" },
+        { src: images.handsWithMaterials, alt: "Natural materials", position: "center 40%" },
+      ],
       description: "Washing away the old. Cold plunges at dawn, silence in the forest, and the brotherhood of the circle."
     }
   ];
@@ -55,10 +63,11 @@ export default function PastRetreats() {
 
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-auto md:h-[500px]">
                     {event.images.map((img, i) => (
-                        <div key={i} className={`relative overflow-hidden group ${i === 0 ? 'md:col-span-2 md:row-span-1' : ''} h-[300px] md:h-full`}>
+                        <div key={i} className={`relative overflow-hidden group ${i === 0 ? 'md:col-span-2 md:row-span-1' : ''} h-[350px] md:h-full`}>
                             <img 
-                                src={img} 
-                                alt={`${event.title} photo ${i + 1}`} 
+                                src={img.src} 
+                                alt={img.alt}
+                                style={{ objectPosition: img.position }}
                                 className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 grayscale-[30%] hover:grayscale-0"
                             />
                         </div>

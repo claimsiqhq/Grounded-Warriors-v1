@@ -19,12 +19,12 @@ export default function Experience() {
   ];
 
   const galleryImages = [
-    { src: images.coldPlungeCelebration, alt: "Cold Plunge Celebration" },
-    { src: images.coldWaterImmersion, alt: "Cold Water Immersion" },
-    { src: images.manByFire, alt: "Building Fire" },
-    { src: images.groundingOutdoors, alt: "Grounding Practice" },
-    { src: images.fireBuildingPrep, alt: "Fire Preparation" },
-    { src: images.handsWithMaterials, alt: "Natural Materials" },
+    { src: images.coldPlungeCelebration, alt: "Cold Plunge Celebration", position: "center 25%" },
+    { src: images.coldWaterImmersion, alt: "Cold Water Immersion", position: "center 20%" },
+    { src: images.manByFire, alt: "Building Fire", position: "center 30%" },
+    { src: images.groundingOutdoors, alt: "Grounding Practice", position: "center 60%" },
+    { src: images.fireBuildingPrep, alt: "Fire Preparation", position: "center 25%" },
+    { src: images.handsWithMaterials, alt: "Natural Materials", position: "center 40%" },
   ];
 
   return (
@@ -75,7 +75,8 @@ export default function Experience() {
                       <div className="overflow-hidden aspect-[3/4] border border-white/5 bg-card">
                          <img 
                           src={img.src} 
-                          alt={img.alt} 
+                          alt={img.alt}
+                          style={{ objectPosition: img.position }}
                           className="w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-700 grayscale-[30%] hover:grayscale-0" 
                         />
                       </div>
