@@ -119,7 +119,7 @@ export const testimonials = [
 export const facilitators = [
   {
     name: "John Shoust",
-    role: "Co-Founder & Lead Facilitator",
+    role: "Co-Founder & Facilitator",
     bio: "John has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines somatic practices, breathwork, and ancient fire ceremony traditions.",
     image: mayCircle,
   },
