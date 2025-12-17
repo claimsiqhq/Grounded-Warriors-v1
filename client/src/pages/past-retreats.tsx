@@ -6,25 +6,23 @@ export default function PastRetreats() {
   const pastEvents = [
     {
       id: 1,
-      title: "Winter Solstice 2024",
-      location: "Muskoka, ON",
+      date: "November 2025",
+      location: "Marmora, ON",
       images: [
         { src: images.manByFire, alt: "Man by the fire", position: "center 30%" },
         { src: images.coldWaterImmersion, alt: "Cold water immersion", position: "center 20%" },
         { src: images.fireBuildingPrep, alt: "Fire building preparation", position: "center 25%" },
       ],
-      description: "A deep dive into the darkness of winter. We embraced the cold, sat by the fire, and welcomed the return of the light."
     },
     {
       id: 2,
-      title: "River's Edge Spring 2024",
+      date: "July 2025",
       location: "Gravenhurst, ON",
       images: [
         { src: images.coldPlungeCelebration, alt: "Cold plunge celebration", position: "center 25%" },
         { src: images.groundingOutdoors, alt: "Grounding outdoors", position: "center 60%" },
         { src: images.handsWithMaterials, alt: "Natural materials", position: "center 40%" },
       ],
-      description: "Washing away the old. Cold plunges at dawn, silence in the forest, and the brotherhood of the circle."
     }
   ];
 
@@ -53,12 +51,9 @@ export default function PastRetreats() {
                 transition={{ duration: 0.8 }}
                 className="relative"
               >
-                 <div className="flex flex-col md:flex-row items-end gap-6 mb-8 border-b border-white/5 pb-8">
-                    <div>
-                        <span className="text-primary text-xs uppercase tracking-widest block mb-2">{event.location}</span>
-                        <h2 className="font-serif text-4xl text-white">{event.title}</h2>
-                    </div>
-                    <p className="text-muted-foreground md:max-w-lg md:ml-auto text-right md:text-left">{event.description}</p>
+                 <div className="mb-8 border-b border-white/5 pb-8">
+                    <h2 className="font-serif text-4xl text-white mb-2">{event.date}</h2>
+                    <span className="text-primary text-sm uppercase tracking-widest">{event.location}</span>
                  </div>
 
                  <div className="grid grid-cols-1 md:grid-cols-3 gap-4 h-auto md:h-[500px]">
