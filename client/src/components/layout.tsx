@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { images } from "@/lib/data";
-import { Menu, X, Instagram, Facebook, Twitter } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
@@ -139,21 +139,6 @@ export function Footer() {
           <Link href="/retreats" className="hover:text-white transition-colors">Retreats</Link>
           <Link href="/past-retreats" className="hover:text-white transition-colors">Past Retreats</Link>
           <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
-        </div>
-
-        <div className="flex justify-center gap-6 mb-12">
-          <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-            <Instagram className="w-5 h-5" />
-            <span className="sr-only">Instagram</span>
-          </a>
-          <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-            <Facebook className="w-5 h-5" />
-            <span className="sr-only">Facebook</span>
-          </a>
-          <a href="#" className="text-muted-foreground hover:text-primary transition-colors">
-            <Twitter className="w-5 h-5" />
-            <span className="sr-only">Twitter</span>
-          </a>
         </div>
 
         <div className="text-white/20 text-xs">
