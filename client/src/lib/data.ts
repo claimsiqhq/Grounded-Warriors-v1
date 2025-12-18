@@ -39,6 +39,7 @@ import marchRest from "@assets/20250308_182718_1766011948998.jpg";
 import marchSnowTraining from "@assets/IMG_4074_1766011897386.JPG";
 import marchWinterHike from "@assets/IMG_4108_1766011897387.JPG";
 import marchContemplation from "@assets/IMG_4127_1766011897387.JPG";
+import johnPhoto from "@assets/IMG_4367_1766062777331.jpeg";
 
 export const images = {
   hero: heroBg,
@@ -121,7 +122,7 @@ export const facilitators = [
     name: "John Shoust",
     role: "Co-Founder & Facilitator",
     bio: "John has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines somatic practices, breathwork, and ancient fire ceremony traditions.",
-    image: mayCircle,
+    image: johnPhoto,
   },
   {
     name: "Brian Coones",
