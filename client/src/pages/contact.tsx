@@ -9,6 +9,7 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -208,14 +209,23 @@ export default function Contact() {
 
           <div className="max-w-3xl mx-auto border-t border-white/10 pt-20">
             <h2 className="font-serif text-3xl text-white mb-10 text-center">Frequently Asked Questions</h2>
-            <div className="space-y-6">
+            <Accordion type="single" collapsible className="space-y-4">
               {faqs.map((faq, index) => (
-                <div key={index} className="border-b border-white/10 pb-6">
-                  <h3 className="text-white hover:text-primary font-serif text-lg mb-3 cursor-pointer">{faq.question}</h3>
-                  <p className="text-muted-foreground leading-relaxed">{faq.answer}</p>
-                </div>
+                <AccordionItem 
+                  key={index} 
+                  value={`faq-${index}`}
+                  className="border border-white/10 px-6 data-[state=open]:border-primary/30"
+                  data-testid={`accordion-faq-${index}`}
+                >
+                  <AccordionTrigger className="text-white hover:text-primary font-serif text-lg text-left py-6 hover:no-underline">
+                    {faq.question}
+                  </AccordionTrigger>
+                  <AccordionContent className="text-muted-foreground leading-relaxed pb-6">
+                    {faq.answer}
+                  </AccordionContent>
+                </AccordionItem>
               ))}
-            </div>
+            </Accordion>
           </div>
         </div>
       </div>

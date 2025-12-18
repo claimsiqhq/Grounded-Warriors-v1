@@ -287,6 +287,35 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Video Highlights Section */}
+      <section className="py-24 bg-card border-y border-white/5">
+        <div className="container px-6 mx-auto">
+          <motion.div {...fadeIn} className="text-center mb-16">
+            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Experience</h2>
+            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">See the Descent</h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Words can only say so much. Watch what happens when men gather in the wild.
+            </p>
+          </motion.div>
+
+          <div className="max-w-4xl mx-auto">
+            <motion.div {...fadeIn} className="relative aspect-video bg-background/50 border border-white/10 overflow-hidden group">
+              <iframe
+                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                title="Grounded Warriors Retreat Highlights"
+                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+                data-testid="video-highlight-main"
+              />
+            </motion.div>
+            <p className="text-center text-muted-foreground text-sm mt-4">
+              Highlights from our November 2025 retreat in Gravenhurst
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Countdown to Next Retreat */}
       <ParallaxSection image={images.water}>
         <section className="py-24">
