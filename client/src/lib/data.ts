@@ -39,7 +39,7 @@ import marchRest from "@assets/20250308_182718_1766011948998.jpg";
 import marchSnowTraining from "@assets/IMG_4074_1766011897386.JPG";
 import marchWinterHike from "@assets/IMG_4108_1766011897387.JPG";
 import marchContemplation from "@assets/IMG_4127_1766011897387.JPG";
-import johnPhoto from "@assets/IMG_4367_1766062777331.jpeg";
+import johnPhoto from "@assets/IMG_4118_1766062885957.jpeg";
 
 export const images = {
   hero: heroBg,
