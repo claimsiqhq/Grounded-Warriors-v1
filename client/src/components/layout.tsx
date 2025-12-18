@@ -134,11 +134,11 @@ export function Footer() {
         </h3>
 
         <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 text-muted-foreground text-sm tracking-widest uppercase">
-          <Link href="/about" className="hover:text-white transition-colors">The Work</Link>
-          <Link href="/experience" className="hover:text-white transition-colors">Experience</Link>
-          <Link href="/retreats" className="hover:text-white transition-colors">Retreats</Link>
-          <Link href="/past-retreats" className="hover:text-white transition-colors">Past Retreats</Link>
-          <Link href="/contact" className="hover:text-white transition-colors">Contact</Link>
+          <Link href="/about"><span className="hover:text-white transition-colors cursor-pointer">The Work</span></Link>
+          <Link href="/experience"><span className="hover:text-white transition-colors cursor-pointer">Experience</span></Link>
+          <Link href="/retreats"><span className="hover:text-white transition-colors cursor-pointer">Retreats</span></Link>
+          <Link href="/past-retreats"><span className="hover:text-white transition-colors cursor-pointer">Past Retreats</span></Link>
+          <Link href="/contact"><span className="hover:text-white transition-colors cursor-pointer">Contact</span></Link>
         </div>
 
         <div className="text-white/20 text-xs">
