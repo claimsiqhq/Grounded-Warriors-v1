@@ -3,6 +3,13 @@ import Stripe from 'stripe';
 let connectionSettings: any;
 
 async function getCredentials() {
+  if (process.env.STRIPE_SECRET_KEY && process.env.STRIPE_PUBLISHABLE_KEY) {
+    return {
+      publishableKey: process.env.STRIPE_PUBLISHABLE_KEY,
+      secretKey: process.env.STRIPE_SECRET_KEY,
+    };
+  }
+
   const hostname = process.env.REPLIT_CONNECTORS_HOSTNAME;
   const xReplitToken = process.env.REPL_IDENTITY
     ? 'repl ' + process.env.REPL_IDENTITY
@@ -10,8 +17,8 @@ async function getCredentials() {
       ? 'depl ' + process.env.WEB_REPL_RENEWAL
       : null;
 
-  if (!xReplitToken) {
-    throw new Error('Stripe credentials not available. Please configure Stripe in the Publish pane with your live API keys.');
+  if (!xReplitToken || !hostname) {
+    throw new Error('Stripe credentials not available. Please add STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY environment variables.');
   }
 
   const connectorName = 'stripe';
@@ -23,25 +30,29 @@ async function getCredentials() {
   url.searchParams.set('connector_names', connectorName);
   url.searchParams.set('environment', targetEnvironment);
 
-  const response = await fetch(url.toString(), {
-    headers: {
-      'Accept': 'application/json',
-      'X_REPLIT_TOKEN': xReplitToken
+  try {
+    const response = await fetch(url.toString(), {
+      headers: {
+        'Accept': 'application/json',
+        'X_REPLIT_TOKEN': xReplitToken
+      }
+    });
+
+    const data = await response.json();
+    
+    connectionSettings = data.items?.[0];
+
+    if (connectionSettings?.settings?.publishable && connectionSettings?.settings?.secret) {
+      return {
+        publishableKey: connectionSettings.settings.publishable,
+        secretKey: connectionSettings.settings.secret,
+      };
     }
-  });
-
-  const data = await response.json();
-  
-  connectionSettings = data.items?.[0];
-
-  if (!connectionSettings || (!connectionSettings.settings.publishable || !connectionSettings.settings.secret)) {
-    throw new Error(`Stripe ${targetEnvironment} connection not configured. Please add your Stripe API keys in the Publish pane.`);
+  } catch (error) {
+    console.log('Could not fetch from Replit Connectors, falling back to env vars');
   }
 
-  return {
-    publishableKey: connectionSettings.settings.publishable,
-    secretKey: connectionSettings.settings.secret,
-  };
+  throw new Error('Stripe credentials not configured. Please add STRIPE_SECRET_KEY and STRIPE_PUBLISHABLE_KEY as secrets.');
 }
 
 export async function getUncachableStripeClient() {
