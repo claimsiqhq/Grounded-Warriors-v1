@@ -88,7 +88,7 @@ export const retreats = [
     date: "March 2026",
     location: "Marmora, ON",
     image: marchIcePlunge,
-    depositAmount: 350,
+    depositAmount: 250,
     fullAmount: 1450,
   },
   {
@@ -97,7 +97,7 @@ export const retreats = [
     date: "May 2026",
     location: "Algonquin Park, ON",
     image: mayColdPlunge,
-    depositAmount: 350,
+    depositAmount: 250,
     fullAmount: 1450,
   },
 ];
