@@ -121,7 +121,7 @@ function ParallaxSection({ image, children, speed = 0.5 }: { image: string; chil
 }
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,

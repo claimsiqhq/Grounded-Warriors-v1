@@ -88,17 +88,14 @@ export function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
                     >
-                      <a 
-                        href={link.href} 
-                        className="font-serif text-3xl text-foreground hover:text-white transition-colors"
-                        onClick={(e) => {
-                          e.preventDefault();
-                          setIsOpen(false);
-                          window.location.href = link.href;
-                        }}
+                      <Link 
+                        href={link.href}
+                        onClick={() => setIsOpen(false)}
                       >
+                        <span className="font-serif text-3xl text-foreground hover:text-white transition-colors block py-2 px-4">
                           {link.label}
-                      </a>
+                        </span>
+                      </Link>
                     </motion.div>
                   ))}
                   <motion.div 
@@ -142,11 +139,11 @@ export function Footer() {
         </h3>
 
         <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 text-muted-foreground text-sm tracking-widest uppercase">
-          <a href="/about" className="hover:text-white transition-colors cursor-pointer">The Work</a>
-          <a href="/experience" className="hover:text-white transition-colors cursor-pointer">Experience</a>
-          <a href="/retreats" className="hover:text-white transition-colors cursor-pointer">Retreats</a>
-          <a href="/past-retreats" className="hover:text-white transition-colors cursor-pointer">Past Retreats</a>
-          <a href="/contact" className="hover:text-white transition-colors cursor-pointer">Contact</a>
+          <Link href="/about"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">The Work</span></Link>
+          <Link href="/experience"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Experience</span></Link>
+          <Link href="/retreats"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Retreats</span></Link>
+          <Link href="/past-retreats"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Past Retreats</span></Link>
+          <Link href="/contact"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Contact</span></Link>
         </div>
 
         <div className="text-white/20 text-xs">
