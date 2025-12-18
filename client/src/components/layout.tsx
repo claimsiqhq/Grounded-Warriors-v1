@@ -88,9 +88,17 @@ export function Navbar() {
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: i * 0.1 }}
                     >
-                      <Link href={link.href} className="font-serif text-3xl text-foreground hover:text-white transition-colors" onClick={() => setIsOpen(false)}>
+                      <a 
+                        href={link.href} 
+                        className="font-serif text-3xl text-foreground hover:text-white transition-colors"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          setIsOpen(false);
+                          window.location.href = link.href;
+                        }}
+                      >
                           {link.label}
-                      </Link>
+                      </a>
                     </motion.div>
                   ))}
                   <motion.div 
@@ -134,11 +142,11 @@ export function Footer() {
         </h3>
 
         <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 text-muted-foreground text-sm tracking-widest uppercase">
-          <Link href="/about"><span className="hover:text-white transition-colors cursor-pointer">The Work</span></Link>
-          <Link href="/experience"><span className="hover:text-white transition-colors cursor-pointer">Experience</span></Link>
-          <Link href="/retreats"><span className="hover:text-white transition-colors cursor-pointer">Retreats</span></Link>
-          <Link href="/past-retreats"><span className="hover:text-white transition-colors cursor-pointer">Past Retreats</span></Link>
-          <Link href="/contact"><span className="hover:text-white transition-colors cursor-pointer">Contact</span></Link>
+          <a href="/about" className="hover:text-white transition-colors cursor-pointer">The Work</a>
+          <a href="/experience" className="hover:text-white transition-colors cursor-pointer">Experience</a>
+          <a href="/retreats" className="hover:text-white transition-colors cursor-pointer">Retreats</a>
+          <a href="/past-retreats" className="hover:text-white transition-colors cursor-pointer">Past Retreats</a>
+          <a href="/contact" className="hover:text-white transition-colors cursor-pointer">Contact</a>
         </div>
 
         <div className="text-white/20 text-xs">
