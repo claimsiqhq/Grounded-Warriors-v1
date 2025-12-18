@@ -84,14 +84,14 @@ export const retreats = [
   {
     id: 1,
     title: "Winter Descent",
-    date: "March 2025",
+    date: "March 2026",
     location: "Marmora, ON",
     image: marchIcePlunge,
   },
   {
     id: 2,
     title: "Spring Awakening",
-    date: "May 2025",
+    date: "May 2026",
     location: "Algonquin Park, ON",
     image: mayColdPlunge,
   },

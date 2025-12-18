@@ -135,7 +135,7 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  const nextRetreatDate = new Date("2025-03-15");
+  const nextRetreatDate = new Date("2026-03-01");
 
   return (
     <Layout>
@@ -293,7 +293,7 @@ export default function Home() {
           <div className="container px-6 mx-auto text-center">
             <motion.div {...fadeIn}>
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Next Retreat</h2>
-              <h3 className="font-serif text-3xl md:text-4xl text-white mb-8">Winter Descent — March 2025</h3>
+              <h3 className="font-serif text-3xl md:text-4xl text-white mb-8">Winter Descent — March 2026</h3>
               <Countdown targetDate={nextRetreatDate} />
               <div className="mt-10">
                 <Link href="/retreats">
