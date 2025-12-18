@@ -11,7 +11,7 @@ async function getCredentials() {
       : null;
 
   if (!xReplitToken) {
-    throw new Error('X_REPLIT_TOKEN not found for repl/depl');
+    throw new Error('Stripe credentials not available. Please configure Stripe in the Publish pane with your live API keys.');
   }
 
   const connectorName = 'stripe';
@@ -35,7 +35,7 @@ async function getCredentials() {
   connectionSettings = data.items?.[0];
 
   if (!connectionSettings || (!connectionSettings.settings.publishable || !connectionSettings.settings.secret)) {
-    throw new Error(`Stripe ${targetEnvironment} connection not found`);
+    throw new Error(`Stripe ${targetEnvironment} connection not configured. Please add your Stripe API keys in the Publish pane.`);
   }
 
   return {

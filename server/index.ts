@@ -30,10 +30,8 @@ async function initStripe() {
   const databaseUrl = process.env.DATABASE_URL;
 
   if (!databaseUrl) {
-    throw new Error(
-      'DATABASE_URL environment variable is required for Stripe integration. ' +
-      'Please create a PostgreSQL database first.'
-    );
+    console.log('DATABASE_URL not available, skipping Stripe initialization');
+    return;
   }
 
   try {
@@ -68,9 +66,8 @@ async function initStripe() {
       .catch((err: any) => {
         console.error('Error syncing Stripe data:', err);
       });
-  } catch (error) {
-    console.error('Failed to initialize Stripe:', error);
-    throw error;
+  } catch (error: any) {
+    console.log('Stripe initialization skipped:', error.message);
   }
 }
 
