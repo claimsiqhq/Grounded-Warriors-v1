@@ -298,19 +298,19 @@ export default function Home() {
             </p>
           </motion.div>
 
-          <div className="max-w-4xl mx-auto">
-            <motion.div {...fadeIn} className="relative aspect-video bg-background/50 border border-white/10 overflow-hidden group">
+          <div className="max-w-md mx-auto">
+            <motion.div {...fadeIn} className="relative aspect-[9/16] bg-background/50 border border-white/10 overflow-hidden group">
               <iframe
-                src="https://www.youtube.com/embed/dQw4w9WgXcQ"
+                src="https://player.vimeo.com/video/1152373112?h=&badge=0&autopause=0&player_id=0&app_id=58479"
                 title="Grounded Warriors Retreat Highlights"
-                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                allow="autoplay; fullscreen; picture-in-picture"
                 allowFullScreen
                 className="absolute inset-0 w-full h-full"
                 data-testid="video-highlight-main"
               />
             </motion.div>
             <p className="text-center text-muted-foreground text-sm mt-4">
-              Highlights from our November 2025 retreat in Gravenhurst
+              The Grounded Warriors experience
             </p>
           </div>
         </div>

@@ -8,6 +8,7 @@ export default function PastRetreats() {
       id: 1,
       date: "November 2025",
       location: "Marmora, ON",
+      videoUrl: null,
       images: [
         { src: images.manByFire, alt: "Man by the fire", position: "center 30%" },
         { src: images.coldWaterImmersion, alt: "Cold water immersion", position: "center 20%" },
@@ -21,6 +22,7 @@ export default function PastRetreats() {
       id: 2,
       date: "July 2025",
       location: "Gravenhurst, ON",
+      videoUrl: "https://player.vimeo.com/video/1152370232?badge=0&autopause=0&player_id=0&app_id=58479",
       images: [
         { src: images.julyGroupDeck, alt: "Group on deck by lake", position: "center 30%" },
         { src: images.julyGroupForest, alt: "Group in forest", position: "center 35%" },
@@ -34,6 +36,7 @@ export default function PastRetreats() {
       id: 3,
       date: "May 2025",
       location: "Muskoka, ON",
+      videoUrl: "https://player.vimeo.com/video/1152369947?badge=0&autopause=0&player_id=0&app_id=58479",
       images: [
         { src: images.mayCircle, alt: "Circle practice", position: "center 40%" },
         { src: images.mayColdPlunge, alt: "Cold plunge meditation", position: "center 25%" },
@@ -47,6 +50,7 @@ export default function PastRetreats() {
       id: 4,
       date: "March 2025",
       location: "Marmora, ON",
+      videoUrl: "https://player.vimeo.com/video/1152369427?badge=0&autopause=0&player_id=0&app_id=58479",
       images: [
         { src: images.marchIcePlunge, alt: "Ice plunge", position: "center 35%" },
         { src: images.marchSauna, alt: "Sauna", position: "center 50%" },
@@ -87,6 +91,24 @@ export default function PastRetreats() {
                     <h2 className="font-serif text-4xl text-white mb-2">{event.date}</h2>
                     <span className="text-primary text-sm uppercase tracking-widest">{event.location}</span>
                  </div>
+
+                 {event.videoUrl && (
+                   <div className="mb-8">
+                     <div className="max-w-xs mx-auto md:mx-0">
+                       <div className="relative aspect-[9/16] bg-background/50 border border-white/10 overflow-hidden">
+                         <iframe
+                           src={event.videoUrl}
+                           title={`${event.date} Retreat Highlights`}
+                           allow="autoplay; fullscreen; picture-in-picture"
+                           allowFullScreen
+                           className="absolute inset-0 w-full h-full"
+                           data-testid={`video-retreat-${event.id}`}
+                         />
+                       </div>
+                       <p className="text-muted-foreground text-sm mt-2">Retreat highlights</p>
+                     </div>
+                   </div>
+                 )}
 
                  {event.images.length > 0 ? (
                    <div className="grid grid-cols-2 md:grid-cols-3 gap-4">
