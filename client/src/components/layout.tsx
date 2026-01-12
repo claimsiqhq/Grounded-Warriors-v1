@@ -34,10 +34,16 @@ export function Navbar() {
   return (
     <nav
       className={`fixed top-0 left-0 right-0 z-50 transition-all duration-500 ${
-        scrolled ? "bg-background/95 backdrop-blur-md py-4 shadow-lg border-b border-white/5" : "bg-transparent py-6"
+        scrolled ? "bg-background/95 backdrop-blur-md shadow-lg border-b border-white/5" : "bg-transparent"
       }`}
     >
-      <div className="container mx-auto px-6 flex items-center justify-between">
+      {/* Mobile countdown banner */}
+      {isHomePage && (
+        <div className="md:hidden">
+          <MiniCountdown targetDate={nextRetreatDate} variant="mobile" />
+        </div>
+      )}
+      <div className={`container mx-auto px-6 flex items-center justify-between ${scrolled ? "py-4" : "py-6"}`}>
         <Link href="/" className="flex items-center gap-3 group">
             <img 
               src={images.logo} 

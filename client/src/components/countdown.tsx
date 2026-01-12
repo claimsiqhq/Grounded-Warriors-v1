@@ -5,7 +5,11 @@ interface CountdownProps {
   targetDate: Date;
 }
 
-export function MiniCountdown({ targetDate }: CountdownProps) {
+interface MiniCountdownProps extends CountdownProps {
+  variant?: "desktop" | "mobile";
+}
+
+export function MiniCountdown({ targetDate, variant = "desktop" }: MiniCountdownProps) {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   function calculateTimeLeft() {
@@ -29,9 +33,29 @@ export function MiniCountdown({ targetDate }: CountdownProps) {
     return () => clearInterval(timer);
   }, [targetDate]);
 
+  if (variant === "mobile") {
+    return (
+      <Link href="/retreats">
+        <div 
+          className="flex items-center justify-center gap-3 py-2 bg-primary/10 border-b border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
+          data-testid="mini-countdown-mobile"
+        >
+          <span className="text-xs text-muted-foreground uppercase tracking-wider">Next Retreat in</span>
+          <span className="text-sm font-semibold text-primary">
+            {timeLeft.days} days, {timeLeft.hours} hours
+          </span>
+          <span className="text-xs text-primary">→</span>
+        </div>
+      </Link>
+    );
+  }
+
   return (
     <Link href="/retreats">
-      <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer group">
+      <div 
+        className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer group"
+        data-testid="mini-countdown-desktop"
+      >
         <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Next Retreat</span>
         <span className="text-sm font-semibold text-primary group-hover:text-white transition-colors">
           {timeLeft.days}d {timeLeft.hours}h
