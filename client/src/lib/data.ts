@@ -89,7 +89,7 @@ export const retreats = [
     location: "Marmora, ON",
     image: marchIcePlunge,
     depositAmount: 250,
-    fullAmount: 550,
+    fullAmount: 555,
   },
   {
     id: 2,
@@ -98,7 +98,7 @@ export const retreats = [
     location: "Algonquin Park, ON",
     image: mayColdPlunge,
     depositAmount: 250,
-    fullAmount: 550,
+    fullAmount: 2500,
   },
 ];
 
