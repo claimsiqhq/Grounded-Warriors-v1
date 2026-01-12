@@ -11,6 +11,7 @@ import Retreats from "@/pages/retreats";
 import Contact from "@/pages/contact";
 import PastRetreats from "@/pages/past-retreats";
 import RegistrationSuccess from "@/pages/registration-success";
+import FAQ from "@/pages/faq";
 
 function Router() {
   return (
@@ -20,6 +21,7 @@ function Router() {
       <Route path="/experience" component={Experience} />
       <Route path="/retreats" component={Retreats} />
       <Route path="/past-retreats" component={PastRetreats} />
+      <Route path="/faq" component={FAQ} />
       <Route path="/contact" component={Contact} />
       <Route path="/registration/success" component={RegistrationSuccess} />
       <Route component={NotFound} />

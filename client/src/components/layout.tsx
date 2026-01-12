@@ -23,6 +23,7 @@ export function Navbar() {
     { href: "/about", label: "The Work" },
     { href: "/retreats", label: "Retreats" },
     { href: "/past-retreats", label: "Past Retreats" },
+    { href: "/faq", label: "FAQ" },
     { href: "/contact", label: "Contact" },
   ];
 
@@ -141,6 +142,7 @@ export function Footer() {
           <Link href="/about"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">The Work</span></Link>
           <Link href="/retreats"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Retreats</span></Link>
           <Link href="/past-retreats"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Past Retreats</span></Link>
+          <Link href="/faq"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">FAQ</span></Link>
           <Link href="/contact"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Contact</span></Link>
         </div>
 
