@@ -5,6 +5,7 @@ import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { motion, AnimatePresence } from "framer-motion";
+import { MiniCountdown } from "@/components/countdown";
 
 export function Navbar() {
   const [location] = useLocation();
@@ -26,6 +27,9 @@ export function Navbar() {
     { href: "/faq", label: "FAQ" },
     { href: "/contact", label: "Contact" },
   ];
+
+  const nextRetreatDate = new Date("2026-03-01");
+  const isHomePage = location === "/";
 
   return (
     <nav
@@ -54,6 +58,16 @@ export function Navbar() {
                 {link.label}
             </Link>
           ))}
+          {isHomePage && scrolled && (
+            <motion.div
+              initial={{ opacity: 0, scale: 0.9 }}
+              animate={{ opacity: 1, scale: 1 }}
+              exit={{ opacity: 0, scale: 0.9 }}
+              transition={{ duration: 0.3 }}
+            >
+              <MiniCountdown targetDate={nextRetreatDate} />
+            </motion.div>
+          )}
           <Link href="/retreats">
             <Button variant="outline" className="ml-4 border-primary/30 hover:bg-primary hover:text-primary-foreground text-primary uppercase tracking-widest text-xs font-semibold px-6">
               Apply Now

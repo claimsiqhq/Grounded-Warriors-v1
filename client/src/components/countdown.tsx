@@ -1,7 +1,44 @@
 import { useState, useEffect } from "react";
+import { Link } from "wouter";
 
 interface CountdownProps {
   targetDate: Date;
+}
+
+export function MiniCountdown({ targetDate }: CountdownProps) {
+  const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
+
+  function calculateTimeLeft() {
+    const difference = targetDate.getTime() - new Date().getTime();
+    
+    if (difference <= 0) {
+      return { days: 0, hours: 0 };
+    }
+
+    return {
+      days: Math.floor(difference / (1000 * 60 * 60 * 24)),
+      hours: Math.floor((difference / (1000 * 60 * 60)) % 24),
+    };
+  }
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setTimeLeft(calculateTimeLeft());
+    }, 60000);
+
+    return () => clearInterval(timer);
+  }, [targetDate]);
+
+  return (
+    <Link href="/retreats">
+      <div className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer group">
+        <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Next Retreat</span>
+        <span className="text-sm font-semibold text-primary group-hover:text-white transition-colors">
+          {timeLeft.days}d {timeLeft.hours}h
+        </span>
+      </div>
+    </Link>
+  );
 }
 
 export function Countdown({ targetDate }: CountdownProps) {
