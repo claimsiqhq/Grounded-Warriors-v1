@@ -253,6 +253,35 @@ export default function Home() {
         </section>
       </ParallaxSection>
 
+      {/* Video Highlights Section */}
+      <section className="py-24 bg-card border-y border-white/5">
+        <div className="container px-6 mx-auto">
+          <motion.div {...fadeIn} className="text-center mb-16">
+            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Experience</h2>
+            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">See the Descent</h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              Words can only say so much. Watch what happens when men gather in the wild.
+            </p>
+          </motion.div>
+
+          <div className="max-w-md mx-auto">
+            <motion.div {...fadeIn} className="relative aspect-[9/16] bg-background/50 border border-white/10 overflow-hidden group">
+              <iframe
+                src="https://player.vimeo.com/video/1152373112?h=&badge=0&autopause=0&player_id=0&app_id=58479"
+                title="Grounded Warriors Retreat Highlights"
+                allow="autoplay; fullscreen; picture-in-picture"
+                allowFullScreen
+                className="absolute inset-0 w-full h-full"
+                data-testid="video-highlight-main"
+              />
+            </motion.div>
+            <p className="text-center text-muted-foreground text-sm mt-4">
+              The Grounded Warriors experience
+            </p>
+          </div>
+        </div>
+      </section>
+
       {/* Facilitators Section */}
       <section className="py-24 bg-background">
         <div className="container px-6 mx-auto">
@@ -283,35 +312,6 @@ export default function Home() {
                 </div>
               </motion.div>
             ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Video Highlights Section */}
-      <section className="py-24 bg-card border-y border-white/5">
-        <div className="container px-6 mx-auto">
-          <motion.div {...fadeIn} className="text-center mb-16">
-            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Experience</h2>
-            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">See the Descent</h3>
-            <p className="text-muted-foreground max-w-2xl mx-auto">
-              Words can only say so much. Watch what happens when men gather in the wild.
-            </p>
-          </motion.div>
-
-          <div className="max-w-md mx-auto">
-            <motion.div {...fadeIn} className="relative aspect-[9/16] bg-background/50 border border-white/10 overflow-hidden group">
-              <iframe
-                src="https://player.vimeo.com/video/1152373112?h=&badge=0&autopause=0&player_id=0&app_id=58479"
-                title="Grounded Warriors Retreat Highlights"
-                allow="autoplay; fullscreen; picture-in-picture"
-                allowFullScreen
-                className="absolute inset-0 w-full h-full"
-                data-testid="video-highlight-main"
-              />
-            </motion.div>
-            <p className="text-center text-muted-foreground text-sm mt-4">
-              The Grounded Warriors experience
-            </p>
           </div>
         </div>
       </section>
