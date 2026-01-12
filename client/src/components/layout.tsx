@@ -58,15 +58,8 @@ export function Navbar() {
                 {link.label}
             </Link>
           ))}
-          {isHomePage && scrolled && (
-            <motion.div
-              initial={{ opacity: 0, scale: 0.9 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.9 }}
-              transition={{ duration: 0.3 }}
-            >
-              <MiniCountdown targetDate={nextRetreatDate} />
-            </motion.div>
+          {isHomePage && (
+            <MiniCountdown targetDate={nextRetreatDate} />
           )}
           <Link href="/retreats">
             <Button variant="outline" className="ml-4 border-primary/30 hover:bg-primary hover:text-primary-foreground text-primary uppercase tracking-widest text-xs font-semibold px-6">
