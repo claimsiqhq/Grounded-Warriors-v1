@@ -35,20 +35,56 @@ export default function About() {
             </div>
           </div>
 
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center">
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center mb-20 md:mb-32">
             <div className="space-y-6 md:space-y-8 order-2 md:order-1">
-              <h2 className="font-serif text-3xl md:text-4xl text-white">The Facilitator</h2>
+              <h2 className="font-serif text-3xl md:text-4xl text-white">The Guides</h2>
+              <h3 className="text-primary text-lg italic">Walking the Path Together</h3>
               <p className="text-muted-foreground leading-loose">
-                Led by seasoned guides who have walked their own paths of grief, loss, and recovery. 
-                Our team brings decades of experience in somatics, wilderness survival, and men's work.
-                <br /><br />
-                We are not gurus. We are fellow travelers who have learned how to build a fire in the dark.
+                Grounded Warriors is facilitated by men who walk this path themselves.
+                The guides have lived through grief, loss, transition, and rebuilding — and bring decades of experience in men's work, somatic practices, breath, cold exposure, and time on the land.
+              </p>
+              <p className="text-muted-foreground leading-loose">
+                We are not gurus.<br />
+                We are not above the work.<br />
+                We are fellow travelers who know how to build a fire in the dark — and how to hold space while others learn to do the same.
               </p>
             </div>
              <div className="relative aspect-[4/3] md:aspect-[4/5] overflow-hidden order-1 md:order-2">
               <img src={images.fire} alt="Fire" className="w-full h-full object-cover opacity-80" />
             </div>
           </div>
+
+          <motion.div 
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="max-w-3xl mx-auto mb-20 md:mb-32"
+          >
+            <div className="border-l-2 border-primary/30 pl-8 py-4">
+              <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">The Intention</h2>
+              <p className="text-muted-foreground leading-loose text-lg mb-6">
+                This work isn't about fixing what's broken.<br />
+                It's about remembering what's been buried.
+              </p>
+              <p className="text-muted-foreground leading-loose">
+                When men return to the body, the land, and honest connection, clarity follows.<br />
+                From clarity comes grounded strength.<br />
+                From grounded strength comes integrity, presence, and leadership.
+              </p>
+            </div>
+          </motion.div>
+
+          <motion.div 
+            initial={{ opacity: 0 }}
+            whileInView={{ opacity: 1 }}
+            viewport={{ once: true }}
+            className="text-center py-16 border-t border-white/10"
+          >
+            <h2 className="font-serif text-3xl md:text-5xl text-white mb-4">Grounded Warriors</h2>
+            <p className="text-primary text-xl md:text-2xl italic tracking-wide">
+              Return to the Elements. Return to Yourself.
+            </p>
+          </motion.div>
         </div>
       </div>
     </Layout>
