@@ -3,7 +3,7 @@ import { images, testimonials, retreats, facilitators } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform } from "framer-motion";
 import { Link } from "wouter";
-import { ArrowDown, Flame, Droplets, Wind, Users, ChevronLeft, ChevronRight, Quote } from "lucide-react";
+import { ArrowDown, Flame, Droplets, Wind, Mountain, ChevronLeft, ChevronRight, Quote } from "lucide-react";
 import { useState, useEffect, useRef } from "react";
 import { Countdown } from "@/components/countdown";
 import { NewsletterSignup } from "@/components/newsletter";
@@ -165,11 +165,14 @@ export default function Home() {
             transition={{ duration: 1, delay: 0.2 }}
           >
             <img src={images.logo} alt="Logo" className="w-24 h-auto mx-auto mb-8 opacity-90" />
-            <h1 className="font-serif text-4xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight uppercase">
-              Transform Through <br className="hidden md:block" /> Descent
+            <h1 className="font-serif text-4xl md:text-6xl lg:text-7xl font-bold text-white mb-6 tracking-tight">
+              Return to the Elements.<br />Return to Yourself.
             </h1>
-            <p className="text-xl md:text-2xl text-primary/80 font-serif italic mb-10 max-w-2xl mx-auto">
-              "The way down is the way through."
+            <p className="text-lg md:text-xl text-muted-foreground mb-4 max-w-2xl mx-auto leading-relaxed">
+              Grounded Warriors is a primal retreat experience for men who are ready to step out of performance, reconnect with their bodies, and remember what it feels like to be fully alive.
+            </p>
+            <p className="text-primary/80 font-serif italic mb-10 max-w-xl mx-auto">
+              Rooted in nature. Guided by the elements. Held in brotherhood.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link href="/retreats">
@@ -196,25 +199,40 @@ export default function Home() {
         </motion.div>
       </section>
 
-      {/* Mission Intro */}
+      {/* Our Philosophy */}
       <section className="py-24 md:py-32 bg-background relative">
         <div className="container px-6 max-w-4xl mx-auto text-center">
           <motion.div {...fadeIn}>
-            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-6 font-semibold">The Mission</h2>
-            <p className="font-serif text-3xl md:text-4xl leading-relaxed text-white mb-8">
-              We are not a bootcamp. We are not here to fix you. <br/>
-              We are a space for men to stop performing, drop into their bodies, and reconnect with the ancient wisdom of the earth.
+            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-6 font-semibold">Our Philosophy</h2>
+            <h3 className="font-serif text-3xl md:text-4xl leading-relaxed text-white mb-8">
+              This Is Not About Fixing You
+            </h3>
+            <p className="text-muted-foreground text-lg leading-loose max-w-3xl mx-auto mb-6">
+              This is not a bootcamp. This is not therapy. This is not about self-improvement or becoming someone else.
             </p>
-            <p className="text-muted-foreground text-lg leading-loose max-w-2xl mx-auto">
-              In a world that demands constant ascent—climbing ladders, building empires, achieving more—we offer the counter-intuitive path: descent. Down into the silence. Down into the wound. Down into the grounded strength that has always been waiting for you.
+            <p className="text-muted-foreground text-lg leading-loose max-w-3xl mx-auto mb-6">
+              Grounded Warriors exists to create space for men to slow down, drop into the body, and reconnect with what modern life quietly strips away — presence, truth, and grounded strength.
+            </p>
+            <p className="text-muted-foreground text-lg leading-loose max-w-3xl mx-auto mb-6">
+              In a world built on constant acceleration, noise, and pressure, this work offers something different: <span className="text-primary italic">a return.</span>
+            </p>
+            <p className="font-serif text-xl text-white/90 max-w-2xl mx-auto">
+              A return to the body. A return to nature. A return to what is real.
             </p>
           </motion.div>
         </div>
       </section>
 
-      {/* The Elements */}
+      {/* The Work - Elements */}
       <section className="py-24 bg-card border-y border-white/5">
         <div className="container px-6 mx-auto">
+          <motion.div {...fadeIn} className="text-center mb-16">
+            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Work</h2>
+            <h3 className="font-serif text-3xl md:text-4xl text-white mb-4">Guided by the Elements</h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto">
+              The retreats are simple, ancient, and intentional. Each experience is shaped by the four elements — not as concepts, but as lived teachers.
+            </p>
+          </motion.div>
           <motion.div 
             variants={staggerContainer}
             initial="hidden"
@@ -223,10 +241,10 @@ export default function Home() {
             className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12"
           >
             {[
-              { icon: Flame, title: "Fire", desc: "Ceremonial spaces to burn what no longer serves you." },
-              { icon: Droplets, title: "Water", desc: "Cold immersion to awaken the nervous system and build resilience." },
-              { icon: Wind, title: "Air", desc: "Breathwork practices to release tension and expand awareness." },
-              { icon: Users, title: "Brotherhood", desc: "A circle of men committed to truth, without posturing." }
+              { icon: Flame, title: "Fire", desc: "Ceremony, truth, and release. Fire is where men burn what no longer serves — old stories, armour, and patterns that keep them disconnected." },
+              { icon: Droplets, title: "Water", desc: "Cold immersion and nervous system awakening. Water teaches resilience, breath, and trust in the body under pressure." },
+              { icon: Wind, title: "Air", desc: "Breathwork and conscious respiration. Air opens awareness, releases stored tension, and reconnects men to emotion, clarity, and inner space." },
+              { icon: Mountain, title: "Earth", desc: "Nature, movement, and stillness. Earth grounds the work — reminding men they belong to something older, steadier, and wiser than the mind." }
             ].map((el, i) => (
               <motion.div 
                 key={i} 
@@ -241,6 +259,9 @@ export default function Home() {
               </motion.div>
             ))}
           </motion.div>
+          <motion.p {...fadeIn} className="text-center text-muted-foreground italic mt-12 max-w-xl mx-auto">
+            Brotherhood is not forced here. It emerges naturally when men walk through the elements together.
+          </motion.p>
         </div>
       </section>
 
@@ -258,9 +279,9 @@ export default function Home() {
         <div className="container px-6 mx-auto">
           <motion.div {...fadeIn} className="text-center mb-16">
             <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Experience</h2>
-            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">See the Descent</h3>
+            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">See the Work</h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Words can only say so much. Watch what happens when men gather in the wild.
+              Words can only say so much. This is what happens when men gather on the land.
             </p>
           </motion.div>
 
@@ -287,7 +308,13 @@ export default function Home() {
         <div className="container px-6 mx-auto">
           <motion.div {...fadeIn} className="text-center mb-16">
             <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Your Guides</h2>
-            <h3 className="font-serif text-4xl md:text-5xl text-white">Meet the Facilitators</h3>
+            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">Holding the Container</h3>
+            <p className="text-muted-foreground max-w-3xl mx-auto mb-4">
+              Grounded Warriors is co-facilitated by men who walk this path themselves.
+            </p>
+            <p className="text-muted-foreground max-w-3xl mx-auto">
+              The role of the guides is not to lead from above, but to hold a grounded, respectful container where men can meet themselves honestly — without pressure, posturing, or performance. Leadership here is quiet, embodied, and present.
+            </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-4xl mx-auto">
@@ -341,8 +368,11 @@ export default function Home() {
         <div className="container px-6 mx-auto">
           <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-6">
             <div>
-              <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Upcoming</h2>
-              <h3 className="font-serif text-4xl md:text-5xl text-white">Join the Circle</h3>
+              <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Retreats</h2>
+              <h3 className="font-serif text-4xl md:text-5xl text-white">Upcoming Gatherings</h3>
+              <p className="text-muted-foreground mt-4 max-w-lg">
+                Each retreat is intentionally small and held on the land. The work deepens through simplicity, presence, and shared experience.
+              </p>
             </div>
             <Link href="/retreats">
               <Button variant="link" className="text-primary hover:text-white p-0 text-lg group">
@@ -388,10 +418,13 @@ export default function Home() {
       <section className="py-24 bg-card border-t border-white/5">
         <div className="container px-6 mx-auto text-center">
           <motion.div {...fadeIn}>
-            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Stay Connected</h2>
+            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Community</h2>
             <h3 className="font-serif text-3xl md:text-4xl text-white mb-4">Join the Circle</h3>
+            <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
+              Grounded Warriors is more than a series of retreats. It is a growing community of men committed to living with presence, integrity, and grounded strength.
+            </p>
             <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-              Receive updates on upcoming retreats, reflections from the fire, and exclusive content for our community.
+              Receive updates on upcoming retreats, reflections from the fire, and community offerings.
             </p>
             <NewsletterSignup />
           </motion.div>

@@ -134,9 +134,12 @@ export function Footer() {
           className="h-24 w-24 mx-auto mb-8 opacity-80 hover:opacity-100 transition-opacity invert" 
         />
         
-        <h3 className="font-serif text-2xl md:text-3xl text-primary mb-8 tracking-wide">
-          "The way down is the way through."
+        <h3 className="font-serif text-2xl md:text-3xl text-white mb-2 tracking-wide">
+          Grounded Warriors
         </h3>
+        <p className="text-primary italic text-lg mb-8">
+          Return to the Elements. Return to Yourself.
+        </p>
 
         <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 text-muted-foreground text-sm tracking-widest uppercase">
           <Link href="/about"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">The Work</span></Link>
