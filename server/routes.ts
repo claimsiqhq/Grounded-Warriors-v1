@@ -4,6 +4,7 @@ import { storage } from "./storage";
 import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { sendContactFormEmail } from "./sendgridClient";
 
 export async function registerRoutes(
   httpServer: Server,
@@ -14,6 +15,20 @@ export async function registerRoutes(
     try {
       const validatedData = insertContactSubmissionSchema.parse(req.body);
       const submission = await storage.createContactSubmission(validatedData);
+      
+      // Send email notification to bcoones@gmail.com
+      try {
+        await sendContactFormEmail({
+          name: validatedData.name,
+          email: validatedData.email,
+          message: validatedData.message
+        });
+        console.log("Contact form email sent successfully");
+      } catch (emailError) {
+        console.error("Failed to send contact form email:", emailError);
+        // Continue even if email fails - form submission is saved to database
+      }
+      
       res.status(201).json({ success: true, submission });
     } catch (error: any) {
       if (error.name === "ZodError") {
