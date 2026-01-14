@@ -108,7 +108,7 @@ export default function Contact() {
               <div className="space-y-8">
                 <div>
                   <h3 className="text-white text-lg font-serif mb-2">Email</h3>
-                  <p className="text-muted-foreground">connect@groundedwarriors.com</p>
+                  <p className="text-muted-foreground">bcoones@gmail.com</p>
                 </div>
                 <div>
                   <h3 className="text-white text-lg font-serif mb-2">Location</h3>
