@@ -67,11 +67,6 @@ export function Navbar() {
           {isHomePage && (
             <MiniCountdown targetDate={nextRetreatDate} />
           )}
-          <Link href="/retreats">
-            <Button variant="outline" className="ml-4 border-primary/30 hover:bg-primary hover:text-primary-foreground text-primary uppercase tracking-widest text-xs font-semibold px-6">
-              Apply Now
-            </Button>
-          </Link>
         </div>
 
         {/* Mobile Nav */}
@@ -111,21 +106,6 @@ export function Navbar() {
                       </Link>
                     </motion.div>
                   ))}
-                  <motion.div 
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.4 }}
-                    className="mt-8"
-                  >
-                    <Link href="/retreats">
-                      <Button 
-                        onClick={() => setIsOpen(false)}
-                        className="bg-primary text-primary-foreground text-lg px-8 py-6 uppercase tracking-widest"
-                      >
-                        Apply Now
-                      </Button>
-                    </Link>
-                  </motion.div>
                 </div>
               </div>
             </SheetContent>
