@@ -92,7 +92,7 @@ export function Countdown({ targetDate }: CountdownProps) {
   }, [targetDate]);
 
   return (
-    <div className="flex gap-4 justify-center">
+    <div className="flex gap-4 md:gap-6 justify-center">
       {[
         { value: timeLeft.days, label: "Days", id: "days" },
         { value: timeLeft.hours, label: "Hours", id: "hours" },
@@ -100,10 +100,10 @@ export function Countdown({ targetDate }: CountdownProps) {
         { value: timeLeft.seconds, label: "Sec", id: "seconds" },
       ].map((item) => (
         <div key={item.id} className="text-center">
-          <div className="bg-card border border-white/10 w-16 h-16 md:w-20 md:h-20 flex items-center justify-center">
-            <span className="font-serif text-2xl md:text-3xl text-white" data-testid={`text-countdown-${item.id}`}>{String(item.value).padStart(2, '0')}</span>
+          <div className="bg-card border border-primary/20 w-20 h-20 md:w-28 md:h-28 flex items-center justify-center">
+            <span className="font-serif text-3xl md:text-5xl text-white" data-testid={`text-countdown-${item.id}`}>{String(item.value).padStart(2, '0')}</span>
           </div>
-          <span className="text-xs text-muted-foreground uppercase tracking-widest mt-2 block">{item.label}</span>
+          <span className="text-xs md:text-sm text-muted-foreground uppercase tracking-widest mt-3 block">{item.label}</span>
         </div>
       ))}
     </div>
