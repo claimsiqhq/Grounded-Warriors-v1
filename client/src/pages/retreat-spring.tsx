@@ -17,7 +17,7 @@ const fadeIn = {
 
 export default function RetreatSpring() {
   const [showModal, setShowModal] = useState(false);
-  const retreatDate = new Date("2026-05-15");
+  const retreatDate = new Date("2026-05-01");
 
   return (
     <Layout>
@@ -45,7 +45,7 @@ export default function RetreatSpring() {
                 Spring Awakening
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                A 5-day deep immersion in the ancient forests of Algonquin Park. The flagship Grounded Warriors experience.
+                A 4-day deep immersion in the ancient forests of Algonquin Park. The flagship Grounded Warriors experience.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
@@ -74,10 +74,10 @@ export default function RetreatSpring() {
           <div className="container px-6 mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
               {[
-                { icon: Calendar, label: "Date", value: "May 15-19, 2026" },
+                { icon: Calendar, label: "Date", value: "May 1-4, 2026" },
                 { icon: MapPin, label: "Location", value: "Algonquin Park, ON" },
                 { icon: Users, label: "Group Size", value: "8-12 Men" },
-                { icon: Clock, label: "Duration", value: "5 Days" },
+                { icon: Clock, label: "Duration", value: "4 Days" },
               ].map((item, i) => (
                 <motion.div key={i} {...fadeIn} className="text-center">
                   <div className="w-12 h-12 mx-auto mb-4 rounded-full border border-primary/20 flex items-center justify-center text-primary">
@@ -96,9 +96,9 @@ export default function RetreatSpring() {
           <div className="container px-6 mx-auto">
             <motion.div {...fadeIn} className="text-center mb-16">
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Flagship Experience</h2>
-              <h3 className="font-serif text-3xl md:text-5xl text-white mb-6">Five Days That Will Change Everything</h3>
+              <h3 className="font-serif text-3xl md:text-5xl text-white mb-6">Four Days That Will Change Everything</h3>
               <p className="text-muted-foreground max-w-3xl mx-auto text-lg">
-                Spring Awakening is our most comprehensive retreat. Five days allows for the deeper work — moving past resistance, breaking through old patterns, and returning home fundamentally transformed.
+                Spring Awakening is our most comprehensive retreat. Four days allows for the deeper work — moving past resistance, breaking through old patterns, and returning home fundamentally transformed.
               </p>
             </motion.div>
 
@@ -112,7 +112,7 @@ export default function RetreatSpring() {
                 {
                   icon: Sunrise,
                   title: "Extended Time",
-                  desc: "Five days creates space for the real transformation. Day one breaks down walls. Days two through four do the deep work. Day five integrates."
+                  desc: "Four days creates space for the real transformation. Day one breaks down walls. Days two and three do the deep work. Day four integrates."
                 },
                 {
                   icon: Flame,
@@ -155,7 +155,7 @@ export default function RetreatSpring() {
                 {
                   icon: Flame,
                   title: "Nightly Fire Council",
-                  desc: "Every evening we gather at the fire. Five nights of ceremony means five opportunities to speak truth, release weight, and witness transformation."
+                  desc: "Every evening we gather at the fire. Three nights of ceremony means three opportunities to speak truth, release weight, and witness transformation."
                 },
                 {
                   icon: Wind,
@@ -190,35 +190,30 @@ export default function RetreatSpring() {
           <div className="container px-6 mx-auto max-w-4xl">
             <motion.div {...fadeIn} className="text-center mb-16">
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Journey</h2>
-              <h3 className="font-serif text-3xl md:text-4xl text-white">Five Days of Transformation</h3>
+              <h3 className="font-serif text-3xl md:text-4xl text-white">Four Days of Transformation</h3>
             </motion.div>
 
             <div className="space-y-12">
               {[
                 {
-                  day: "Day 1",
+                  day: "Day 1 — Friday",
                   title: "Arrival & Opening",
-                  desc: "Arrive by early afternoon. Land on the property. Meet your brothers. Opening circle and first fire ceremony. Begin to let go of the world you left behind."
+                  desc: "Arrive between 10-11 AM. Land on the property. Meet your brothers. Opening circle and first fire ceremony. Begin to let go of the world you left behind."
                 },
                 {
-                  day: "Day 2",
+                  day: "Day 2 — Saturday",
                   title: "Breaking Ground",
                   desc: "First cold immersion. Deep breathwork journey. The walls start to crack. Evening fire work goes deeper as trust builds between men."
                 },
                 {
-                  day: "Day 3",
+                  day: "Day 3 — Sunday",
                   title: "The Descent",
-                  desc: "The heart of the retreat. Extended solo time in nature. Fasting optional. This is where you meet yourself without distraction. Evening integration circle."
+                  desc: "The heart of the retreat. Extended solo time in nature. This is where you meet yourself without distraction. Evening integration circle and final fire ceremony."
                 },
                 {
-                  day: "Day 4",
-                  title: "Emergence",
-                  desc: "Return from solo time. Share your insights with the group. Final deep breathwork. Celebratory meal. Closing fire ceremony with intention setting."
-                },
-                {
-                  day: "Day 5",
+                  day: "Day 4 — Monday",
                   title: "Integration & Return",
-                  desc: "Morning practice. Integration teaching — how to bring this work home. Final circle. Depart by early afternoon, changed."
+                  desc: "Morning practice. Integration teaching — how to bring this work home. Final circle. Return to base camp between 11 AM - 1 PM. Depart between 2-4 PM, changed."
                 },
               ].map((item, i) => (
                 <motion.div 
@@ -254,12 +249,12 @@ export default function RetreatSpring() {
             <div className="max-w-2xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  "5 days / 4 nights wilderness accommodation",
+                  "4 days / 3 nights wilderness accommodation",
                   "All meals (organic, locally sourced)",
                   "Daily cold water immersion",
-                  "5 fire ceremonies",
+                  "3 fire ceremonies",
                   "Extended breathwork sessions",
-                  "24-hour solo vision experience",
+                  "Solo time in nature",
                   "Men's circle facilitation",
                   "Pre-retreat preparation call",
                   "Preparation materials & reading",
@@ -312,7 +307,7 @@ export default function RetreatSpring() {
                 "Have done some personal work but want more",
                 "Crave genuine connection with other men",
                 "Are willing to be uncomfortable in service of growth",
-                "Can commit to five days away from their regular life",
+                "Can commit to four days away from their regular life",
               ].map((item, i) => (
                 <motion.div 
                   key={i}
