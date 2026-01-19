@@ -244,23 +244,28 @@ export default function RetreatSpring() {
               </p>
             </motion.div>
 
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto">
               {springRetreatHosts.map((host, i) => (
                 <motion.div 
                   key={i} 
                   {...fadeIn}
                   transition={{ delay: i * 0.1 }}
-                  className="text-center"
+                  className="bg-card border border-white/5 overflow-hidden"
                 >
-                  <div className="aspect-square overflow-hidden mb-4 border border-white/10">
-                    <img 
-                      src={host.image} 
-                      alt={host.name} 
-                      className="w-full h-full object-cover object-top opacity-90 hover:opacity-100 transition-opacity"
-                    />
+                  <div className="flex flex-col sm:flex-row">
+                    <div className="sm:w-2/5 aspect-square sm:aspect-auto overflow-hidden">
+                      <img 
+                        src={host.image} 
+                        alt={host.name} 
+                        className="w-full h-full object-cover object-top opacity-90"
+                      />
+                    </div>
+                    <div className="sm:w-3/5 p-6">
+                      <h4 className="font-serif text-2xl text-white mb-1">{host.name}</h4>
+                      <p className="text-primary text-sm uppercase tracking-widest mb-4">{host.role}</p>
+                      <p className="text-muted-foreground text-sm leading-relaxed">{host.bio}</p>
+                    </div>
                   </div>
-                  <h4 className="font-serif text-xl text-white mb-1">{host.name}</h4>
-                  <p className="text-primary text-sm">{host.role}</p>
                 </motion.div>
               ))}
             </div>

@@ -178,21 +178,25 @@ export const springRetreatHosts = [
   {
     name: "John Shoust",
     role: "Co-Founder & Facilitator",
+    bio: "John has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines somatic practices, breathwork, and ancient fire ceremony traditions.",
     image: johnPhoto,
   },
   {
     name: "Brian Coones",
     role: "Co-Founder & Facilitator",
+    bio: "Brian brings expertise in cold water therapy and men's work. A certified breathwork facilitator, he creates space for men to reconnect with their bodies and find strength through surrender.",
     image: marchWinterHike,
   },
   {
     name: "Rawa",
     role: "Facilitator",
+    bio: "Founder of Bold & Centered, a men's empowerment movement devoted to the awakening of men's hearts. Rawa guides men through initiatory processes that restore sacred brotherhood and embodied leadership, cultivating safety through somatic practices and ritual.",
     image: rawaPhoto,
   },
   {
     name: "Chris",
-    role: "Facilitator",
+    role: "Wilderness Guide",
+    bio: "World traveler, dreamer, coach, and guide of 12 years. Chris's deep love for nature and ability to connect with people creates an environment that encourages exploration, openness, and deep reflection. His mission is to be the bridge between society and the natural world.",
     image: chrisPhoto,
   },
 ];
