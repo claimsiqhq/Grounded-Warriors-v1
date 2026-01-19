@@ -345,15 +345,17 @@ export default function Home() {
 
       {/* Countdown to Next Retreat */}
       <ParallaxSection image={images.water}>
-        <section className="py-24">
+        <section className="py-32 md:py-40">
           <div className="container px-6 mx-auto text-center">
             <motion.div {...fadeIn}>
-              <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Next Retreat</h2>
-              <h3 className="font-serif text-3xl md:text-4xl text-white mb-8">Winter Descent — March 2026</h3>
-              <Countdown targetDate={nextRetreatDate} />
-              <div className="mt-10">
+              <h2 className="text-primary text-sm md:text-base uppercase tracking-[0.3em] mb-6 font-semibold">Next Retreat</h2>
+              <h3 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-12">Winter Descent — March 2026</h3>
+              <div className="flex justify-center">
+                <Countdown targetDate={nextRetreatDate} />
+              </div>
+              <div className="mt-14">
                 <Link href="/retreats">
-                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest font-semibold">
+                  <Button size="lg" className="bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest font-semibold text-lg px-10 py-6">
                     Reserve Your Spot
                   </Button>
                 </Link>
