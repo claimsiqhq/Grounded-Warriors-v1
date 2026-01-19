@@ -350,7 +350,7 @@ export default function Home() {
             <motion.div {...fadeIn}>
               <h2 className="text-primary text-sm md:text-base uppercase tracking-[0.3em] mb-6 font-semibold">Next Retreat</h2>
               <h3 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-12">Winter Descent — March 2026</h3>
-              <div className="flex justify-center">
+              <div className="w-full flex items-center justify-center">
                 <Countdown targetDate={nextRetreatDate} />
               </div>
               <div className="mt-14">
