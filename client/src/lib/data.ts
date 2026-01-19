@@ -40,6 +40,8 @@ import marchSnowTraining from "@assets/IMG_4074_1766011897386.JPG";
 import marchWinterHike from "@assets/IMG_4108_1766011897387.JPG";
 import marchContemplation from "@assets/IMG_4127_1766011897387.JPG";
 import johnPhoto from "@assets/IMG_4118_1766062885957.jpeg";
+import rawaPhoto from "@assets/Rawa_Bo_PHoto_1768788413370.jpeg";
+import chrisPhoto from "@assets/Chris_Bio_Photo_1768788413370.jpeg";
 
 export const images = {
   hero: heroBg,
@@ -133,5 +135,28 @@ export const facilitators = [
     role: "Co-Founder & Facilitator",
     bio: "Brian brings expertise in cold water therapy and men's work. A certified breathwork facilitator, he creates space for men to reconnect with their bodies and find strength through surrender.",
     image: marchWinterHike,
+  },
+];
+
+export const springRetreatHosts = [
+  {
+    name: "John Shoust",
+    role: "Co-Founder & Facilitator",
+    image: johnPhoto,
+  },
+  {
+    name: "Brian Coones",
+    role: "Co-Founder & Facilitator",
+    image: marchWinterHike,
+  },
+  {
+    name: "Rawa",
+    role: "Facilitator",
+    image: rawaPhoto,
+  },
+  {
+    name: "Chris",
+    role: "Facilitator",
+    image: chrisPhoto,
   },
 ];

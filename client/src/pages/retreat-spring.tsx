@@ -1,5 +1,5 @@
 import { Layout } from "@/components/layout";
-import { images } from "@/lib/data";
+import { images, springRetreatHosts } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
@@ -137,8 +137,42 @@ export default function RetreatSpring() {
           </div>
         </section>
 
-        {/* The Experience */}
+        {/* Your Hosts */}
         <section className="py-24 bg-background">
+          <div className="container px-6 mx-auto">
+            <motion.div {...fadeIn} className="text-center mb-16">
+              <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Your Hosts</h2>
+              <h3 className="font-serif text-3xl md:text-5xl text-white mb-6">Meet Your Guides</h3>
+              <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
+                Four experienced facilitators will hold space for your transformation.
+              </p>
+            </motion.div>
+
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-6 max-w-4xl mx-auto">
+              {springRetreatHosts.map((host, i) => (
+                <motion.div 
+                  key={i} 
+                  {...fadeIn}
+                  transition={{ delay: i * 0.1 }}
+                  className="text-center"
+                >
+                  <div className="aspect-square overflow-hidden mb-4 border border-white/10">
+                    <img 
+                      src={host.image} 
+                      alt={host.name} 
+                      className="w-full h-full object-cover object-top opacity-90 hover:opacity-100 transition-opacity"
+                    />
+                  </div>
+                  <h4 className="font-serif text-xl text-white mb-1">{host.name}</h4>
+                  <p className="text-primary text-sm">{host.role}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* The Experience */}
+        <section className="py-24 bg-card border-y border-white/5">
           <div className="container px-6 mx-auto">
             <motion.div {...fadeIn} className="text-center mb-16">
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Elements</h2>
