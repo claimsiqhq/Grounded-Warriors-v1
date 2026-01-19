@@ -43,6 +43,18 @@ import johnPhoto from "@assets/IMG_4118_1766062885957.jpeg";
 import rawaPhoto from "@assets/Rawa_Bo_PHoto_1768788413370.jpeg";
 import chrisPhoto from "@assets/Chris_Bio_Photo_1768788413370.jpeg";
 
+// Driftwood Paddle photos for Spring Awakening
+import driftwoodHero from "@assets/driftwood_photos/hero_canoe.jpg";
+import driftwoodSunset from "@assets/driftwood_photos/sunset_lake.jpg";
+import driftwoodGroup from "@assets/driftwood_photos/group_canoes.png";
+import driftwoodPaddling from "@assets/driftwood_photos/paddling.jpg";
+import driftwoodCampfire from "@assets/driftwood_photos/campfire_cooking.jpg";
+import driftwoodTent from "@assets/driftwood_photos/tent_camp.jpg";
+import driftwoodMist from "@assets/driftwood_photos/morning_mist.jpg";
+import driftwoodPortage from "@assets/driftwood_photos/portage.jpg";
+import driftwoodReflection from "@assets/driftwood_photos/water_reflection.jpg";
+import driftwoodForest from "@assets/driftwood_photos/forest_path.jpg";
+
 export const images = {
   hero: heroBg,
   fire: fireImg,
@@ -81,7 +93,31 @@ export const images = {
   marchSnowTraining,
   marchWinterHike,
   marchContemplation,
+  // Driftwood Paddle / Spring Awakening photos
+  driftwoodHero,
+  driftwoodSunset,
+  driftwoodGroup,
+  driftwoodPaddling,
+  driftwoodCampfire,
+  driftwoodTent,
+  driftwoodMist,
+  driftwoodPortage,
+  driftwoodReflection,
+  driftwoodForest,
 };
+
+export const springRetreatGallery = [
+  { src: driftwoodHero, alt: "Canoe on the lake at sunrise" },
+  { src: driftwoodGroup, alt: "Group paddling together" },
+  { src: driftwoodPaddling, alt: "Paddling through Algonquin" },
+  { src: driftwoodCampfire, alt: "Cooking over the campfire" },
+  { src: driftwoodMist, alt: "Morning mist on the water" },
+  { src: driftwoodPortage, alt: "Portaging through the forest" },
+  { src: driftwoodReflection, alt: "Still water reflections" },
+  { src: driftwoodForest, alt: "Forest pathway" },
+  { src: driftwoodSunset, alt: "Sunset over the lake" },
+  { src: driftwoodTent, alt: "Backcountry campsite" },
+];
 
 export const retreats = [
   {

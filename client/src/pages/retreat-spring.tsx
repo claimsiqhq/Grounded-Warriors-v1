@@ -1,12 +1,12 @@
 import { Layout } from "@/components/layout";
-import { images, springRetreatHosts } from "@/lib/data";
+import { images, springRetreatHosts, springRetreatGallery } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { useState } from "react";
 import { RegistrationModal } from "@/components/registration-modal";
 import { Countdown } from "@/components/countdown";
-import { Flame, Droplets, Wind, Mountain, Check, Calendar, MapPin, Users, Clock, TreePine, Sunrise } from "lucide-react";
+import { Flame, Droplets, Wind, Mountain, Check, Calendar, MapPin, Users, Clock, TreePine, Sunrise, ArrowRight } from "lucide-react";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -26,8 +26,8 @@ export default function RetreatSpring() {
         <section className="relative h-[70vh] min-h-[500px] flex items-center justify-center overflow-hidden">
           <div className="absolute inset-0 z-0">
             <img 
-              src={images.mayColdPlunge} 
-              alt="Spring Awakening" 
+              src={images.driftwoodHero} 
+              alt="Spring Awakening - Canoe on Algonquin Lake" 
               className="w-full h-full object-cover opacity-50"
               style={{ objectPosition: "center 40%" }}
             />
@@ -40,12 +40,12 @@ export default function RetreatSpring() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
             >
-              <span className="text-primary text-sm uppercase tracking-[0.3em] mb-4 block font-semibold">May 2026</span>
+              <span className="text-primary text-sm uppercase tracking-[0.3em] mb-4 block font-semibold">May 1-4, 2026</span>
               <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
                 Spring Awakening
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                A 4-day deep immersion in the ancient forests of Algonquin Park. The flagship Grounded Warriors experience.
+                A 4-day inner and outer journey for men in the ancient forests of Algonquin Park.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
@@ -85,6 +85,102 @@ export default function RetreatSpring() {
                   </div>
                   <p className="text-muted-foreground text-xs uppercase tracking-widest mb-1">{item.label}</p>
                   <p className="text-white font-serif text-lg">{item.value}</p>
+                </motion.div>
+              ))}
+            </div>
+          </div>
+        </section>
+
+        {/* For Men Ready */}
+        <section className="py-24 bg-card border-y border-white/5">
+          <div className="container px-6 mx-auto">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-16 items-center max-w-5xl mx-auto">
+              <motion.div {...fadeIn}>
+                <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">A Modern Rite of Passage</h2>
+                <h3 className="font-serif text-3xl md:text-4xl text-white mb-6">
+                  For Men Ready to Live Deeper
+                </h3>
+                <p className="text-muted-foreground leading-loose mb-6">
+                  If life's been too busy, overwhelming, or you're just not getting the time you need for yourself... If you long for deeper connection with good men who work on themselves... And if you could use some quality time in nature, to slow down and just exist...
+                </p>
+                <p className="text-white font-serif text-xl mb-6">
+                  Then you're in the right place.
+                </p>
+                <p className="text-muted-foreground leading-loose">
+                  This is not just a canoe trip. It's a modern rite of passage. You'll paddle, portage, cook, camp, and share stories together in the wild. By guiding you into the wilderness, we guide you back to yourself.
+                </p>
+              </motion.div>
+              <motion.div {...fadeIn} className="aspect-[4/5] overflow-hidden">
+                <img 
+                  src={images.driftwoodGroup} 
+                  alt="Group paddling through Algonquin" 
+                  className="w-full h-full object-cover opacity-80"
+                />
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Paddle In / Paddle Out */}
+        <section className="py-24 bg-background">
+          <div className="container px-6 mx-auto max-w-5xl">
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-12">
+              <motion.div {...fadeIn} className="bg-card border border-white/5 p-8">
+                <h3 className="font-serif text-2xl text-white mb-6">Paddle In...</h3>
+                <ul className="space-y-4">
+                  {[
+                    "Distracted, overworked, and stretched thin",
+                    "Your soul is tired from not living its truth",
+                    "You'd like to get to know other men on a deeper level",
+                    "You're ready for some deep healing",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-muted-foreground">
+                      <ArrowRight className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+              <motion.div {...fadeIn} transition={{ delay: 0.1 }} className="bg-primary/10 border border-primary/20 p-8">
+                <h3 className="font-serif text-2xl text-white mb-6">Paddle Out...</h3>
+                <ul className="space-y-4">
+                  {[
+                    "Present, grounded, and open",
+                    "A deeper understanding of your inner world",
+                    "You've healed something and learned practices to manage your emotions",
+                    "With memories and bonds that will last a lifetime",
+                  ].map((item, i) => (
+                    <li key={i} className="flex items-start gap-3 text-white">
+                      <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
+                      <span>{item}</span>
+                    </li>
+                  ))}
+                </ul>
+              </motion.div>
+            </div>
+          </div>
+        </section>
+
+        {/* Photo Gallery */}
+        <section className="py-24 bg-card border-y border-white/5">
+          <div className="container px-6 mx-auto">
+            <motion.div {...fadeIn} className="text-center mb-12">
+              <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Experience</h2>
+              <h3 className="font-serif text-3xl md:text-4xl text-white">A Glimpse of What Awaits</h3>
+            </motion.div>
+            <div className="grid grid-cols-2 md:grid-cols-4 gap-4 max-w-6xl mx-auto">
+              {springRetreatGallery.slice(0, 8).map((photo, i) => (
+                <motion.div 
+                  key={i}
+                  {...fadeIn}
+                  transition={{ delay: i * 0.05 }}
+                  className={`overflow-hidden ${i === 0 || i === 5 ? 'col-span-2 row-span-2' : ''}`}
+                >
+                  <img 
+                    src={photo.src} 
+                    alt={photo.alt}
+                    className="w-full h-full object-cover opacity-80 hover:opacity-100 transition-opacity cursor-pointer aspect-square"
+                  />
                 </motion.div>
               ))}
             </div>
