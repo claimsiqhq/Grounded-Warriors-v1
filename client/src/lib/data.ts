@@ -163,13 +163,13 @@ export const facilitators = [
   {
     name: "John Shoust",
     role: "Co-Founder & Facilitator",
-    bio: "John has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines somatic practices, breathwork, and ancient fire ceremony traditions.",
+    bio: "Lifelong wilderness lover, off-grid expert, endurance athlete, and entrepreneur. With degrees spanning engineering, business, and psychology, John brings deep knowledge to both the physical and mental aspects of the retreats. A longtime practitioner and facilitator of cold therapy, he guides men through challenge with grounded presence.",
     image: johnPhoto,
   },
   {
     name: "Brian Coones",
     role: "Co-Founder & Facilitator",
-    bio: "Brian brings expertise in cold water therapy and men's work. A certified breathwork facilitator, he creates space for men to reconnect with their bodies and find strength through surrender.",
+    bio: "Brian has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines cold water therapy, somatic practices, breathwork, and ancient fire ceremony traditions. A certified facilitator, he creates space for men to reconnect with their bodies and find strength through surrender.",
     image: marchWinterHike,
   },
 ];
@@ -178,13 +178,13 @@ export const springRetreatHosts = [
   {
     name: "John Shoust",
     role: "Co-Founder & Facilitator",
-    bio: "John has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines somatic practices, breathwork, and ancient fire ceremony traditions.",
+    bio: "Lifelong wilderness lover, off-grid expert, endurance athlete, and entrepreneur. With degrees spanning engineering, business, and psychology, John brings deep knowledge to both the physical and mental aspects of the retreats. A longtime practitioner and facilitator of cold therapy, he guides men through challenge with grounded presence.",
     image: johnPhoto,
   },
   {
     name: "Brian Coones",
     role: "Co-Founder & Facilitator",
-    bio: "Brian brings expertise in cold water therapy and men's work. A certified breathwork facilitator, he creates space for men to reconnect with their bodies and find strength through surrender.",
+    bio: "Brian has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines cold water therapy, somatic practices, breathwork, and ancient fire ceremony traditions. A certified facilitator, he creates space for men to reconnect with their bodies and find strength through surrender.",
     image: marchWinterHike,
   },
   {
