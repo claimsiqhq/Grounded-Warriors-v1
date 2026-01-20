@@ -17,7 +17,7 @@ const fadeIn = {
 
 export default function RetreatWinter() {
   const [showModal, setShowModal] = useState(false);
-  const retreatDate = new Date("2026-03-01");
+  const retreatDate = new Date("2026-03-06");
 
   return (
     <Layout>
@@ -40,7 +40,7 @@ export default function RetreatWinter() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
             >
-              <span className="text-primary text-sm uppercase tracking-[0.3em] mb-4 block font-semibold">March 2026</span>
+              <span className="text-primary text-sm uppercase tracking-[0.3em] mb-4 block font-semibold">March 6-8, 2026</span>
               <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
                 Winter Descent
               </h1>

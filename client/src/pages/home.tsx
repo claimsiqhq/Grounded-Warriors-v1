@@ -349,7 +349,7 @@ export default function Home() {
           <div className="container px-6 mx-auto text-center">
             <motion.div {...fadeIn}>
               <h2 className="text-primary text-sm md:text-base uppercase tracking-[0.3em] mb-6 font-semibold">Next Retreat</h2>
-              <h3 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-12">Winter Descent — March 2026</h3>
+              <h3 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-12">Winter Descent — March 6-8, 2026</h3>
               <div className="w-full flex items-center justify-center">
                 <Countdown targetDate={nextRetreatDate} />
               </div>

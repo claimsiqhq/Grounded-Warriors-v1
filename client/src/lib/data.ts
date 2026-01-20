@@ -123,7 +123,7 @@ export const retreats = [
   {
     id: 1,
     title: "Winter Descent",
-    date: "March 2026",
+    date: "March 6-8, 2026",
     location: "Marmora, ON",
     image: marchIcePlunge,
     depositAmount: 250,
