@@ -195,7 +195,7 @@ export const springRetreatHosts = [
   },
   {
     name: "Chris \"CK\" Kelly",
-    role: "Wilderness Guide",
+    role: "Facilitator & Wilderness Guide",
     bio: "World traveler, dreamer, coach, and guide of 12 years. Chris's deep love for nature and ability to connect with people creates an environment that encourages exploration, openness, and deep reflection. His mission is to be the bridge between society and the natural world.",
     image: chrisPhoto,
   },
