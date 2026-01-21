@@ -23,6 +23,7 @@ export function Navbar() {
   const links = [
     { href: "/about", label: "The Work" },
     { href: "/retreats", label: "Retreats" },
+    { href: "/team", label: "Team" },
     { href: "/past-retreats", label: "Past Retreats" },
     { href: "/faq", label: "FAQ" },
     { href: "/contact", label: "Contact" },
