@@ -1,21 +1,9 @@
-import { sql } from "drizzle-orm";
-import { pgTable, text, varchar, serial, timestamp } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, integer } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
-export const users = pgTable("users", {
-  id: varchar("id").primaryKey().default(sql`gen_random_uuid()`),
-  username: text("username").notNull().unique(),
-  password: text("password").notNull(),
-});
-
-export const insertUserSchema = createInsertSchema(users).pick({
-  username: true,
-  password: true,
-});
-
-export type InsertUser = z.infer<typeof insertUserSchema>;
-export type User = typeof users.$inferSelect;
+// Re-export auth models (users and sessions tables)
+export * from "./models/auth";
 
 export const contactSubmissions = pgTable("contact_submissions", {
   id: serial("id").primaryKey(),
@@ -46,3 +34,61 @@ export const insertNewsletterSubscriptionSchema = createInsertSchema(newsletterS
 
 export type InsertNewsletterSubscription = z.infer<typeof insertNewsletterSubscriptionSchema>;
 export type NewsletterSubscription = typeof newsletterSubscriptions.$inferSelect;
+
+// Member portal tables
+export const retreatRegistrations = pgTable("retreat_registrations", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  retreatName: text("retreat_name").notNull(),
+  retreatDate: text("retreat_date").notNull(),
+  paymentStatus: text("payment_status").notNull().default("pending"),
+  paymentAmount: text("payment_amount"),
+  stripeSessionId: text("stripe_session_id"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertRetreatRegistrationSchema = createInsertSchema(retreatRegistrations).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertRetreatRegistration = z.infer<typeof insertRetreatRegistrationSchema>;
+export type RetreatRegistration = typeof retreatRegistrations.$inferSelect;
+
+// Discussion board
+export const discussions = pgTable("discussions", {
+  id: serial("id").primaryKey(),
+  userId: text("user_id").notNull(),
+  userName: text("user_name").notNull(),
+  userImage: text("user_image"),
+  title: text("title").notNull(),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertDiscussionSchema = createInsertSchema(discussions).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertDiscussion = z.infer<typeof insertDiscussionSchema>;
+export type Discussion = typeof discussions.$inferSelect;
+
+// Discussion replies
+export const discussionReplies = pgTable("discussion_replies", {
+  id: serial("id").primaryKey(),
+  discussionId: integer("discussion_id").notNull(),
+  userId: text("user_id").notNull(),
+  userName: text("user_name").notNull(),
+  userImage: text("user_image"),
+  content: text("content").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertDiscussionReplySchema = createInsertSchema(discussionReplies).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertDiscussionReply = z.infer<typeof insertDiscussionReplySchema>;
+export type DiscussionReply = typeof discussionReplies.$inferSelect;

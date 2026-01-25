@@ -1,16 +1,18 @@
 import { Link, useLocation } from "wouter";
 import { images } from "@/lib/data";
-import { Menu, X } from "lucide-react";
+import { Menu, User, LogIn, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion } from "framer-motion";
 import { MiniCountdown } from "@/components/countdown";
+import { useAuth } from "@/hooks/use-auth";
 
 export function Navbar() {
   const [location] = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const { user, isLoading } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -29,7 +31,7 @@ export function Navbar() {
     { href: "/contact", label: "Contact" },
   ];
 
-  const nextRetreatDate = new Date("2026-03-01");
+  const nextRetreatDate = new Date("2026-03-06");
   const isHomePage = location === "/";
 
   return (
@@ -57,7 +59,7 @@ export function Navbar() {
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-8">
+        <div className="hidden md:flex items-center gap-6">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className={`text-sm tracking-widest uppercase hover:text-white transition-colors duration-300 ${
                   location === link.href ? "text-white border-b border-primary" : "text-muted-foreground"
@@ -67,6 +69,31 @@ export function Navbar() {
           ))}
           {isHomePage && (
             <MiniCountdown targetDate={nextRetreatDate} />
+          )}
+          
+          {/* Auth buttons */}
+          {!isLoading && (
+            user ? (
+              <div className="flex items-center gap-3 ml-2">
+                <Link href="/member">
+                  <Button variant="ghost" size="sm" className="gap-2 text-primary hover:text-white" data-testid="button-member-portal">
+                    {user.profileImageUrl ? (
+                      <img src={user.profileImageUrl} alt="" className="w-5 h-5 rounded-full" />
+                    ) : (
+                      <User className="w-4 h-4" />
+                    )}
+                    Portal
+                  </Button>
+                </Link>
+              </div>
+            ) : (
+              <Button variant="ghost" size="sm" asChild className="gap-2 text-muted-foreground hover:text-white ml-2" data-testid="button-login">
+                <a href="/api/login">
+                  <LogIn className="w-4 h-4" />
+                  Log In
+                </a>
+              </Button>
+            )
           )}
         </div>
 
@@ -86,10 +113,9 @@ export function Navbar() {
                  </div>
 
                  <div className="p-8 flex justify-end">
-                    {/* Close button handled by Sheet primitives, but we can add custom if needed */}
                  </div>
                  
-                 <div className="flex flex-col justify-center items-center gap-8 flex-1 z-10">
+                 <div className="flex flex-col justify-center items-center gap-6 flex-1 z-10">
                   {links.map((link, i) => (
                     <motion.div
                       key={link.href}
@@ -107,6 +133,35 @@ export function Navbar() {
                       </Link>
                     </motion.div>
                   ))}
+                  
+                  {/* Mobile Auth */}
+                  {!isLoading && (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      animate={{ opacity: 1, y: 0 }}
+                      transition={{ delay: links.length * 0.1 }}
+                      className="pt-4 border-t border-white/10 mt-4"
+                    >
+                      {user ? (
+                        <div className="flex flex-col items-center gap-4">
+                          <Link href="/member" onClick={() => setIsOpen(false)}>
+                            <span className="font-serif text-2xl text-primary hover:text-white transition-colors block py-2 px-4">
+                              Member Portal
+                            </span>
+                          </Link>
+                          <a href="/api/logout" className="text-muted-foreground hover:text-white text-sm flex items-center gap-2">
+                            <LogOut className="w-4 h-4" />
+                            Log Out
+                          </a>
+                        </div>
+                      ) : (
+                        <a href="/api/login" className="font-serif text-2xl text-primary hover:text-white transition-colors block py-2 px-4 flex items-center gap-3">
+                          <LogIn className="w-6 h-6" />
+                          Log In
+                        </a>
+                      )}
+                    </motion.div>
+                  )}
                 </div>
               </div>
             </SheetContent>

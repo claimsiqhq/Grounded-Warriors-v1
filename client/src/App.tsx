@@ -15,6 +15,10 @@ import PastRetreats from "@/pages/past-retreats";
 import RegistrationSuccess from "@/pages/registration-success";
 import FAQ from "@/pages/faq";
 import Team from "@/pages/team";
+import MemberDashboard from "@/pages/member-dashboard";
+import MemberDiscussions from "@/pages/member-discussions";
+import MemberDiscussionDetail from "@/pages/member-discussion-detail";
+import MemberResources from "@/pages/member-resources";
 
 function Router() {
   return (
@@ -30,6 +34,10 @@ function Router() {
       <Route path="/team" component={Team} />
       <Route path="/contact" component={Contact} />
       <Route path="/registration/success" component={RegistrationSuccess} />
+      <Route path="/member" component={MemberDashboard} />
+      <Route path="/member/discussions" component={MemberDiscussions} />
+      <Route path="/member/discussions/:id" component={MemberDiscussionDetail} />
+      <Route path="/member/resources" component={MemberResources} />
       <Route component={NotFound} />
     </Switch>
   );

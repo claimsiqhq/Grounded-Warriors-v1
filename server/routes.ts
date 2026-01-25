@@ -1,15 +1,19 @@
 import type { Express } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema } from "@shared/schema";
+import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sendContactFormEmail } from "./sendgridClient";
+import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  // Setup authentication BEFORE other routes
+  await setupAuth(app);
+  registerAuthRoutes(app);
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {
@@ -190,6 +194,111 @@ export async function registerRoutes(
     } catch (error: any) {
       console.error("Error retrieving checkout session:", error);
       res.status(500).json({ error: error.message || "Failed to retrieve session" });
+    }
+  });
+
+  // Member Portal: Discussions
+  app.get("/api/discussions", isAuthenticated, async (req, res) => {
+    try {
+      const discussions = await storage.getDiscussions();
+      res.json({ discussions });
+    } catch (error) {
+      console.error("Error fetching discussions:", error);
+      res.status(500).json({ error: "Failed to fetch discussions" });
+    }
+  });
+
+  app.post("/api/discussions", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const userName = `${req.user.claims.first_name || ''} ${req.user.claims.last_name || ''}`.trim() || req.user.claims.email || 'Member';
+      const userImage = req.user.claims.profile_image_url;
+      
+      const validatedData = insertDiscussionSchema.parse({
+        ...req.body,
+        userId,
+        userName,
+        userImage
+      });
+      const discussion = await storage.createDiscussion(validatedData);
+      res.status(201).json({ discussion });
+    } catch (error: any) {
+      if (error.name === "ZodError") {
+        const validationError = fromZodError(error);
+        return res.status(400).json({ error: validationError.message });
+      }
+      console.error("Error creating discussion:", error);
+      res.status(500).json({ error: "Failed to create discussion" });
+    }
+  });
+
+  app.get("/api/discussions/:id", isAuthenticated, async (req, res) => {
+    try {
+      const discussion = await storage.getDiscussion(parseInt(req.params.id));
+      if (!discussion) {
+        return res.status(404).json({ error: "Discussion not found" });
+      }
+      const replies = await storage.getRepliesForDiscussion(discussion.id);
+      res.json({ discussion, replies });
+    } catch (error) {
+      console.error("Error fetching discussion:", error);
+      res.status(500).json({ error: "Failed to fetch discussion" });
+    }
+  });
+
+  app.post("/api/discussions/:id/replies", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const userName = `${req.user.claims.first_name || ''} ${req.user.claims.last_name || ''}`.trim() || req.user.claims.email || 'Member';
+      const userImage = req.user.claims.profile_image_url;
+      
+      const validatedData = insertDiscussionReplySchema.parse({
+        ...req.body,
+        discussionId: parseInt(req.params.id),
+        userId,
+        userName,
+        userImage
+      });
+      const reply = await storage.createDiscussionReply(validatedData);
+      res.status(201).json({ reply });
+    } catch (error: any) {
+      if (error.name === "ZodError") {
+        const validationError = fromZodError(error);
+        return res.status(400).json({ error: validationError.message });
+      }
+      console.error("Error creating reply:", error);
+      res.status(500).json({ error: "Failed to create reply" });
+    }
+  });
+
+  // Member Portal: Registrations
+  app.get("/api/member/registrations", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const registrations = await storage.getUserRegistrations(userId);
+      res.json({ registrations });
+    } catch (error) {
+      console.error("Error fetching registrations:", error);
+      res.status(500).json({ error: "Failed to fetch registrations" });
+    }
+  });
+
+  app.post("/api/member/registrations", isAuthenticated, async (req: any, res) => {
+    try {
+      const userId = req.user.claims.sub;
+      const validatedData = insertRetreatRegistrationSchema.parse({
+        ...req.body,
+        userId
+      });
+      const registration = await storage.createRetreatRegistration(validatedData);
+      res.status(201).json({ registration });
+    } catch (error: any) {
+      if (error.name === "ZodError") {
+        const validationError = fromZodError(error);
+        return res.status(400).json({ error: validationError.message });
+      }
+      console.error("Error creating registration:", error);
+      res.status(500).json({ error: "Failed to create registration" });
     }
   });
 

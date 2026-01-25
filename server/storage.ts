@@ -1,30 +1,37 @@
-import { type User, type InsertUser, type ContactSubmission, type InsertContactSubmission, type NewsletterSubscription, type InsertNewsletterSubscription, users, contactSubmissions, newsletterSubscriptions } from "@shared/schema";
+import { 
+  type User, 
+  type ContactSubmission, type InsertContactSubmission, 
+  type NewsletterSubscription, type InsertNewsletterSubscription,
+  type Discussion, type InsertDiscussion,
+  type DiscussionReply, type InsertDiscussionReply,
+  type RetreatRegistration, type InsertRetreatRegistration,
+  users, contactSubmissions, newsletterSubscriptions,
+  discussions, discussionReplies, retreatRegistrations
+} from "@shared/schema";
 import { db } from "./db";
-import { eq, sql } from "drizzle-orm";
+import { eq, sql, desc } from "drizzle-orm";
 
 export interface IStorage {
   getUser(id: string): Promise<User | undefined>;
-  getUserByUsername(username: string): Promise<User | undefined>;
-  createUser(user: InsertUser): Promise<User>;
   createContactSubmission(submission: InsertContactSubmission): Promise<ContactSubmission>;
   getContactSubmissions(): Promise<ContactSubmission[]>;
   createNewsletterSubscription(subscription: InsertNewsletterSubscription): Promise<NewsletterSubscription>;
   getNewsletterSubscriptions(): Promise<NewsletterSubscription[]>;
+  // Discussions
+  createDiscussion(discussion: InsertDiscussion): Promise<Discussion>;
+  getDiscussions(): Promise<Discussion[]>;
+  getDiscussion(id: number): Promise<Discussion | undefined>;
+  // Replies
+  createDiscussionReply(reply: InsertDiscussionReply): Promise<DiscussionReply>;
+  getRepliesForDiscussion(discussionId: number): Promise<DiscussionReply[]>;
+  // Registrations
+  createRetreatRegistration(registration: InsertRetreatRegistration): Promise<RetreatRegistration>;
+  getUserRegistrations(userId: string): Promise<RetreatRegistration[]>;
 }
 
 export class DatabaseStorage implements IStorage {
   async getUser(id: string): Promise<User | undefined> {
     const [user] = await db.select().from(users).where(eq(users.id, id));
-    return user;
-  }
-
-  async getUserByUsername(username: string): Promise<User | undefined> {
-    const [user] = await db.select().from(users).where(eq(users.username, username));
-    return user;
-  }
-
-  async createUser(insertUser: InsertUser): Promise<User> {
-    const [user] = await db.insert(users).values(insertUser).returning();
     return user;
   }
 
@@ -44,6 +51,41 @@ export class DatabaseStorage implements IStorage {
 
   async getNewsletterSubscriptions(): Promise<NewsletterSubscription[]> {
     return await db.select().from(newsletterSubscriptions).orderBy(newsletterSubscriptions.createdAt);
+  }
+
+  // Discussion methods
+  async createDiscussion(discussion: InsertDiscussion): Promise<Discussion> {
+    const [newDiscussion] = await db.insert(discussions).values(discussion).returning();
+    return newDiscussion;
+  }
+
+  async getDiscussions(): Promise<Discussion[]> {
+    return await db.select().from(discussions).orderBy(desc(discussions.createdAt));
+  }
+
+  async getDiscussion(id: number): Promise<Discussion | undefined> {
+    const [discussion] = await db.select().from(discussions).where(eq(discussions.id, id));
+    return discussion;
+  }
+
+  // Reply methods
+  async createDiscussionReply(reply: InsertDiscussionReply): Promise<DiscussionReply> {
+    const [newReply] = await db.insert(discussionReplies).values(reply).returning();
+    return newReply;
+  }
+
+  async getRepliesForDiscussion(discussionId: number): Promise<DiscussionReply[]> {
+    return await db.select().from(discussionReplies).where(eq(discussionReplies.discussionId, discussionId)).orderBy(discussionReplies.createdAt);
+  }
+
+  // Registration methods
+  async createRetreatRegistration(registration: InsertRetreatRegistration): Promise<RetreatRegistration> {
+    const [newRegistration] = await db.insert(retreatRegistrations).values(registration).returning();
+    return newRegistration;
+  }
+
+  async getUserRegistrations(userId: string): Promise<RetreatRegistration[]> {
+    return await db.select().from(retreatRegistrations).where(eq(retreatRegistrations.userId, userId)).orderBy(desc(retreatRegistrations.createdAt));
   }
 
   async listProducts(active = true) {
