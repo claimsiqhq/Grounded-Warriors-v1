@@ -69,7 +69,7 @@ export default function MemberDiscussionDetail() {
               <h2 className="font-serif text-2xl text-white mb-4">Members Only</h2>
               <p className="text-muted-foreground mb-6">Please log in to access the community.</p>
               <Button asChild className="bg-primary">
-                <a href="/api/login" data-testid="button-login">Log In</a>
+                <Link href="/login" data-testid="button-login">Log In</Link>
               </Button>
             </CardContent>
           </Card>

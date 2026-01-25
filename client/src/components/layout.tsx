@@ -87,12 +87,12 @@ export function Navbar() {
                 </Link>
               </div>
             ) : (
-              <Button variant="ghost" size="sm" asChild className="gap-2 text-muted-foreground hover:text-white ml-2" data-testid="button-login">
-                <a href="/api/login">
+              <Link href="/login">
+                <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-white ml-2" data-testid="button-login">
                   <LogIn className="w-4 h-4" />
                   Log In
-                </a>
-              </Button>
+                </Button>
+              </Link>
             )
           )}
         </div>
@@ -149,16 +149,14 @@ export function Navbar() {
                               Member Portal
                             </span>
                           </Link>
-                          <a href="/api/logout" className="text-muted-foreground hover:text-white text-sm flex items-center gap-2">
-                            <LogOut className="w-4 h-4" />
-                            Log Out
-                          </a>
                         </div>
                       ) : (
-                        <a href="/api/login" className="font-serif text-2xl text-primary hover:text-white transition-colors block py-2 px-4 flex items-center gap-3">
-                          <LogIn className="w-6 h-6" />
-                          Log In
-                        </a>
+                        <Link href="/login" onClick={() => setIsOpen(false)}>
+                          <span className="font-serif text-2xl text-primary hover:text-white transition-colors block py-2 px-4 flex items-center gap-3">
+                            <LogIn className="w-6 h-6" />
+                            Log In
+                          </span>
+                        </Link>
                       )}
                     </motion.div>
                   )}

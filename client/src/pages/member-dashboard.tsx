@@ -46,7 +46,7 @@ export default function MemberDashboard() {
               <h2 className="font-serif text-2xl text-white mb-4">Members Only</h2>
               <p className="text-muted-foreground mb-6">Please log in to access the member portal.</p>
               <Button asChild className="bg-primary">
-                <a href="/api/login" data-testid="button-login">Log In</a>
+                <Link href="/login" data-testid="button-login">Log In</Link>
               </Button>
             </CardContent>
           </Card>
@@ -201,8 +201,11 @@ export default function MemberDashboard() {
         <section className="py-12 pb-24">
           <div className="container px-6 mx-auto">
             <motion.div {...fadeIn}>
-              <Button variant="outline" asChild data-testid="button-logout">
-                <a href="/api/logout">Log Out</a>
+              <Button variant="outline" onClick={() => {
+                fetch('/api/auth/logout', { method: 'POST', credentials: 'include' })
+                  .then(() => window.location.href = '/');
+              }} data-testid="button-logout">
+                Log Out
               </Button>
             </motion.div>
           </div>

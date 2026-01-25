@@ -1,19 +1,28 @@
-import type { Express } from "express";
+import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema } from "@shared/schema";
 import { fromZodError } from "zod-validation-error";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sendContactFormEmail } from "./sendgridClient";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./replit_integrations/auth";
+import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
+import { db } from "./db";
+import { users } from "@shared/models/auth";
+import { eq } from "drizzle-orm";
+
+async function getUserFromSession(req: Request) {
+  if (!req.session.userId) return null;
+  const [user] = await db.select().from(users).where(eq(users.id, req.session.userId));
+  return user || null;
+}
 
 export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
   // Setup authentication BEFORE other routes
-  await setupAuth(app);
-  registerAuthRoutes(app);
+  setupAuth(app);
+  await registerAuthRoutes(app);
   // Contact form submission endpoint
   app.post("/api/contact", async (req, res) => {
     try {
@@ -210,15 +219,16 @@ export async function registerRoutes(
 
   app.post("/api/discussions", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const userName = `${req.user.claims.first_name || ''} ${req.user.claims.last_name || ''}`.trim() || req.user.claims.email || 'Member';
-      const userImage = req.user.claims.profile_image_url;
+      const user = await getUserFromSession(req);
+      if (!user) return res.status(401).json({ error: "Not authenticated" });
+      
+      const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || 'Member';
       
       const validatedData = insertDiscussionSchema.parse({
         ...req.body,
-        userId,
+        userId: user.id,
         userName,
-        userImage
+        userImage: user.profileImageUrl
       });
       const discussion = await storage.createDiscussion(validatedData);
       res.status(201).json({ discussion });
@@ -248,16 +258,17 @@ export async function registerRoutes(
 
   app.post("/api/discussions/:id/replies", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const userName = `${req.user.claims.first_name || ''} ${req.user.claims.last_name || ''}`.trim() || req.user.claims.email || 'Member';
-      const userImage = req.user.claims.profile_image_url;
+      const user = await getUserFromSession(req);
+      if (!user) return res.status(401).json({ error: "Not authenticated" });
+      
+      const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || 'Member';
       
       const validatedData = insertDiscussionReplySchema.parse({
         ...req.body,
         discussionId: parseInt(req.params.id),
-        userId,
+        userId: user.id,
         userName,
-        userImage
+        userImage: user.profileImageUrl
       });
       const reply = await storage.createDiscussionReply(validatedData);
       res.status(201).json({ reply });
@@ -274,8 +285,10 @@ export async function registerRoutes(
   // Member Portal: Registrations
   app.get("/api/member/registrations", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
-      const registrations = await storage.getUserRegistrations(userId);
+      const user = await getUserFromSession(req);
+      if (!user) return res.status(401).json({ error: "Not authenticated" });
+      
+      const registrations = await storage.getUserRegistrations(user.id);
       res.json({ registrations });
     } catch (error) {
       console.error("Error fetching registrations:", error);
@@ -285,10 +298,12 @@ export async function registerRoutes(
 
   app.post("/api/member/registrations", isAuthenticated, async (req: any, res) => {
     try {
-      const userId = req.user.claims.sub;
+      const user = await getUserFromSession(req);
+      if (!user) return res.status(401).json({ error: "Not authenticated" });
+      
       const validatedData = insertRetreatRegistrationSchema.parse({
         ...req.body,
-        userId
+        userId: user.id
       });
       const registration = await storage.createRetreatRegistration(validatedData);
       res.status(201).json({ registration });
