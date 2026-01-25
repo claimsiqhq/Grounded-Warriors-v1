@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { Link } from "wouter";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface CountdownProps {
   targetDate: Date;
@@ -36,31 +37,63 @@ export function MiniCountdown({ targetDate, variant = "desktop" }: MiniCountdown
   if (variant === "mobile") {
     return (
       <Link href="/retreats">
-        <div 
+        <motion.div 
           className="flex items-center justify-center gap-3 py-2 bg-primary/10 border-b border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
           data-testid="mini-countdown-mobile"
+          animate={{
+            backgroundColor: [
+              "rgba(139, 195, 74, 0.1)",
+              "rgba(139, 195, 74, 0.15)",
+              "rgba(139, 195, 74, 0.1)",
+            ],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
         >
           <span className="text-xs text-muted-foreground uppercase tracking-wider">Next Retreat in</span>
-          <span className="text-sm font-semibold text-primary">
+          <motion.span 
+            className="text-sm font-semibold text-primary"
+            animate={{ scale: [1, 1.05, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
             {timeLeft.days} days, {timeLeft.hours} hours
-          </span>
+          </motion.span>
           <span className="text-xs text-primary">→</span>
-        </div>
+        </motion.div>
       </Link>
     );
   }
 
   return (
     <Link href="/retreats">
-      <div 
+      <motion.div 
         className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer group"
         data-testid="mini-countdown-desktop"
+        animate={{
+          boxShadow: [
+            "0 0 0px rgba(139, 195, 74, 0)",
+            "0 0 8px rgba(139, 195, 74, 0.4)",
+            "0 0 0px rgba(139, 195, 74, 0)",
+          ],
+        }}
+        transition={{
+          duration: 3,
+          repeat: Infinity,
+          ease: "easeInOut",
+        }}
       >
         <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Next Retreat</span>
-        <span className="text-sm font-semibold text-primary group-hover:text-white transition-colors">
+        <motion.span 
+          className="text-sm font-semibold text-primary group-hover:text-white transition-colors"
+          animate={{ scale: [1, 1.05, 1] }}
+          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+        >
           {timeLeft.days}d {timeLeft.hours}h
-        </span>
-      </div>
+        </motion.span>
+      </motion.div>
     </Link>
   );
 }
@@ -100,9 +133,36 @@ export function Countdown({ targetDate }: CountdownProps) {
         { value: timeLeft.seconds, label: "Sec", id: "seconds" },
       ].map((item) => (
         <div key={item.id} className="text-center">
-          <div className="bg-card border border-primary/20 w-20 h-20 md:w-28 md:h-28 flex items-center justify-center">
-            <span className="font-serif text-3xl md:text-5xl text-white" data-testid={`text-countdown-${item.id}`}>{String(item.value).padStart(2, '0')}</span>
-          </div>
+          <motion.div 
+            className="bg-card border border-primary/20 w-20 h-20 md:w-28 md:h-28 flex items-center justify-center relative overflow-hidden"
+            animate={{
+              boxShadow: [
+                "0 0 0px rgba(139, 195, 74, 0)",
+                "0 0 15px rgba(139, 195, 74, 0.3)",
+                "0 0 0px rgba(139, 195, 74, 0)",
+              ],
+            }}
+            transition={{
+              duration: 2,
+              repeat: Infinity,
+              ease: "easeInOut",
+            }}
+          >
+            <AnimatePresence mode="popLayout">
+              <motion.span
+                key={item.value}
+                className="font-serif text-3xl md:text-5xl text-white"
+                data-testid={`text-countdown-${item.id}`}
+                initial={{ rotateX: -90, opacity: 0 }}
+                animate={{ rotateX: 0, opacity: 1 }}
+                exit={{ rotateX: 90, opacity: 0 }}
+                transition={{ duration: 0.3, ease: "easeOut" }}
+                style={{ transformStyle: "preserve-3d" }}
+              >
+                {String(item.value).padStart(2, '0')}
+              </motion.span>
+            </AnimatePresence>
+          </motion.div>
           <span className="text-xs md:text-sm text-muted-foreground uppercase tracking-widest mt-3 block">{item.label}</span>
         </div>
       ))}
