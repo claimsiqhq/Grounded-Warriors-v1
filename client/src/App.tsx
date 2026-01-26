@@ -10,6 +10,7 @@ import Experience from "@/pages/experience";
 import Retreats from "@/pages/retreats";
 import RetreatWinter from "@/pages/retreat-winter";
 import RetreatSpring from "@/pages/retreat-spring";
+import VeteransRetreat from "@/pages/retreats/veterans";
 import Contact from "@/pages/contact";
 import PastRetreats from "@/pages/past-retreats";
 import RegistrationSuccess from "@/pages/registration-success";
@@ -30,6 +31,7 @@ function Router() {
       <Route path="/retreats" component={Retreats} />
       <Route path="/retreats/winter-descent" component={RetreatWinter} />
       <Route path="/retreats/spring-awakening" component={RetreatSpring} />
+      <Route path="/retreats/first-responders-veterans" component={VeteransRetreat} />
       <Route path="/past-retreats" component={PastRetreats} />
       <Route path="/faq" component={FAQ} />
       <Route path="/team" component={Team} />

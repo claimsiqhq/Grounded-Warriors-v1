@@ -142,13 +142,13 @@ export default function Retreats() {
                   </div>
                   
                   <div className="flex gap-3">
-                    <Link href="/contact" className="flex-1">
+                    <Link href="/retreats/first-responders-veterans" className="flex-1">
                       <Button 
                         variant="outline"
                         className="w-full border-amber-500/30 text-amber-500 hover:bg-amber-500 hover:text-white rounded-none uppercase tracking-widest py-6"
-                        data-testid="button-interest-veterans"
+                        data-testid="button-learn-more-veterans"
                       >
-                        Express Interest
+                        Learn More
                       </Button>
                     </Link>
                   </div>
