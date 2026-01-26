@@ -42,8 +42,9 @@ export default function VeteransRetreat() {
               <h2 className="font-serif text-2xl md:text-3xl text-white mb-6">The Crisis</h2>
               <div className="space-y-4 text-white/80">
                 <p className="text-lg">
-                  <span className="text-red-400 font-semibold">22 veterans die by suicide every day.</span> First responders 
-                  are 5x more likely to experience PTSD than the general population.
+                  <span className="text-red-400 font-semibold">22 veterans die by suicide every day.</span> Police officers 
+                  are 30% more likely to die by suicide than in the line of duty. EMS personnel have the highest rates of 
+                  PTSD among all first responders—<span className="text-red-400 font-semibold">nearly 1 in 3.</span>
                 </p>
                 <p>
                   While billions are spent on traditional intervention programs, recidivism rates remain high because most 
@@ -109,9 +110,9 @@ export default function VeteransRetreat() {
                     </p>
                   </div>
                   <div className="border-l-2 border-primary/50 pl-4">
-                    <h4 className="text-white font-semibold mb-1">What Are You Guarding Now?</h4>
+                    <h4 className="text-white font-semibold mb-1">What Are You Protecting Now?</h4>
                     <p className="text-muted-foreground text-sm">
-                      Shifting from external perimeter security to protecting their peace, marriages, and recovery.
+                      Shifting from protecting others to protecting their peace, marriages, and recovery.
                     </p>
                   </div>
                 </div>
@@ -133,9 +134,9 @@ export default function VeteransRetreat() {
                     </p>
                   </div>
                   <div className="border-l-2 border-amber-500/50 pl-4">
-                    <h4 className="text-white font-semibold mb-1">The Watch</h4>
+                    <h4 className="text-white font-semibold mb-1">The Vigil</h4>
                     <p className="text-muted-foreground text-sm">
-                      Night vigils tending fire, writing to themselves and loved ones—familiar rhythms redirected toward self-witnessing.
+                      Night shifts tending fire, writing to themselves and loved ones—familiar rhythms redirected toward self-witnessing.
                     </p>
                   </div>
                   <div className="border-l-2 border-amber-500/50 pl-4">
@@ -228,7 +229,7 @@ export default function VeteransRetreat() {
           >
             <h2 className="font-serif text-3xl md:text-4xl text-white text-center mb-12">Why We're Different</h2>
             
-            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid sm:grid-cols-2 lg:grid-cols-3 gap-6 max-w-5xl mx-auto">
               <div className="bg-card border border-white/10 p-6 text-center">
                 <div className="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-7 h-7 text-primary" />
@@ -257,11 +258,19 @@ export default function VeteransRetreat() {
                 <div className="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="w-7 h-7 text-primary" />
                 </div>
-                <h4 className="text-white font-semibold mb-2">Brother-Led</h4>
-                <p className="text-muted-foreground text-sm">Facilitated by veterans who've walked the path</p>
+                <h4 className="text-white font-semibold mb-2">Brotherhood Across Service</h4>
+                <p className="text-muted-foreground text-sm">First responders and veterans healing together</p>
               </div>
               
-              <div className="bg-card border border-white/10 p-6 text-center sm:col-span-2 lg:col-span-1">
+              <div className="bg-card border border-white/10 p-6 text-center">
+                <div className="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
+                  <Shield className="w-7 h-7 text-primary" />
+                </div>
+                <h4 className="text-white font-semibold mb-2">Brother-Led</h4>
+                <p className="text-muted-foreground text-sm">Facilitated by those who've served and walked the path</p>
+              </div>
+              
+              <div className="bg-card border border-white/10 p-6 text-center">
                 <div className="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Flame className="w-7 h-7 text-primary" />
                 </div>
@@ -306,8 +315,8 @@ export default function VeteransRetreat() {
             <div className="text-center border-t border-b border-white/10 py-12">
               <h2 className="font-serif text-2xl md:text-3xl text-white mb-6">The Bottom Line</h2>
               <p className="text-xl md:text-2xl text-white/80 font-serif italic leading-relaxed">
-                "We're not running another veterans program. We're giving warriors permission to guard their own peace 
-                with the same discipline they once guarded others."
+                "We're not running another program. We're giving warriors permission to protect their own peace 
+                with the same discipline they once protected others."
               </p>
             </div>
           </motion.section>
