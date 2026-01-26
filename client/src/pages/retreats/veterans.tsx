@@ -75,8 +75,8 @@ export default function VeteransRetreat() {
               <h2 className="font-serif text-2xl md:text-3xl text-white mb-6">The Crisis</h2>
               <div className="space-y-4 text-white/80">
                 <p className="text-lg">
-                  <span className="text-red-400 font-semibold">22 veterans die by suicide every day.</span> Police officers 
-                  are 30% more likely to die by suicide than in the line of duty. EMS personnel have the highest rates of 
+                  <span className="text-red-400 font-semibold">Over 17 veterans die by suicide every day.</span> Police officers 
+                  are 2-3x more likely to die by suicide than in the line of duty. EMS personnel have the highest rates of 
                   PTSD among all first responders—<span className="text-red-400 font-semibold">nearly 1 in 3.</span>
                 </p>
                 <p>
