@@ -313,7 +313,7 @@ export default function VeteransRetreat() {
             </div>
           </motion.section>
 
-          {/* Investment / Pricing */}
+          {/* Retreat Details */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
@@ -321,9 +321,9 @@ export default function VeteransRetreat() {
             className="max-w-3xl mx-auto mb-20"
           >
             <div className="bg-gradient-to-br from-primary/20 to-amber-500/10 border border-primary/30 p-8 md:p-12 text-center">
-              <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">Investment</h2>
-              <div className="text-5xl md:text-6xl font-serif text-primary mb-2">$3,500</div>
-              <p className="text-muted-foreground mb-6">4-day retreat, all-inclusive</p>
+              <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">Retreat Details</h2>
+              <div className="text-3xl md:text-4xl font-serif text-primary mb-2">3 Days, 2 Nights</div>
+              <p className="text-muted-foreground mb-6">All-inclusive immersive experience</p>
               
               <div className="flex flex-wrap justify-center gap-4 text-sm text-white/70 mb-8">
                 <span className="bg-white/5 px-4 py-2 rounded">Cohort Size: 12-16</span>
@@ -332,7 +332,7 @@ export default function VeteransRetreat() {
               </div>
               
               <p className="text-muted-foreground text-sm max-w-xl mx-auto">
-                Funding supports: Facility operations, facilitator training, participant scholarships, 
+                Your participation supports: Facility operations, facilitator training, participant scholarships, 
                 land development, and follow-up integration support.
               </p>
             </div>
