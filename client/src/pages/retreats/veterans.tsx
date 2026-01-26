@@ -3,33 +3,66 @@ import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
 import { Shield, Heart, Users, Flame, Moon, Mountain, CheckCircle } from "lucide-react";
+import veteransHero from "@/assets/images/veterans-hero.jpg";
+import firstResponder1 from "@/assets/images/first-responder-1.jpg";
+import firstResponder2 from "@/assets/images/first-responder-2.jpg";
+import firstResponder3 from "@/assets/images/first-responder-3.jpg";
 
 export default function VeteransRetreat() {
   return (
     <Layout>
-      <div className="pt-32 pb-20 bg-background min-h-screen">
-        {/* Hero Section */}
+      {/* Hero Image Section */}
+      <div className="relative h-[50vh] min-h-[400px]">
+        <div className="absolute inset-0">
+          <img 
+            src={veteransHero} 
+            alt="Veterans and first responders in nature" 
+            className="w-full h-full object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-b from-background/60 via-background/40 to-background" />
+        </div>
+        <div className="absolute inset-0 flex items-center justify-center">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            className="text-center px-6"
+          >
+            <span className="text-amber-500 text-xs uppercase tracking-widest mb-4 block">Coming April 2026</span>
+            <h1 className="font-serif text-4xl md:text-6xl text-white mb-6">
+              First Responders & Veterans Healing Retreat
+            </h1>
+            <p className="text-xl text-white/80 max-w-2xl mx-auto mb-8">
+              Where the most elite operation is the one to reclaim your life.
+            </p>
+            <div className="inline-block bg-amber-600/20 border border-amber-500/30 px-6 py-3 rounded backdrop-blur-sm">
+              <span className="text-amber-400 font-semibold">Tentative Date: April 3-5, 2026</span>
+              <span className="text-white/50 mx-3">|</span>
+              <span className="text-white">Ontario, Canada</span>
+            </div>
+          </motion.div>
+        </div>
+      </div>
+
+      <div className="pb-20 bg-background">
         <div className="container px-6 mx-auto">
-          <div className="max-w-4xl mx-auto text-center mb-16">
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="text-amber-500 text-xs uppercase tracking-widest mb-4 block">Coming April 2026</span>
-              <h1 className="font-serif text-4xl md:text-6xl text-white mb-6">
-                First Responders & Veterans Healing Retreat
-              </h1>
-              <p className="text-xl text-muted-foreground max-w-2xl mx-auto mb-8">
-                Where the most elite operation is the one to reclaim your life.
-              </p>
-              <div className="inline-block bg-amber-600/20 border border-amber-500/30 px-6 py-3 rounded">
-                <span className="text-amber-400 font-semibold">Tentative Date: April 3-5, 2026</span>
-                <span className="text-muted-foreground mx-3">|</span>
-                <span className="text-white">Ontario, Canada</span>
-              </div>
-            </motion.div>
-          </div>
+          {/* First Responder Images Row */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="grid grid-cols-3 gap-4 max-w-4xl mx-auto -mt-16 relative z-10 mb-20"
+          >
+            <div className="aspect-[4/3] overflow-hidden border-2 border-primary/20">
+              <img src={firstResponder1} alt="Firefighter" className="w-full h-full object-cover" />
+            </div>
+            <div className="aspect-[4/3] overflow-hidden border-2 border-primary/20">
+              <img src={firstResponder2} alt="Paramedic" className="w-full h-full object-cover" />
+            </div>
+            <div className="aspect-[4/3] overflow-hidden border-2 border-primary/20">
+              <img src={firstResponder3} alt="Police officer" className="w-full h-full object-cover" />
+            </div>
+          </motion.div>
 
           {/* The Crisis Section */}
           <motion.section
