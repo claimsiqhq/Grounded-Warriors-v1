@@ -136,7 +136,7 @@ export const retreats = [
     location: "Algonquin Park, ON",
     image: mayColdPlunge,
     depositAmount: 250,
-    fullAmount: 2500,
+    fullAmount: 1999,
   },
 ];
 

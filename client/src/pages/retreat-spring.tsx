@@ -375,7 +375,7 @@ export default function RetreatSpring() {
           <div className="container px-6 mx-auto">
             <motion.div {...fadeIn} className="text-center mb-16">
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Investment</h2>
-              <h3 className="font-serif text-3xl md:text-5xl text-white mb-4">$2,500 All-Inclusive</h3>
+              <h3 className="font-serif text-3xl md:text-5xl text-white mb-4">$1,999 All-Inclusive</h3>
               <p className="text-muted-foreground max-w-xl mx-auto">
                 Secure your spot with a $250 deposit. Remaining balance due 30 days before retreat. Payment plans available.
               </p>
@@ -497,7 +497,7 @@ export default function RetreatSpring() {
           onClose={() => setShowModal(false)}
           retreatTitle="Spring Awakening"
           depositAmount={250}
-          fullAmount={2500}
+          fullAmount={1999}
         />
       )}
     </Layout>
