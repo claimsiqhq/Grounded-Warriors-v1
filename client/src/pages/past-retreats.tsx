@@ -5,6 +5,20 @@ import { motion } from "framer-motion";
 export default function PastRetreats() {
   const pastEvents = [
     {
+      id: 0,
+      date: "March 2026",
+      location: "Marmora, ON",
+      videoUrl: null,
+      images: [
+        { src: images.marchIcePlunge, alt: "Ice plunge", position: "center 35%" },
+        { src: images.marchSauna, alt: "Sauna", position: "center 50%" },
+        { src: images.marchWinterHike, alt: "Winter hike", position: "center 25%" },
+        { src: images.marchContemplation, alt: "Contemplation", position: "center 30%" },
+        { src: images.marchRest, alt: "Rest and recovery", position: "center 50%" },
+        { src: images.marchSnowTraining, alt: "Snow training", position: "center 40%" },
+      ],
+    },
+    {
       id: 1,
       date: "November 2025",
       location: "Marmora, ON",

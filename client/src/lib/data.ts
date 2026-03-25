@@ -121,15 +121,6 @@ export const springRetreatGallery = [
 
 export const retreats = [
   {
-    id: 1,
-    title: "Winter Descent",
-    date: "March 6-8, 2026",
-    location: "Marmora, ON",
-    image: marchIcePlunge,
-    depositAmount: 250,
-    fullAmount: 555,
-  },
-  {
     id: 2,
     title: "Spring Awakening",
     date: "May 1-4, 2026",
