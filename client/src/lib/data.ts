@@ -132,7 +132,7 @@ export const retreats = [
   {
     id: 2,
     title: "Spring Awakening",
-    date: "May 2026",
+    date: "May 1-4, 2026",
     location: "Algonquin Park, ON",
     image: mayColdPlunge,
     depositAmount: 250,

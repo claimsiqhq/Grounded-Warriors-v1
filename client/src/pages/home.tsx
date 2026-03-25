@@ -135,7 +135,7 @@ export default function Home() {
     return () => clearTimeout(timer);
   }, []);
 
-  const nextRetreatDate = new Date("2026-03-01");
+  const nextRetreatDate = new Date("2026-05-01");
 
   return (
     <Layout>
