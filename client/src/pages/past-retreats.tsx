@@ -5,6 +5,13 @@ import { motion } from "framer-motion";
 export default function PastRetreats() {
   const pastEvents = [
     {
+      id: -1,
+      date: "May 2026",
+      location: "Algonquin Park, ON",
+      videoUrl: null,
+      images: [],
+    },
+    {
       id: 0,
       date: "March 2026",
       location: "Marmora, ON",

@@ -121,13 +121,13 @@ export const springRetreatGallery = [
 
 export const retreats = [
   {
-    id: 2,
-    title: "Spring Awakening",
-    date: "May 1-4, 2026",
-    location: "Algonquin Park, ON",
-    image: mayColdPlunge,
+    id: 3,
+    title: "Equinox Gathering",
+    date: "September 2026",
+    location: "Marmora, ON",
+    image: driftwoodForest,
     depositAmount: 250,
-    fullAmount: 1999,
+    fullAmount: 555,
   },
 ];
 
