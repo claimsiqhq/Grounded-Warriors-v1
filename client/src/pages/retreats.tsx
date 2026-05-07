@@ -35,48 +35,81 @@ export default function Retreats() {
                 viewport={{ once: true }}
                 className="bg-card border border-white/5 overflow-hidden group"
               >
-                <Link href={retreatSlugs[retreat.id]}>
-                  <div className="relative h-64 cursor-pointer">
-                    <img 
-                      src={retreat.image} 
-                      alt={retreat.title} 
-                      className="w-full h-full object-cover object-center opacity-80 group-hover:opacity-100 transition-opacity"
-                      style={{ objectPosition: "center 35%" }}
-                    />
-                    <div className="absolute top-4 right-4 bg-primary/90 text-primary-foreground px-3 py-1 text-sm font-semibold">
-                      ${retreat.depositAmount} Deposit
-                    </div>
-                  </div>
-                </Link>
-                <div className="p-8">
-                  <span className="text-primary text-xs uppercase tracking-widest mb-3 block">{retreat.date}</span>
-                  <Link href={retreatSlugs[retreat.id]}>
-                    <h3 className="font-serif text-3xl text-white mb-2 hover:text-primary transition-colors cursor-pointer">{retreat.title}</h3>
-                  </Link>
-                  <p className="text-muted-foreground mb-2">{retreat.location}</p>
-                  <p className="text-white/80 text-sm mb-6">
-                    Full Price: <span className="text-primary font-semibold">${retreat.fullAmount}</span>
-                  </p>
-                  
-                  <div className="flex gap-3">
-                    <Link href={retreatSlugs[retreat.id]} className="flex-1">
-                      <Button 
-                        variant="outline"
-                        className="w-full border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground rounded-none uppercase tracking-widest py-6"
-                        data-testid={`button-details-${retreat.id}`}
-                      >
-                        Learn More
-                      </Button>
-                    </Link>
-                    <Button 
-                      onClick={() => setSelectedRetreat(retreat)}
-                      className="flex-1 bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
-                      data-testid={`button-register-${retreat.id}`}
-                    >
-                      Reserve
-                    </Button>
-                  </div>
-                </div>
+                {(() => {
+                  const isPlaceholder = retreatSlugs[retreat.id] === "/contact";
+                  return (
+                    <>
+                      <Link href={retreatSlugs[retreat.id]}>
+                        <div className="relative h-64 cursor-pointer">
+                          <img 
+                            src={retreat.image} 
+                            alt={retreat.title} 
+                            className="w-full h-full object-cover object-center opacity-80 group-hover:opacity-100 transition-opacity"
+                            style={{ objectPosition: "center 35%" }}
+                          />
+                          {!isPlaceholder && (
+                            <div className="absolute top-4 right-4 bg-primary/90 text-primary-foreground px-3 py-1 text-sm font-semibold">
+                              ${retreat.depositAmount} Deposit
+                            </div>
+                          )}
+                          {isPlaceholder && (
+                            <div className="absolute top-4 right-4 bg-primary/90 text-primary-foreground px-3 py-1 text-sm font-semibold">
+                              Details Soon
+                            </div>
+                          )}
+                        </div>
+                      </Link>
+                      <div className="p-8">
+                        <span className="text-primary text-xs uppercase tracking-widest mb-3 block">{retreat.date}</span>
+                        <Link href={retreatSlugs[retreat.id]}>
+                          <h3 className="font-serif text-3xl text-white mb-2 hover:text-primary transition-colors cursor-pointer">{retreat.title}</h3>
+                        </Link>
+                        <p className="text-muted-foreground mb-2">{retreat.location}</p>
+                        {!isPlaceholder ? (
+                          <p className="text-white/80 text-sm mb-6">
+                            Full Price: <span className="text-primary font-semibold">${retreat.fullAmount}</span>
+                          </p>
+                        ) : (
+                          <p className="text-white/80 text-sm mb-6 italic">
+                            Dates and pricing coming soon.
+                          </p>
+                        )}
+
+                        <div className="flex gap-3">
+                          {isPlaceholder ? (
+                            <Link href="/contact" className="flex-1">
+                              <Button 
+                                className="w-full bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
+                                data-testid={`button-apply-${retreat.id}`}
+                              >
+                                Express Interest
+                              </Button>
+                            </Link>
+                          ) : (
+                            <>
+                              <Link href={retreatSlugs[retreat.id]} className="flex-1">
+                                <Button 
+                                  variant="outline"
+                                  className="w-full border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground rounded-none uppercase tracking-widest py-6"
+                                  data-testid={`button-details-${retreat.id}`}
+                                >
+                                  Learn More
+                                </Button>
+                              </Link>
+                              <Button 
+                                onClick={() => setSelectedRetreat(retreat)}
+                                className="flex-1 bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
+                                data-testid={`button-register-${retreat.id}`}
+                              >
+                                Reserve
+                              </Button>
+                            </>
+                          )}
+                        </div>
+                      </div>
+                    </>
+                  );
+                })()}
               </motion.div>
             ))}
           </div>
