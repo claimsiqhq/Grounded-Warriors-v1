@@ -9,7 +9,11 @@ export default function PastRetreats() {
       date: "May 2026",
       location: "Algonquin Park, ON",
       videoUrl: null,
-      images: [],
+      images: [
+        { src: images.may2026Cabin, alt: "Group at the A-frame cabin with Driftwood Paddle canoe", position: "center 40%" },
+        { src: images.may2026LakePlunge, alt: "Brothers in the lake plunge", position: "center 40%" },
+        { src: images.may2026Firepit, alt: "Morning circle around the fire pit", position: "center 35%" },
+      ],
     },
     {
       id: 0,

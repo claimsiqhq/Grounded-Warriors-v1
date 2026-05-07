@@ -43,6 +43,11 @@ import johnPhoto from "@assets/DSC03772_2_1768960016124.JPG";
 import rawaPhoto from "@assets/Rawa_Bo_PHoto_1768788413370.jpeg";
 import chrisPhoto from "@assets/Chris_Bio_Photo_1768788413370.jpeg";
 
+// May 2026 Spring Awakening retreat photos
+import may2026Cabin from "@assets/IMG_6433_1778154539671.jpeg";
+import may2026LakePlunge from "@assets/IMG_6434_1778154539671.jpeg";
+import may2026Firepit from "@assets/IMG_6437_1778154539671.jpeg";
+
 // Driftwood Paddle photos for Spring Awakening
 import driftwoodHero from "@assets/driftwood_photos/hero_canoe.jpg";
 import driftwoodSunset from "@assets/driftwood_photos/sunset_lake.jpg";
@@ -86,6 +91,10 @@ export const images = {
   mayLogBalance,
   mayConversation,
   mayMeditation,
+  // May 2026 Spring Awakening retreat photos
+  may2026Cabin,
+  may2026LakePlunge,
+  may2026Firepit,
   // March 2025 retreat photos
   marchIcePlunge,
   marchSauna,
