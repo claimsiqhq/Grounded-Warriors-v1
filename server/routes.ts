@@ -2,6 +2,7 @@ import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema } from "@shared/schema";
+import { isFlodeskConfigured, upsertFlodeskSubscriber } from "./flodeskClient";
 import { fromZodError } from "zod-validation-error";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sendContactFormEmail } from "./sendgridClient";
@@ -78,6 +79,14 @@ export async function registerRoutes(
     try {
       const validatedData = insertNewsletterSubscriptionSchema.parse(req.body);
       const subscription = await storage.createNewsletterSubscription(validatedData);
+
+      // Best-effort sync to Flodesk (won't block the response on failure).
+      if (isFlodeskConfigured()) {
+        upsertFlodeskSubscriber({ email: validatedData.email }).catch((err) => {
+          console.error("Flodesk sync error:", err);
+        });
+      }
+
       res.status(201).json({ success: true, subscription });
     } catch (error: any) {
       if (error.name === "ZodError") {
