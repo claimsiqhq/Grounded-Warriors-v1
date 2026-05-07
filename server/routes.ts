@@ -149,7 +149,12 @@ export async function registerRoutes(
       const { priceId, customerEmail, customerName, retreatName, amount, paymentType } = req.body;
 
       const stripe = await getUncachableStripeClient();
-      const baseUrl = `https://${process.env.REPLIT_DOMAINS?.split(',')[0]}`;
+      const baseUrl =
+        process.env.APP_URL ||
+        process.env.RENDER_EXTERNAL_URL ||
+        (process.env.REPLIT_DOMAINS
+          ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
+          : `${req.protocol}://${req.get('host')}`);
 
       let lineItems;
       
