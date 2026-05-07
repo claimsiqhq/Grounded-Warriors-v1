@@ -10,6 +10,7 @@ const retreatSlugs: Record<number, string> = {
   1: "/retreats/winter-descent",
   2: "/retreats/spring-awakening",
   3: "/contact",
+  4: "/contact",
 };
 
 export default function Retreats() {

@@ -144,6 +144,15 @@ export const retreats = [
     depositAmount: 250,
     fullAmount: 555,
   },
+  {
+    id: 4,
+    title: "Spring Awakening",
+    date: "April 30 – May 3, 2027",
+    location: "Algonquin Park, ON",
+    image: may2026Cabin,
+    depositAmount: 250,
+    fullAmount: 555,
+  },
 ];
 
 export const testimonials = [
