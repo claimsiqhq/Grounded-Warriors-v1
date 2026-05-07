@@ -13,6 +13,9 @@ export default function PastRetreats() {
         { src: images.may2026Cabin, alt: "Group at the A-frame cabin with Driftwood Paddle canoe", position: "center 40%" },
         { src: images.may2026LakePlunge, alt: "Brothers in the lake plunge", position: "center 40%" },
         { src: images.may2026Firepit, alt: "Morning circle around the fire pit", position: "center 35%" },
+        { src: images.may2026CanoePortage, alt: "Portaging the canoe through the forest", position: "center 40%" },
+        { src: images.may2026CampMeal, alt: "Preparing a camp meal lakeside", position: "center 40%" },
+        { src: images.may2026CanoeFirewood, alt: "Hauling firewood across the lake by canoe", position: "center 40%" },
       ],
     },
     {

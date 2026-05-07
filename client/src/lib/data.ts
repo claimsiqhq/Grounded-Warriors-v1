@@ -47,6 +47,9 @@ import chrisPhoto from "@assets/Chris_Bio_Photo_1768788413370.jpeg";
 import may2026Cabin from "@assets/IMG_6433_1778154539671.jpeg";
 import may2026LakePlunge from "@assets/IMG_6434_1778154539671.jpeg";
 import may2026Firepit from "@assets/IMG_6437_1778154539671.jpeg";
+import may2026CanoePortage from "@assets/IMG_6440_1778154652138.jpeg";
+import may2026CampMeal from "@assets/IMG_6438_1778154652138.jpeg";
+import may2026CanoeFirewood from "@assets/IMG_6439_1778154652138.jpeg";
 
 // Driftwood Paddle photos for Spring Awakening
 import driftwoodHero from "@assets/driftwood_photos/hero_canoe.jpg";
@@ -95,6 +98,9 @@ export const images = {
   may2026Cabin,
   may2026LakePlunge,
   may2026Firepit,
+  may2026CanoePortage,
+  may2026CampMeal,
+  may2026CanoeFirewood,
   // March 2025 retreat photos
   marchIcePlunge,
   marchSauna,
