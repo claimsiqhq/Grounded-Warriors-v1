@@ -20,6 +20,8 @@ import MemberDashboard from "@/pages/member-dashboard";
 import MemberDiscussions from "@/pages/member-discussions";
 import MemberDiscussionDetail from "@/pages/member-discussion-detail";
 import MemberResources from "@/pages/member-resources";
+import MemberRetreat from "@/pages/member-retreat";
+import AdminPage from "@/pages/admin";
 import Login from "@/pages/login";
 
 function Router() {
@@ -42,6 +44,8 @@ function Router() {
       <Route path="/member/discussions" component={MemberDiscussions} />
       <Route path="/member/discussions/:id" component={MemberDiscussionDetail} />
       <Route path="/member/resources" component={MemberResources} />
+      <Route path="/member/retreats/:id" component={MemberRetreat} />
+      <Route path="/admin" component={AdminPage} />
       <Route component={NotFound} />
     </Switch>
   );

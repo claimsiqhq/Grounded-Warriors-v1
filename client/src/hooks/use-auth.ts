@@ -6,6 +6,7 @@ export interface User {
   firstName: string | null;
   lastName: string | null;
   profileImageUrl: string | null;
+  role: "member" | "admin";
 }
 
 async function fetchUser(): Promise<User | null> {

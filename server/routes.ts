@@ -1,4 +1,4 @@
-import type { Express, Request } from "express";
+import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
 import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema } from "@shared/schema";
@@ -10,11 +10,29 @@ import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
 import { db } from "./db";
 import { users } from "@shared/models/auth";
 import { eq } from "drizzle-orm";
+import { RETREATS, getRetreat, isValidRetreatId } from "./retreats";
 
 async function getUserFromSession(req: Request) {
   if (!req.session.userId) return null;
   const [user] = await db.select().from(users).where(eq(users.id, req.session.userId));
   return user || null;
+}
+
+// Returns true if the user is allowed inside a specific retreat container.
+async function userCanAccessRetreat(user: { id: string; role: string }, retreatId: number) {
+  if (user.role === "admin") return true;
+  if (await storage.userHasRegistrationForRetreat(user.id, retreatId)) return true;
+  if (await storage.isUserRetreatStaff(user.id, retreatId)) return true;
+  return false;
+}
+
+// Express middleware: only admins may pass.
+async function requireAdmin(req: Request, res: Response, next: NextFunction) {
+  const user = await getUserFromSession(req);
+  if (!user) return res.status(401).json({ error: "Not authenticated" });
+  if (user.role !== "admin") return res.status(403).json({ error: "Admin only" });
+  (req as any).currentUser = user;
+  next();
 }
 
 export async function registerRoutes(
@@ -220,10 +238,30 @@ export async function registerRoutes(
     }
   });
 
+  // ------------------------------------------------------------------
   // Member Portal: Discussions
+  //
+  // ?retreatId=<n>  -> scoped to that retreat's private container
+  // (no param)      -> General Commons (visible to all members)
+  // ------------------------------------------------------------------
   app.get("/api/discussions", isAuthenticated, async (req, res) => {
     try {
-      const discussions = await storage.getDiscussions();
+      const user = await getUserFromSession(req);
+      if (!user) return res.status(401).json({ error: "Not authenticated" });
+
+      let retreatId: number | null = null;
+      if (typeof req.query.retreatId === "string" && req.query.retreatId.length > 0) {
+        const parsed = parseInt(req.query.retreatId, 10);
+        if (Number.isNaN(parsed) || !isValidRetreatId(parsed)) {
+          return res.status(400).json({ error: "Invalid retreatId" });
+        }
+        if (!(await userCanAccessRetreat(user, parsed))) {
+          return res.status(403).json({ error: "You don't have access to this retreat" });
+        }
+        retreatId = parsed;
+      }
+
+      const discussions = await storage.getDiscussions(retreatId);
       res.json({ discussions });
     } catch (error) {
       console.error("Error fetching discussions:", error);
@@ -235,14 +273,29 @@ export async function registerRoutes(
     try {
       const user = await getUserFromSession(req);
       if (!user) return res.status(401).json({ error: "Not authenticated" });
-      
+
+      const rawRetreatId = req.body?.retreatId;
+      let retreatId: number | null = null;
+      if (rawRetreatId !== undefined && rawRetreatId !== null && rawRetreatId !== "") {
+        const parsed = typeof rawRetreatId === "number" ? rawRetreatId : parseInt(String(rawRetreatId), 10);
+        if (Number.isNaN(parsed) || !isValidRetreatId(parsed)) {
+          return res.status(400).json({ error: "Invalid retreatId" });
+        }
+        if (!(await userCanAccessRetreat(user, parsed))) {
+          return res.status(403).json({ error: "You don't have access to this retreat" });
+        }
+        retreatId = parsed;
+      }
+
       const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || 'Member';
-      
+
       const validatedData = insertDiscussionSchema.parse({
-        ...req.body,
+        title: req.body?.title,
+        content: req.body?.content,
+        retreatId,
         userId: user.id,
         userName,
-        userImage: user.profileImageUrl
+        userImage: user.profileImageUrl,
       });
       const discussion = await storage.createDiscussion(validatedData);
       res.status(201).json({ discussion });
@@ -258,12 +311,20 @@ export async function registerRoutes(
 
   app.get("/api/discussions/:id", isAuthenticated, async (req, res) => {
     try {
+      const user = await getUserFromSession(req);
+      if (!user) return res.status(401).json({ error: "Not authenticated" });
+
       const discussion = await storage.getDiscussion(parseInt(req.params.id));
       if (!discussion) {
         return res.status(404).json({ error: "Discussion not found" });
       }
+      // Gate scoped discussions behind retreat access.
+      if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
+        return res.status(403).json({ error: "You don't have access to this retreat" });
+      }
       const replies = await storage.getRepliesForDiscussion(discussion.id);
-      res.json({ discussion, replies });
+      const retreat = discussion.retreatId !== null ? getRetreat(discussion.retreatId) : null;
+      res.json({ discussion, replies, retreat });
     } catch (error) {
       console.error("Error fetching discussion:", error);
       res.status(500).json({ error: "Failed to fetch discussion" });
@@ -274,12 +335,18 @@ export async function registerRoutes(
     try {
       const user = await getUserFromSession(req);
       if (!user) return res.status(401).json({ error: "Not authenticated" });
-      
+
+      const discussion = await storage.getDiscussion(parseInt(req.params.id));
+      if (!discussion) return res.status(404).json({ error: "Discussion not found" });
+      if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
+        return res.status(403).json({ error: "You don't have access to this retreat" });
+      }
+
       const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || 'Member';
-      
+
       const validatedData = insertDiscussionReplySchema.parse({
         ...req.body,
-        discussionId: parseInt(req.params.id),
+        discussionId: discussion.id,
         userId: user.id,
         userName,
         userImage: user.profileImageUrl
@@ -293,6 +360,123 @@ export async function registerRoutes(
       }
       console.error("Error creating reply:", error);
       res.status(500).json({ error: "Failed to create reply" });
+    }
+  });
+
+  // ------------------------------------------------------------------
+  // Retreat containers: list + access check + admin staff management
+  // ------------------------------------------------------------------
+  app.get("/api/retreats", isAuthenticated, async (_req, res) => {
+    res.json({ retreats: RETREATS });
+  });
+
+  // List the retreat containers the current user can actually enter
+  // (admin -> all; otherwise registered or designated staff).
+  app.get("/api/member/my-retreats", isAuthenticated, async (req, res) => {
+    try {
+      const user = await getUserFromSession(req);
+      if (!user) return res.status(401).json({ error: "Not authenticated" });
+
+      const accessible = await Promise.all(
+        RETREATS.map(async (r) => {
+          const isStaff = await storage.isUserRetreatStaff(user.id, r.id);
+          const isAttendee = await storage.userHasRegistrationForRetreat(user.id, r.id);
+          const canAccess = user.role === "admin" || isStaff || isAttendee;
+          return canAccess ? { ...r, isStaff, isAttendee } : null;
+        }),
+      );
+      res.json({ retreats: accessible.filter(Boolean) });
+    } catch (error) {
+      console.error("Error listing my retreats:", error);
+      res.status(500).json({ error: "Failed to list retreats" });
+    }
+  });
+
+  app.get("/api/retreats/:id", isAuthenticated, async (req, res) => {
+    try {
+      const user = await getUserFromSession(req);
+      if (!user) return res.status(401).json({ error: "Not authenticated" });
+
+      const id = parseInt(req.params.id, 10);
+      const retreat = getRetreat(id);
+      if (!retreat) return res.status(404).json({ error: "Retreat not found" });
+
+      const canAccess = await userCanAccessRetreat(user, id);
+      const isStaff = await storage.isUserRetreatStaff(user.id, id);
+      res.json({
+        retreat,
+        canAccess,
+        isStaff,
+        isAdmin: user.role === "admin",
+      });
+    } catch (error) {
+      console.error("Error fetching retreat:", error);
+      res.status(500).json({ error: "Failed to fetch retreat" });
+    }
+  });
+
+  // Admin: list staff for a retreat (with user info hydrated)
+  app.get("/api/admin/retreats/:id/staff", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (!isValidRetreatId(id)) return res.status(404).json({ error: "Retreat not found" });
+      const rows = await storage.getRetreatStaff(id);
+      const hydrated = await Promise.all(
+        rows.map(async (row) => {
+          const u = await storage.getUser(row.userId);
+          return {
+            ...row,
+            user: u
+              ? { id: u.id, email: u.email, firstName: u.firstName, lastName: u.lastName }
+              : null,
+          };
+        }),
+      );
+      res.json({ staff: hydrated });
+    } catch (error) {
+      console.error("Error fetching staff:", error);
+      res.status(500).json({ error: "Failed to fetch staff" });
+    }
+  });
+
+  // Admin: designate a member as staff for a retreat (by email).
+  app.post("/api/admin/retreats/:id/staff", requireAdmin, async (req: any, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (!isValidRetreatId(id)) return res.status(404).json({ error: "Retreat not found" });
+
+      const email = String(req.body?.email || "").trim().toLowerCase();
+      if (!email) return res.status(400).json({ error: "Email is required" });
+
+      const target = await storage.getUserByEmail(email);
+      if (!target) return res.status(404).json({ error: "No member with that email" });
+
+      if (await storage.isUserRetreatStaff(target.id, id)) {
+        return res.status(400).json({ error: "Already staff for this retreat" });
+      }
+
+      const entry = await storage.addRetreatStaff({
+        retreatId: id,
+        userId: target.id,
+        addedBy: req.currentUser.id,
+      });
+      res.status(201).json({ staff: entry });
+    } catch (error) {
+      console.error("Error adding staff:", error);
+      res.status(500).json({ error: "Failed to add staff" });
+    }
+  });
+
+  // Admin: remove a staff designation.
+  app.delete("/api/admin/retreats/:id/staff/:userId", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (!isValidRetreatId(id)) return res.status(404).json({ error: "Retreat not found" });
+      await storage.removeRetreatStaff(id, req.params.userId);
+      res.json({ success: true });
+    } catch (error) {
+      console.error("Error removing staff:", error);
+      res.status(500).json({ error: "Failed to remove staff" });
     }
   });
 
@@ -310,14 +494,32 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/member/registrations", isAuthenticated, async (req: any, res) => {
+  // Admin-only: manually attach a member to a retreat (e.g. to backfill
+  // attendance for past retreats so they get container access). Public
+  // self-registration is intentionally disabled here because granting a
+  // registration also grants access to that retreat's private container.
+  // Real paid registrations are created server-side by the Stripe flow.
+  app.post("/api/member/registrations", requireAdmin, async (req: any, res) => {
     try {
-      const user = await getUserFromSession(req);
-      if (!user) return res.status(401).json({ error: "Not authenticated" });
-      
+      const adminUser = req.currentUser;
+
+      const rawRetreatId = req.body?.retreatId;
+      let retreatId: number | null = null;
+      if (rawRetreatId !== undefined && rawRetreatId !== null && rawRetreatId !== "") {
+        const parsed = typeof rawRetreatId === "number" ? rawRetreatId : parseInt(String(rawRetreatId), 10);
+        if (Number.isNaN(parsed) || !isValidRetreatId(parsed)) {
+          return res.status(400).json({ error: "Invalid retreatId" });
+        }
+        retreatId = parsed;
+      }
+
+      // Admin can register any member by user id; falls back to themselves.
+      const targetUserId = req.body?.userId || adminUser.id;
+
       const validatedData = insertRetreatRegistrationSchema.parse({
         ...req.body,
-        userId: user.id
+        retreatId,
+        userId: targetUserId,
       });
       const registration = await storage.createRetreatRegistration(validatedData);
       res.status(201).json({ registration });

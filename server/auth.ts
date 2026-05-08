@@ -8,6 +8,29 @@ import { users, sessions } from "@shared/models/auth";
 import { eq } from "drizzle-orm";
 import { sendPasswordResetEmail } from "./sendgridClient";
 
+// Bootstrap admin role from STAFF_EMAILS env var (comma-separated).
+// Any user whose email matches will be promoted to role='admin' on
+// register or login.
+function getAdminEmails(): string[] {
+  return (process.env.STAFF_EMAILS || "")
+    .split(",")
+    .map((e) => e.trim().toLowerCase())
+    .filter(Boolean);
+}
+
+function shouldBeAdmin(email: string): boolean {
+  return getAdminEmails().includes(email.toLowerCase());
+}
+
+async function syncAdminRole(userId: string, email: string, currentRole: string) {
+  const targetRole = shouldBeAdmin(email) ? "admin" : currentRole;
+  if (targetRole !== currentRole) {
+    await db.update(users).set({ role: targetRole }).where(eq(users.id, userId));
+    return targetRole;
+  }
+  return currentRole;
+}
+
 declare module "express-session" {
   interface SessionData {
     userId?: string;
@@ -76,7 +99,8 @@ export async function registerAuthRoutes(app: Express) {
       // Hash password
       const hashedPassword = await bcrypt.hash(password, 12);
 
-      // Create user
+      // Create user (auto-promote to admin if email is in STAFF_EMAILS)
+      const role = shouldBeAdmin(email) ? "admin" : "member";
       const [newUser] = await db
         .insert(users)
         .values({
@@ -84,6 +108,7 @@ export async function registerAuthRoutes(app: Express) {
           password: hashedPassword,
           firstName: firstName || null,
           lastName: lastName || null,
+          role,
         })
         .returning();
 
@@ -97,6 +122,7 @@ export async function registerAuthRoutes(app: Express) {
           firstName: newUser.firstName,
           lastName: newUser.lastName,
           profileImageUrl: newUser.profileImageUrl,
+          role: newUser.role,
         },
       });
     } catch (error: any) {
@@ -126,6 +152,9 @@ export async function registerAuthRoutes(app: Express) {
 
       req.session.userId = user.id;
 
+      // Re-sync admin role on every login so STAFF_EMAILS changes take effect.
+      const role = await syncAdminRole(user.id, user.email, user.role);
+
       res.json({
         user: {
           id: user.id,
@@ -133,6 +162,7 @@ export async function registerAuthRoutes(app: Express) {
           firstName: user.firstName,
           lastName: user.lastName,
           profileImageUrl: user.profileImageUrl,
+          role,
         },
       });
     } catch (error: any) {
@@ -154,12 +184,16 @@ export async function registerAuthRoutes(app: Express) {
         return res.status(401).json({ error: "User not found" });
       }
 
+      // Keep admin role in sync with STAFF_EMAILS on every fetch.
+      const role = await syncAdminRole(user.id, user.email, user.role);
+
       res.json({
         id: user.id,
         email: user.email,
         firstName: user.firstName,
         lastName: user.lastName,
         profileImageUrl: user.profileImageUrl,
+        role,
       });
     } catch (error: any) {
       console.error("Get user error:", error);

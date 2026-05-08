@@ -112,10 +112,13 @@ export default function MemberDiscussions() {
               </Link>
               <div className="flex items-center justify-between">
                 <div>
-                  <span className="text-primary text-sm uppercase tracking-[0.3em] mb-2 block font-semibold">Community</span>
+                  <span className="text-primary text-sm uppercase tracking-[0.3em] mb-2 block font-semibold">All Members</span>
                   <h1 className="font-serif text-4xl md:text-5xl font-bold text-white tracking-tight">
-                    Discussions
+                    General Commons
                   </h1>
+                  <p className="text-muted-foreground mt-2 max-w-xl text-sm">
+                    Open ground for all members. For private retreat conversations, enter your retreat container from the dashboard.
+                  </p>
                 </div>
                 <Button onClick={() => setShowNewPost(!showNewPost)} className="gap-2" data-testid="button-new-post">
                   <Plus className="w-4 h-4" />

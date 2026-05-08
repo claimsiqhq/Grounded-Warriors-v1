@@ -19,14 +19,17 @@ export default function MemberDiscussionDetail() {
   const discussionId = params.id;
   const [replyContent, setReplyContent] = useState("");
 
-  const { data, isLoading } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["/api/discussions", discussionId],
     queryFn: async () => {
       const res = await fetch(`/api/discussions/${discussionId}`, { credentials: "include" });
+      if (res.status === 403) throw new Error("forbidden");
+      if (res.status === 404) throw new Error("not_found");
       if (!res.ok) throw new Error("Failed to fetch discussion");
       return res.json();
     },
     enabled: !!user && !!discussionId,
+    retry: false,
   });
 
   const replyMutation = useMutation({
@@ -78,7 +81,34 @@ export default function MemberDiscussionDetail() {
     );
   }
 
-  const { discussion, replies } = data || {};
+  if (error) {
+    const msg = (error as Error).message;
+    return (
+      <Layout>
+        <div className="min-h-screen bg-background flex items-center justify-center">
+          <Card className="max-w-md mx-auto">
+            <CardContent className="pt-6 text-center">
+              <h2 className="font-serif text-2xl text-white mb-2">
+                {msg === "forbidden" ? "Closed Container" : "Not Found"}
+              </h2>
+              <p className="text-muted-foreground mb-6">
+                {msg === "forbidden"
+                  ? "This conversation lives inside a private retreat container you don't have access to."
+                  : "This discussion no longer exists."}
+              </p>
+              <Button asChild>
+                <Link href="/member">Back to Dashboard</Link>
+              </Button>
+            </CardContent>
+          </Card>
+        </div>
+      </Layout>
+    );
+  }
+
+  const { discussion, replies, retreat } = data || {};
+  const backHref = retreat ? `/member/retreats/${retreat.id}` : "/member/discussions";
+  const backLabel = retreat ? `Back to ${retreat.name}` : "Back to General Commons";
 
   const handleReply = (e: React.FormEvent) => {
     e.preventDefault();
@@ -98,10 +128,15 @@ export default function MemberDiscussionDetail() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
             >
-              <Link href="/member/discussions" className="inline-flex items-center gap-2 text-muted-foreground hover:text-white mb-6">
+              <Link href={backHref} className="inline-flex items-center gap-2 text-muted-foreground hover:text-white mb-6" data-testid="link-back">
                 <ArrowLeft className="w-4 h-4" />
-                Back to Discussions
+                {backLabel}
               </Link>
+              {retreat && (
+                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs uppercase tracking-wider mb-2">
+                  Private container · {retreat.name}
+                </div>
+              )}
             </motion.div>
           </div>
         </section>

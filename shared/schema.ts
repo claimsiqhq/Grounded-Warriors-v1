@@ -39,6 +39,8 @@ export type NewsletterSubscription = typeof newsletterSubscriptions.$inferSelect
 export const retreatRegistrations = pgTable("retreat_registrations", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull(),
+  // Canonical retreat ID (see server/retreats.ts). Nullable for legacy rows.
+  retreatId: integer("retreat_id"),
   retreatName: text("retreat_name").notNull(),
   retreatDate: text("retreat_date").notNull(),
   paymentStatus: text("payment_status").notNull().default("pending"),
@@ -46,6 +48,24 @@ export const retreatRegistrations = pgTable("retreat_registrations", {
   stripeSessionId: text("stripe_session_id"),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
+
+// Per-retreat staff designations. Admins assign trusted members as staff
+// for a specific retreat container, granting them access alongside attendees.
+export const retreatStaff = pgTable("retreat_staff", {
+  id: serial("id").primaryKey(),
+  retreatId: integer("retreat_id").notNull(),
+  userId: text("user_id").notNull(),
+  addedBy: text("added_by").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertRetreatStaffSchema = createInsertSchema(retreatStaff).omit({
+  id: true,
+  createdAt: true,
+});
+
+export type InsertRetreatStaff = z.infer<typeof insertRetreatStaffSchema>;
+export type RetreatStaff = typeof retreatStaff.$inferSelect;
 
 export const insertRetreatRegistrationSchema = createInsertSchema(retreatRegistrations).omit({
   id: true,
@@ -55,12 +75,16 @@ export const insertRetreatRegistrationSchema = createInsertSchema(retreatRegistr
 export type InsertRetreatRegistration = z.infer<typeof insertRetreatRegistrationSchema>;
 export type RetreatRegistration = typeof retreatRegistrations.$inferSelect;
 
-// Discussion board
+// Discussion board.
+// retreatId = null  -> General Commons (visible to all logged-in members).
+// retreatId = N     -> Scoped to retreat container; only accessible by
+//                       attendees, designated staff, or admins.
 export const discussions = pgTable("discussions", {
   id: serial("id").primaryKey(),
   userId: text("user_id").notNull(),
   userName: text("user_name").notNull(),
   userImage: text("user_image"),
+  retreatId: integer("retreat_id"),
   title: text("title").notNull(),
   content: text("content").notNull(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
