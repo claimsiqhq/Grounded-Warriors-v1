@@ -40,6 +40,8 @@ services:
         sync: false
       - key: FLODESK_SEGMENT_IDS
         sync: false
+      - key: FLODESK_USER_AGENT
+        sync: false
 
 databases:
   - name: grounded-warriors-db
