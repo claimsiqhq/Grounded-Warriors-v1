@@ -102,74 +102,150 @@ export async function sendNewsletterWelcomeEmail(data: {
   const retreatsLink = `${baseUrl}/retreats`;
   const commonsLink = `${baseUrl}/member/discussions`;
 
+  // Brand palette (matches client/src/index.css)
+  //   Night Forest bg: #0f1812   Deep Pine card: #1e3329
+  //   Birch text:      #c5b393   Sage accent:    #3e5d48
+  //   Moss subtle:     #90a190
+  const headingFont = "'Cormorant Garamond', Georgia, 'Times New Roman', serif";
+  const bodyFont = "'Inter', -apple-system, BlinkMacSystemFont, 'Helvetica Neue', Arial, sans-serif";
+
   const msg = {
     to: data.email,
     from: fromEmail,
     subject: 'Welcome to the Circle — Grounded Warriors',
-    text: `Welcome, brother.
+    text: `Brother,
 
-Thank you for stepping into the circle. You'll now hear from us when a new retreat opens, when stories from the land are worth sharing, and when there's a quiet moment we think you'd want to know about.
+Thank you for stepping into the circle. You'll hear from us when a new retreat opens, when stories from the land are worth sharing, and when there's a quiet moment we think you'd want to know about.
 
-There's one more step you can take whenever you're ready: create a free account in the Member Portal. From there you can:
-
-  • Register for an upcoming retreat (${retreatsLink})
-  • Join the General Commons — our open conversation space for men walking this path together (${commonsLink})
-
-Create your account here:
+When you're ready, create a free account in the Member Portal:
 ${registerLink}
+
+From there you can:
+
+  • Register for an upcoming retreat — ${retreatsLink}
+  • Join the General Commons, our open conversation space for men walking this path — ${commonsLink}
 
 No pressure. The trees aren't going anywhere, and neither are we.
 
----
+—
 Grounded Warriors
 Return to the Elements. Return to Yourself.
 Men's Healing Retreats in Ontario`,
-    html: `
-      <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; background-color: #1a1a1a; color: #e0e0e0; padding: 40px;">
-        <div style="text-align: center; margin-bottom: 30px;">
-          <h1 style="color: #8bc34a; margin: 0; font-weight: normal; letter-spacing: 1px;">Grounded Warriors</h1>
-          <p style="color: #888; font-style: italic; margin-top: 8px;">Return to the Elements. Return to Yourself.</p>
-        </div>
+    html: `<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@300;400;500&display=swap" rel="stylesheet" />
+  <title>Welcome to the Circle</title>
+</head>
+<body style="margin:0; padding:0; background-color:#0f1812; font-family:${bodyFont}; color:#c5b393;">
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color:#0f1812;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="600" cellpadding="0" cellspacing="0" border="0" style="max-width:600px; width:100%;">
 
-        <h2 style="color: #ffffff; margin-bottom: 20px; font-weight: normal;">Welcome to the Circle</h2>
-
-        <p style="line-height: 1.7;">Brother,</p>
-
-        <p style="line-height: 1.7;">Thank you for stepping into the circle. You'll now hear from us when a new retreat opens, when stories from the land are worth sharing, and when there's a quiet moment we think you'd want to know about.</p>
-
-        <p style="line-height: 1.7;">There's one more step you can take whenever you're ready &mdash; create a free account in the Member Portal. From there you can register for an upcoming retreat, or join the General Commons, our open conversation space for men walking this path together.</p>
-
-        <div style="text-align: center; margin: 35px 0;">
-          <a href="${registerLink}" style="background-color: #8bc34a; color: #1a1a1a; padding: 15px 32px; text-decoration: none; display: inline-block; font-weight: bold; letter-spacing: 0.5px;">
-            Create Your Account
-          </a>
-        </div>
-
-        <table style="width: 100%; margin: 30px 0; border-collapse: collapse;">
+          <!-- Header / Wordmark -->
           <tr>
-            <td style="padding: 16px; border: 1px solid #333; vertical-align: top; width: 50%;">
-              <h3 style="color: #8bc34a; margin: 0 0 8px 0; font-size: 16px;">Register for a Retreat</h3>
-              <p style="color: #bbb; margin: 0 0 12px 0; font-size: 14px; line-height: 1.6;">See upcoming gatherings and reserve your seat by the fire.</p>
-              <a href="${retreatsLink}" style="color: #8bc34a; font-size: 14px;">View retreats &rarr;</a>
-            </td>
-            <td style="padding: 16px; border: 1px solid #333; vertical-align: top; width: 50%;">
-              <h3 style="color: #8bc34a; margin: 0 0 8px 0; font-size: 16px;">Join the General Commons</h3>
-              <p style="color: #bbb; margin: 0 0 12px 0; font-size: 14px; line-height: 1.6;">Our open chat for any man walking this path.</p>
-              <a href="${commonsLink}" style="color: #8bc34a; font-size: 14px;">Enter the Commons &rarr;</a>
+            <td align="center" style="padding:24px 0 32px 0;">
+              <div style="font-family:${headingFont}; font-size:30px; font-weight:500; letter-spacing:4px; color:#c5b393; text-transform:uppercase;">
+                Grounded Warriors
+              </div>
+              <div style="margin-top:10px; font-family:${headingFont}; font-style:italic; font-size:15px; color:#90a190; letter-spacing:1px;">
+                Return to the Elements. Return to Yourself.
+              </div>
             </td>
           </tr>
+
+          <!-- Card -->
+          <tr>
+            <td style="background-color:#1e3329; border:1px solid #3e5d48; padding:48px 40px;">
+
+              <h1 style="margin:0 0 28px 0; font-family:${headingFont}; font-weight:500; font-size:34px; line-height:1.2; color:#c5b393; text-align:center;">
+                Welcome to the Circle
+              </h1>
+
+              <p style="margin:0 0 18px 0; font-size:16px; line-height:1.75; color:#c5b393;">
+                Brother,
+              </p>
+
+              <p style="margin:0 0 18px 0; font-size:16px; line-height:1.75; color:#c5b393;">
+                Thank you for stepping into the circle. You'll hear from us when a new retreat opens, when stories from the land are worth sharing, and when there's a quiet moment we think you'd want to know about.
+              </p>
+
+              <p style="margin:0 0 32px 0; font-size:16px; line-height:1.75; color:#c5b393;">
+                When you're ready, take one more step — create a free account in the Member Portal. From there you can register for an upcoming retreat, or simply join the General Commons, our open conversation space for men walking this path together.
+              </p>
+
+              <!-- CTA -->
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" align="center" style="margin:8px auto 32px auto;">
+                <tr>
+                  <td align="center" style="background-color:#c5b393; padding:14px 36px;">
+                    <a href="${registerLink}" style="font-family:${bodyFont}; font-size:14px; font-weight:500; letter-spacing:2px; text-transform:uppercase; color:#0f1812; text-decoration:none; display:inline-block;">
+                      Create Your Account
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <!-- Divider -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="margin:8px 0 28px 0;">
+                <tr><td style="border-top:1px solid #3e5d48; line-height:0; font-size:0;">&nbsp;</td></tr>
+              </table>
+
+              <!-- Two paths -->
+              <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td style="padding:0 12px 0 0; vertical-align:top; width:50%;">
+                    <div style="font-family:${headingFont}; font-size:20px; font-weight:500; color:#c5b393; margin-bottom:8px;">
+                      Register for a Retreat
+                    </div>
+                    <p style="margin:0 0 12px 0; font-size:14px; line-height:1.65; color:#90a190;">
+                      See upcoming gatherings and reserve your seat by the fire.
+                    </p>
+                    <a href="${retreatsLink}" style="font-size:13px; letter-spacing:1px; text-transform:uppercase; color:#c5b393; text-decoration:none; border-bottom:1px solid #3e5d48; padding-bottom:2px;">
+                      View Retreats
+                    </a>
+                  </td>
+                  <td style="padding:0 0 0 12px; vertical-align:top; width:50%;">
+                    <div style="font-family:${headingFont}; font-size:20px; font-weight:500; color:#c5b393; margin-bottom:8px;">
+                      Join the General Commons
+                    </div>
+                    <p style="margin:0 0 12px 0; font-size:14px; line-height:1.65; color:#90a190;">
+                      Our open conversation space for any man walking this path.
+                    </p>
+                    <a href="${commonsLink}" style="font-size:13px; letter-spacing:1px; text-transform:uppercase; color:#c5b393; text-decoration:none; border-bottom:1px solid #3e5d48; padding-bottom:2px;">
+                      Enter the Commons
+                    </a>
+                  </td>
+                </tr>
+              </table>
+
+              <p style="margin:36px 0 0 0; font-size:14px; line-height:1.75; color:#90a190; font-style:italic; text-align:center;">
+                No pressure. The trees aren't going anywhere, and neither are we.
+              </p>
+
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td align="center" style="padding:28px 16px 16px 16px;">
+              <div style="font-family:${headingFont}; font-size:13px; letter-spacing:3px; text-transform:uppercase; color:#90a190;">
+                Grounded Warriors
+              </div>
+              <div style="margin-top:6px; font-size:12px; color:#90a190;">
+                Men's Healing Retreats &middot; Ontario, Canada
+              </div>
+            </td>
+          </tr>
+
         </table>
-
-        <p style="color: #888; line-height: 1.7; font-size: 14px;">No pressure. The trees aren't going anywhere, and neither are we.</p>
-
-        <hr style="border: none; border-top: 1px solid #333; margin: 35px 0;" />
-
-        <p style="color: #666; font-size: 12px; text-align: center; line-height: 1.6;">
-          Grounded Warriors<br/>
-          Men's Healing Retreats in Ontario
-        </p>
-      </div>
-    `
+      </td>
+    </tr>
+  </table>
+</body>
+</html>`
   };
 
   await client.send(msg);
