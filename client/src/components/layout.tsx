@@ -210,6 +210,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <Navbar />
       <main className="flex-grow">{children}</main>
       <Footer />
+      <FloatingNewsletterBadge />
     </div>
   );
 }
