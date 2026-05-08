@@ -29,12 +29,22 @@ export default function Login() {
   const [showForgot, setShowForgot] = useState(false);
   const [resetToken, setResetToken] = useState<string | null>(null);
   const [resetPassword, setResetPassword] = useState({ password: "", confirmPassword: "" });
+  const [activeTab, setActiveTab] = useState("login");
 
   useEffect(() => {
     const params = new URLSearchParams(searchString);
     const token = params.get("reset");
     if (token) {
       setResetToken(token);
+    }
+    const mode = params.get("mode");
+    if (mode === "register") {
+      setActiveTab("register");
+    }
+    const prefillEmail = params.get("email");
+    if (prefillEmail) {
+      setRegisterData((prev) => ({ ...prev, email: prefillEmail }));
+      setLoginData((prev) => ({ ...prev, email: prefillEmail }));
     }
   }, [searchString]);
 
@@ -347,7 +357,7 @@ export default function Login() {
             </CardDescription>
           </CardHeader>
           <CardContent>
-            <Tabs defaultValue="login" className="w-full">
+            <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
               <TabsList className="grid w-full grid-cols-2 mb-6">
                 <TabsTrigger value="login" data-testid="tab-login">Sign In</TabsTrigger>
                 <TabsTrigger value="register" data-testid="tab-register">Create Account</TabsTrigger>

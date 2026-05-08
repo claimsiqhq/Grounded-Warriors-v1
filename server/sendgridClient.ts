@@ -87,6 +87,95 @@ This message was sent via the Grounded Warriors website contact form.`,
   return true;
 }
 
+export async function sendNewsletterWelcomeEmail(data: {
+  email: string;
+}) {
+  const { client, fromEmail } = await getUncachableSendGridClient();
+
+  const baseUrl =
+    process.env.APP_URL ||
+    process.env.RENDER_EXTERNAL_URL ||
+    (process.env.REPLIT_DOMAINS?.split(',')[0]
+      ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
+      : 'http://localhost:5000');
+  const registerLink = `${baseUrl}/login?mode=register&email=${encodeURIComponent(data.email)}`;
+  const retreatsLink = `${baseUrl}/retreats`;
+  const commonsLink = `${baseUrl}/member/discussions`;
+
+  const msg = {
+    to: data.email,
+    from: fromEmail,
+    subject: 'Welcome to the Circle — Grounded Warriors',
+    text: `Welcome, brother.
+
+Thank you for stepping into the circle. You'll now hear from us when a new retreat opens, when stories from the land are worth sharing, and when there's a quiet moment we think you'd want to know about.
+
+There's one more step you can take whenever you're ready: create a free account in the Member Portal. From there you can:
+
+  • Register for an upcoming retreat (${retreatsLink})
+  • Join the General Commons — our open conversation space for men walking this path together (${commonsLink})
+
+Create your account here:
+${registerLink}
+
+No pressure. The trees aren't going anywhere, and neither are we.
+
+---
+Grounded Warriors
+Return to the Elements. Return to Yourself.
+Men's Healing Retreats in Ontario`,
+    html: `
+      <div style="font-family: Georgia, serif; max-width: 600px; margin: 0 auto; background-color: #1a1a1a; color: #e0e0e0; padding: 40px;">
+        <div style="text-align: center; margin-bottom: 30px;">
+          <h1 style="color: #8bc34a; margin: 0; font-weight: normal; letter-spacing: 1px;">Grounded Warriors</h1>
+          <p style="color: #888; font-style: italic; margin-top: 8px;">Return to the Elements. Return to Yourself.</p>
+        </div>
+
+        <h2 style="color: #ffffff; margin-bottom: 20px; font-weight: normal;">Welcome to the Circle</h2>
+
+        <p style="line-height: 1.7;">Brother,</p>
+
+        <p style="line-height: 1.7;">Thank you for stepping into the circle. You'll now hear from us when a new retreat opens, when stories from the land are worth sharing, and when there's a quiet moment we think you'd want to know about.</p>
+
+        <p style="line-height: 1.7;">There's one more step you can take whenever you're ready &mdash; create a free account in the Member Portal. From there you can register for an upcoming retreat, or join the General Commons, our open conversation space for men walking this path together.</p>
+
+        <div style="text-align: center; margin: 35px 0;">
+          <a href="${registerLink}" style="background-color: #8bc34a; color: #1a1a1a; padding: 15px 32px; text-decoration: none; display: inline-block; font-weight: bold; letter-spacing: 0.5px;">
+            Create Your Account
+          </a>
+        </div>
+
+        <table style="width: 100%; margin: 30px 0; border-collapse: collapse;">
+          <tr>
+            <td style="padding: 16px; border: 1px solid #333; vertical-align: top; width: 50%;">
+              <h3 style="color: #8bc34a; margin: 0 0 8px 0; font-size: 16px;">Register for a Retreat</h3>
+              <p style="color: #bbb; margin: 0 0 12px 0; font-size: 14px; line-height: 1.6;">See upcoming gatherings and reserve your seat by the fire.</p>
+              <a href="${retreatsLink}" style="color: #8bc34a; font-size: 14px;">View retreats &rarr;</a>
+            </td>
+            <td style="padding: 16px; border: 1px solid #333; vertical-align: top; width: 50%;">
+              <h3 style="color: #8bc34a; margin: 0 0 8px 0; font-size: 16px;">Join the General Commons</h3>
+              <p style="color: #bbb; margin: 0 0 12px 0; font-size: 14px; line-height: 1.6;">Our open chat for any man walking this path.</p>
+              <a href="${commonsLink}" style="color: #8bc34a; font-size: 14px;">Enter the Commons &rarr;</a>
+            </td>
+          </tr>
+        </table>
+
+        <p style="color: #888; line-height: 1.7; font-size: 14px;">No pressure. The trees aren't going anywhere, and neither are we.</p>
+
+        <hr style="border: none; border-top: 1px solid #333; margin: 35px 0;" />
+
+        <p style="color: #666; font-size: 12px; text-align: center; line-height: 1.6;">
+          Grounded Warriors<br/>
+          Men's Healing Retreats in Ontario
+        </p>
+      </div>
+    `
+  };
+
+  await client.send(msg);
+  return true;
+}
+
 export async function sendPasswordResetEmail(data: {
   email: string;
   resetToken: string;

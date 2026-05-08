@@ -5,7 +5,7 @@ import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, inse
 import { isFlodeskConfigured, upsertFlodeskSubscriber } from "./flodeskClient";
 import { fromZodError } from "zod-validation-error";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
-import { sendContactFormEmail } from "./sendgridClient";
+import { sendContactFormEmail, sendNewsletterWelcomeEmail } from "./sendgridClient";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
 import { db } from "./db";
 import { users } from "@shared/models/auth";
@@ -104,6 +104,11 @@ export async function registerRoutes(
           console.error("Flodesk sync error:", err);
         });
       }
+
+      // Best-effort welcome email via SendGrid. Never blocks the response.
+      sendNewsletterWelcomeEmail({ email: validatedData.email }).catch((err) => {
+        console.error("Newsletter welcome email error:", err?.message || err);
+      });
 
       res.status(201).json({ success: true, subscription });
     } catch (error: any) {
