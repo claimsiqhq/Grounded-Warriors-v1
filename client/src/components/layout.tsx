@@ -6,6 +6,7 @@ import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { motion } from "framer-motion";
 import { MiniCountdown } from "@/components/countdown";
+import { FloatingNewsletterBadge } from "@/components/floating-newsletter-badge";
 import { useAuth } from "@/hooks/use-auth";
 
 export function Navbar() {
