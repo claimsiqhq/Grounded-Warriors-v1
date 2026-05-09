@@ -30,10 +30,10 @@ export default function VeteransRetreat() {
           >
             <span className="text-amber-500 text-xs uppercase tracking-widest mb-4 block">Coming April 2026</span>
             <h1 className="font-serif text-4xl md:text-6xl text-white mb-6">
-              First Responders & Veterans Healing Retreat
+              First Responders & Veterans Expedition
             </h1>
             <p className="text-xl text-white/80 max-w-2xl mx-auto mb-8">
-              Where the most elite operation is the one to reclaim your life.
+              The next operation is your own ground. Run it the same way you ran every other one.
             </p>
             <div className="inline-block bg-amber-600/20 border border-amber-500/30 px-6 py-3 rounded backdrop-blur-sm">
               <span className="text-amber-400 font-semibold">Tentative Date: April 3-5, 2026</span>
@@ -72,17 +72,16 @@ export default function VeteransRetreat() {
             className="max-w-4xl mx-auto mb-20"
           >
             <div className="bg-red-950/20 border border-red-500/20 p-8 md:p-12">
-              <h2 className="font-serif text-2xl md:text-3xl text-white mb-6">The Crisis</h2>
+              <h2 className="font-serif text-2xl md:text-3xl text-white mb-6">The Reality</h2>
               <div className="space-y-4 text-white/80">
                 <p className="text-lg">
-                  <span className="text-red-400 font-semibold">Over 17 veterans die by suicide every day.</span> Police officers 
-                  are 2-3x more likely to die by suicide than in the line of duty. EMS personnel have the highest rates of 
-                  PTSD among all first responders—<span className="text-red-400 font-semibold">nearly 1 in 3.</span>
+                  <span className="text-red-400 font-semibold">Over 17 veterans die by suicide every day.</span> Police officers
+                  are 2-3x more likely to die by suicide than in the line of duty. EMS personnel have the highest rates of
+                  operational stress of any first responder group — <span className="text-red-400 font-semibold">nearly 1 in 3.</span>
                 </p>
                 <p>
-                  While billions are spent on traditional intervention programs, recidivism rates remain high because most 
-                  programs fail to address the core issue: <span className="text-white">warriors are trained to override their 
-                  humanity, and they need support reintegrating it without losing their identity.</span>
+                  Most existing programs miss the mark because they ask warriors to put down what made them effective.
+                  <span className="text-white"> We don't. We hand them a paddle, point them at the next portage, and run a real operation in the wild — the same discipline, redirected at their own ground.</span>
                 </p>
               </div>
             </div>
@@ -96,16 +95,16 @@ export default function VeteransRetreat() {
             className="max-w-4xl mx-auto mb-20"
           >
             <div className="text-center mb-12">
-              <h2 className="font-serif text-3xl md:text-4xl text-white mb-4">The Solution</h2>
+              <h2 className="font-serif text-3xl md:text-4xl text-white mb-4">The Operation</h2>
               <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-                Grounded Warriors delivers immersive, off-grid healing retreats that honor first responders' and veterans' 
-                warrior identity while redirecting their operational discipline inward.
+                A backcountry expedition built for men who've worn the uniform.
+                Off-grid, tactical, no nonsense. Real terrain, real cold, real fire, and a crew of brothers who've been through it.
               </p>
             </div>
             <div className="bg-primary/10 border border-primary/30 p-8 md:p-12 text-center">
               <p className="text-xl md:text-2xl text-white font-serif italic">
-                "We don't ask them to stop being warriors—we help them run the most elite operation of their lives: 
-                <span className="text-primary"> reclaiming their peace.</span>"
+                "We don't ask them to stop being warriors. We give them a real mission in the wild —
+                <span className="text-primary"> and trust them to run it.</span>"
               </p>
             </div>
           </motion.section>
@@ -130,22 +129,22 @@ export default function VeteransRetreat() {
                 </div>
                 <div className="space-y-4">
                   <div className="border-l-2 border-primary/50 pl-4">
-                    <h4 className="text-white font-semibold mb-1">Tactical Introspection</h4>
+                    <h4 className="text-white font-semibold mb-1">Tactical Briefings</h4>
                     <p className="text-muted-foreground text-sm">
-                      After Action Reviews for marriages, Standard Operating Procedures for emotional regulation, 
-                      mission planning for life transitions.
+                      Mission planning, route briefs, gear checks, and after-action reviews — the same operational rhythm,
+                      run on a real wilderness route.
                     </p>
                   </div>
                   <div className="border-l-2 border-primary/50 pl-4">
-                    <h4 className="text-white font-semibold mb-1">Emergency Protocols for the Soul</h4>
+                    <h4 className="text-white font-semibold mb-1">Cold-Water & Stress Protocols</h4>
                     <p className="text-muted-foreground text-sm">
-                      Immediate action drills for trauma responses, rage, and numbness—making healing operational.
+                      Breathing drills, controlled cold exposure, and load-bearing conditioning. Practical tools you'll keep using.
                     </p>
                   </div>
                   <div className="border-l-2 border-primary/50 pl-4">
                     <h4 className="text-white font-semibold mb-1">What Are You Protecting Now?</h4>
                     <p className="text-muted-foreground text-sm">
-                      Shifting from protecting others to protecting their peace, marriages, and recovery.
+                      Shifting from protecting others to protecting your own ground, your family, and the brothers beside you.
                     </p>
                   </div>
                 </div>
@@ -161,27 +160,27 @@ export default function VeteransRetreat() {
                 </div>
                 <div className="space-y-4">
                   <div className="border-l-2 border-amber-500/50 pl-4">
-                    <h4 className="text-white font-semibold mb-1">The Gear Down Ceremony</h4>
+                    <h4 className="text-white font-semibold mb-1">The Gear-Down</h4>
                     <p className="text-muted-foreground text-sm">
-                      Conscious rituals around choosing when to wear their operational armor instead of it wearing them 24/7.
+                      Choosing when to wear the operational armor and when to set it down — instead of it wearing you 24/7.
                     </p>
                   </div>
                   <div className="border-l-2 border-amber-500/50 pl-4">
-                    <h4 className="text-white font-semibold mb-1">The Vigil</h4>
+                    <h4 className="text-white font-semibold mb-1">The Night Vigil</h4>
                     <p className="text-muted-foreground text-sm">
-                      Night shifts tending fire, writing to themselves and loved ones—familiar rhythms redirected toward self-witnessing.
+                      Rotating night watches at the fire — familiar rhythms, redirected toward writing, planning, and brotherhood.
                     </p>
                   </div>
                   <div className="border-l-2 border-amber-500/50 pl-4">
-                    <h4 className="text-white font-semibold mb-1">Building Legacy</h4>
+                    <h4 className="text-white font-semibold mb-1">Legacy Builds</h4>
                     <p className="text-muted-foreground text-sm">
-                      Each cohort constructs permanent structures on the land—meditation circles, shelters, memorials—creating lineage between brothers.
+                      Each cohort builds something permanent on the land — shelters, fire circles, signposts — that the next crew finds standing.
                     </p>
                   </div>
                   <div className="border-l-2 border-amber-500/50 pl-4">
-                    <h4 className="text-white font-semibold mb-1">Controlled Burn Ritual</h4>
+                    <h4 className="text-white font-semibold mb-1">Controlled Burn</h4>
                     <p className="text-muted-foreground text-sm">
-                      Planned burns they execute together, witnessing regeneration from ash—visceral metaphor for their own transformation.
+                      A planned burn the cohort executes together — practical land-tending, with everything that fire teaches built right in.
                     </p>
                   </div>
                 </div>
@@ -276,23 +275,23 @@ export default function VeteransRetreat() {
                   <Heart className="w-7 h-7 text-primary" />
                 </div>
                 <h4 className="text-white font-semibold mb-2">Identity-Honoring</h4>
-                <p className="text-muted-foreground text-sm">Healing is the mission, vulnerability is tactical</p>
+                <p className="text-muted-foreground text-sm">You don't stop being a warrior — we just hand you a new mission</p>
               </div>
-              
+
               <div className="bg-card border border-white/10 p-6 text-center">
                 <div className="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Mountain className="w-7 h-7 text-primary" />
                 </div>
-                <h4 className="text-white font-semibold mb-2">Land-Based Medicine</h4>
-                <p className="text-muted-foreground text-sm">Off-grid immersion, fire ceremonies, nature as healer</p>
+                <h4 className="text-white font-semibold mb-2">Backcountry Operation</h4>
+                <p className="text-muted-foreground text-sm">Off-grid, real terrain, real conditions, real fire</p>
               </div>
-              
+
               <div className="bg-card border border-white/10 p-6 text-center">
                 <div className="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Users className="w-7 h-7 text-primary" />
                 </div>
                 <h4 className="text-white font-semibold mb-2">Brotherhood Across Service</h4>
-                <p className="text-muted-foreground text-sm">First responders and veterans healing together</p>
+                <p className="text-muted-foreground text-sm">First responders and veterans on the same crew</p>
               </div>
               
               <div className="bg-card border border-white/10 p-6 text-center">

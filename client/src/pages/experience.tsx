@@ -11,11 +11,11 @@ import {
 
 export default function Experience() {
   const timeline = [
-    { time: "06:00", title: "Morning Silence & Cold Plunge", desc: "Awaken the body in the river or lake. No speaking." },
-    { time: "08:00", title: "Fire Breakfast", desc: "Cooking over open flame. Communal eating." },
-    { time: "10:00", title: "Somatic Grounding", desc: "Breathwork and physical practices to release stored tension." },
-    { time: "14:00", title: "Deep Nature Immersion", desc: "Solo time in the forest. Tracking, listening, being." },
-    { time: "19:00", title: "Council Fire", desc: "The heart of the retreat. Sharing truth in the circle." },
+    { time: "06:00", title: "First Light & Cold Plunge", desc: "Up with the sun. Into the lake or river. Coached entry, breathwork, warm-up." },
+    { time: "08:00", title: "Fire Breakfast", desc: "Hot food cooked over open flame. Eat together. Brief the day." },
+    { time: "10:00", title: "On the Land", desc: "Paddle, portage, hike, climb, or build — depending on the trip and the route." },
+    { time: "14:00", title: "Solo Time", desc: "Pack out alone. Tracking, navigation, or sitting with the land." },
+    { time: "19:00", title: "Council Fire", desc: "Stories, plans, and the long conversations that only happen at the fire." },
   ];
 
   const galleryImages = [
@@ -38,7 +38,7 @@ export default function Experience() {
           >
             <h1 className="font-serif text-4xl md:text-7xl text-white mb-6">The Experience</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              A typical day in the wild. No phones. No clocks. Just the rhythm of the earth and the fire.
+              A typical day on a Grounded Warriors expedition. No phones. No clocks. Just the rhythm of the land and the fire.
             </p>
           </motion.div>
 

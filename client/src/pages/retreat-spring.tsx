@@ -98,16 +98,16 @@ export default function RetreatSpring() {
               <motion.div {...fadeIn}>
                 <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">A Modern Rite of Passage</h2>
                 <h3 className="font-serif text-3xl md:text-4xl text-white mb-6">
-                  For Men Ready to Live Deeper
+                  Built for Men Who Want a Hard Trip
                 </h3>
                 <p className="text-muted-foreground leading-loose mb-6">
-                  If life's been too busy, overwhelming, or you're just not getting the time you need for yourself... If you long for deeper connection with good men who work on themselves... And if you could use some quality time in nature, to slow down and just exist...
+                  If you've been stuck behind glass and a screen, if you're hungry for a real day in the wild, and if you want to share that day with a crew of good men who'll match your effort...
                 </p>
                 <p className="text-white font-serif text-xl mb-6">
-                  Then you're in the right place.
+                  This is the trip.
                 </p>
                 <p className="text-muted-foreground leading-loose">
-                  This is not just a canoe trip. It's a modern rite of passage. You'll paddle, portage, cook, camp, and share stories together in the wild. By guiding you into the wilderness, we guide you back to yourself.
+                  Four days, deep in Algonquin. Paddle hard, portage harder, cook over open fire, sleep on the land, plunge in cold lakes. No phones, no agenda, no shortcuts. Just real wilderness travel with men who'll have your back.
                 </p>
               </motion.div>
               <motion.div {...fadeIn} className="aspect-[4/5] overflow-hidden">
@@ -129,10 +129,10 @@ export default function RetreatSpring() {
                 <h3 className="font-serif text-2xl text-white mb-6">Paddle In...</h3>
                 <ul className="space-y-4">
                   {[
-                    "Distracted, overworked, and stretched thin",
-                    "Your soul is tired from not living its truth",
-                    "You'd like to get to know other men on a deeper level",
-                    "You're ready for some deep healing",
+                    "Burnt out, behind a screen, and out of shape for the wild",
+                    "Hungry for a real adventure with real consequences",
+                    "Looking for a crew of solid men who'll match your effort",
+                    "Ready to put your body and your nerve to work",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-muted-foreground">
                       <ArrowRight className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -145,10 +145,10 @@ export default function RetreatSpring() {
                 <h3 className="font-serif text-2xl text-white mb-6">Paddle Out...</h3>
                 <ul className="space-y-4">
                   {[
-                    "Present, grounded, and open",
-                    "A deeper understanding of your inner world",
-                    "You've healed something and learned practices to manage your emotions",
-                    "With memories and bonds that will last a lifetime",
+                    "Sharper, stronger, and clear-eyed",
+                    "With new wilderness skills you'll carry for life",
+                    "Cold-tested, fire-tempered, and steady under pressure",
+                    "With brothers and stories that don't fade",
                   ].map((item, i) => (
                     <li key={i} className="flex items-start gap-3 text-white">
                       <Check className="w-5 h-5 text-primary flex-shrink-0 mt-0.5" />
@@ -191,10 +191,10 @@ export default function RetreatSpring() {
         <section className="py-24 bg-card border-y border-white/5">
           <div className="container px-6 mx-auto">
             <motion.div {...fadeIn} className="text-center mb-16">
-              <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Flagship Experience</h2>
-              <h3 className="font-serif text-3xl md:text-5xl text-white mb-6">Four Days That Will Change Everything</h3>
+              <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Flagship Expedition</h2>
+              <h3 className="font-serif text-3xl md:text-5xl text-white mb-6">Four Days. Real Backcountry.</h3>
               <p className="text-muted-foreground max-w-3xl mx-auto text-lg">
-                Spring Awakening is our most comprehensive retreat. Four days allows for the deeper work — moving past resistance, breaking through old patterns, and returning home fundamentally transformed.
+                Spring Awakening is our most demanding trip. Four days deep in Algonquin gives us the time to really move — multiple paddle days, real portages, full nights at the fire, and enough miles under your belt that the city falls off you for good.
               </p>
             </motion.div>
 
@@ -202,18 +202,18 @@ export default function RetreatSpring() {
               {[
                 {
                   icon: TreePine,
-                  title: "Deep Wilderness",
-                  desc: "Algonquin Park offers complete immersion in ancient boreal forest. No roads. No cell service. Just you, the land, and the work."
+                  title: "Real Backcountry",
+                  desc: "Algonquin Park — boreal forest, big cold lakes, real portages. No roads. No cell service. Just the land, the route, and the crew."
                 },
                 {
                   icon: Sunrise,
-                  title: "Extended Time",
-                  desc: "Four days creates space for the real transformation. Day one breaks down walls. Days two and three do the deep work. Day four integrates."
+                  title: "Hard Days, Earned Nights",
+                  desc: "Big paddle days. Carrying canoes over portages. Setting camp by dusk. The kind of tired that earns you the deepest sleep of the year."
                 },
                 {
                   icon: Flame,
-                  title: "Advanced Practices",
-                  desc: "Extended breathwork journeys. Multiple fire ceremonies. Solo vision time. Practices reserved for those ready to go deeper."
+                  title: "Real Wilderness Skills",
+                  desc: "Canoe handling, fire-craft, navigation, cold-water entry, and breathwork drills you'll keep using long after the trip ends."
                 },
               ].map((item, i) => (
                 <motion.div 
@@ -240,7 +240,7 @@ export default function RetreatSpring() {
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Your Hosts</h2>
               <h3 className="font-serif text-3xl md:text-5xl text-white mb-6">Meet Your Guides</h3>
               <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-                Four experienced facilitators will hold space for your transformation.
+                Four experienced wilderness guides leading the trip from the front.
               </p>
             </motion.div>
 
@@ -284,23 +284,23 @@ export default function RetreatSpring() {
               {[
                 {
                   icon: Droplets,
-                  title: "Lake Immersion",
-                  desc: "The spring-fed lakes of Algonquin remain cold even in May. Daily cold water practice in pristine wilderness waters. This is cold immersion at its most sacred."
+                  title: "Cold Lake Plunges",
+                  desc: "Algonquin's spring-fed lakes stay cold deep into May. Daily plunges in pristine wilderness water — coached entry, breathwork, and a fire waiting for the warm-up."
                 },
                 {
                   icon: Flame,
-                  title: "Nightly Fire Council",
-                  desc: "Every evening we gather at the fire. Three nights of ceremony means three opportunities to speak truth, release weight, and witness transformation."
+                  title: "Nightly Council Fire",
+                  desc: "Three nights at the fire after long days on the water. Stories, plans, and the kind of conversation that only happens when the screens are gone and the stars are out."
                 },
                 {
                   icon: Wind,
-                  title: "Extended Breathwork",
-                  desc: "Longer sessions, deeper journeys. Two-hour breathwork experiences that unlock stored trauma and reconnect you with forgotten parts of yourself."
+                  title: "Breathwork Drills",
+                  desc: "Practical breathing techniques for cold-water entry, exertion under load, and recovery. The same protocols used by free-divers, athletes, and arctic swimmers."
                 },
                 {
                   icon: Mountain,
-                  title: "Solo Vision Time",
-                  desc: "24 hours alone in the forest. Fasting. Sitting with yourself. This ancient practice is where the deepest insights emerge."
+                  title: "Solo Time on the Land",
+                  desc: "A full day and night solo on the land. Light pack, your own fire, your own thoughts. The oldest reset known to man."
                 },
               ].map((item, i) => (
                 <motion.div 
@@ -324,31 +324,31 @@ export default function RetreatSpring() {
         <section className="py-24 bg-card border-y border-white/5">
           <div className="container px-6 mx-auto max-w-4xl">
             <motion.div {...fadeIn} className="text-center mb-16">
-              <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Journey</h2>
-              <h3 className="font-serif text-3xl md:text-4xl text-white">Four Days of Transformation</h3>
+              <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Route</h2>
+              <h3 className="font-serif text-3xl md:text-4xl text-white">Four Days in the Wild</h3>
             </motion.div>
 
             <div className="space-y-12">
               {[
                 {
                   day: "Day 1 — Friday",
-                  title: "Arrival & Opening",
-                  desc: "Arrive between 10-11 AM. Land on the property. Meet your brothers. Opening circle and first fire ceremony. Begin to let go of the world you left behind."
+                  title: "Put-In & First Fire",
+                  desc: "Meet at base camp 10-11 AM. Gear check, route brief, paddle to first night's site. Set camp, first cold plunge, opening fire after dark."
                 },
                 {
                   day: "Day 2 — Saturday",
-                  title: "Breaking Ground",
-                  desc: "First cold immersion. Deep breathwork journey. The walls start to crack. Evening fire work goes deeper as trust builds between men."
+                  title: "Deep Water",
+                  desc: "Big paddle day. Cross the open lakes. Hit the first portages. Earn the night by the fire and the long sleep that comes with it."
                 },
                 {
                   day: "Day 3 — Sunday",
-                  title: "The Descent",
-                  desc: "The heart of the retreat. Extended solo time in nature. This is where you meet yourself without distraction. Evening integration circle and final fire ceremony."
+                  title: "Solo & The Land",
+                  desc: "Light camp day. Solo time on the land — your own site, your own fire, your own thoughts. Reconvene at the council fire after dark for the deepest night of the trip."
                 },
                 {
                   day: "Day 4 — Monday",
-                  title: "Integration & Return",
-                  desc: "Morning practice. Integration teaching — how to bring this work home. Final circle. Return to base camp between 11 AM - 1 PM. Depart between 2-4 PM, changed."
+                  title: "Paddle Out",
+                  desc: "Final morning practice and breakfast. Paddle and portage back to base. Closing fire and final words at the put-in. Depart between 2-4 PM, sharper than you arrived."
                 },
               ].map((item, i) => (
                 <motion.div 
@@ -384,18 +384,17 @@ export default function RetreatSpring() {
             <div className="max-w-2xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  "4 days / 3 nights wilderness accommodation",
-                  "All meals (organic, locally sourced)",
-                  "Daily cold water immersion",
-                  "3 fire ceremonies",
-                  "Extended breathwork sessions",
-                  "Solo time in nature",
-                  "Men's circle facilitation",
-                  "Pre-retreat preparation call",
-                  "Preparation materials & reading",
-                  "Post-retreat integration call",
+                  "4 days / 3 nights backcountry travel",
+                  "All meals (hearty, locally sourced)",
+                  "Canoes, paddles, and group safety gear",
+                  "Daily cold lake plunges",
+                  "3 nights at the council fire",
+                  "Breathwork & wilderness skill coaching",
+                  "Solo day on the land",
+                  "Pre-trip preparation call & gear list",
+                  "Post-trip integration call",
                   "Lifetime community membership",
-                  "Alumni retreat discounts",
+                  "Alumni discounts on future expeditions",
                 ].map((item, i) => (
                   <motion.div 
                     key={i}
@@ -436,13 +435,12 @@ export default function RetreatSpring() {
 
             <div className="space-y-4">
               {[
-                "Feel ready for a significant shift in their life",
-                "Want to go deeper than a weekend allows",
-                "Are drawn to wilderness and solitude",
-                "Have done some personal work but want more",
-                "Crave genuine connection with other men",
-                "Are willing to be uncomfortable in service of growth",
-                "Can commit to four days away from their regular life",
+                "Want a real wilderness trip, not a wellness weekend",
+                "Are drawn to backcountry travel, cold water, and open fire",
+                "Have a baseline of fitness and aren't afraid to push it",
+                "Are looking for a tight crew of capable men",
+                "Are willing to get cold, tired, and hungry to earn the night by the fire",
+                "Can commit to four days completely off the grid",
               ].map((item, i) => (
                 <motion.div 
                   key={i}
@@ -463,10 +461,10 @@ export default function RetreatSpring() {
           <div className="container px-6 mx-auto text-center">
             <motion.div {...fadeIn}>
               <h2 className="font-serif text-3xl md:text-5xl text-white mb-6">
-                The Forest is Calling
+                The Wild is Calling
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto mb-8 text-lg">
-                Five days in Algonquin. No phone. No agenda. Just you, the elements, and a circle of men ready to do the work.
+                Four days in Algonquin. No phone. No agenda. Just the land, the cold water, the fire, and a crew of men ready to put in the miles.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 

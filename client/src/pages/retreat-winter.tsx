@@ -45,7 +45,7 @@ export default function RetreatWinter() {
                 Winter Descent
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                A 3-day immersion into cold, fire, and stillness in the heart of Ontario winter.
+                A 3-day winter expedition into the cold, the fire, and the frozen Ontario backcountry.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
@@ -98,7 +98,7 @@ export default function RetreatWinter() {
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Experience</h2>
               <h3 className="font-serif text-3xl md:text-5xl text-white mb-6">What Awaits You</h3>
               <p className="text-muted-foreground max-w-2xl mx-auto text-lg">
-                Winter strips everything back. The cold demands presence. This is where we meet ourselves without distraction.
+                Winter strips the noise away. Subzero air, frozen lakes, hard ground. The kind of conditions that make a man pay attention.
               </p>
             </motion.div>
 
@@ -106,23 +106,23 @@ export default function RetreatWinter() {
               {[
                 {
                   icon: Droplets,
-                  title: "Cold Water Immersion",
-                  desc: "Begin each day with intentional cold exposure. Learn breathwork techniques to regulate your nervous system and find calm in the chaos. The ice becomes your teacher."
+                  title: "Ice Plunges",
+                  desc: "Cut a hole in the ice and drop in. Coached entry, breathing protocol, and a wood-fired sauna waiting for the warm-up. The fastest way to find out what you're made of."
                 },
                 {
                   icon: Flame,
-                  title: "Fire Ceremony",
-                  desc: "Gather around sacred fire for evening ceremonies. Speak your truth, release what weighs you down, and witness other men doing the same. The fire holds space for transformation."
+                  title: "Council Fire",
+                  desc: "Long winter nights mean long nights at the fire. Stories, plans, hot food, and the kind of conversation that only happens when it's twenty below outside the canvas."
                 },
                 {
                   icon: Wind,
-                  title: "Breathwork Sessions",
-                  desc: "Guided breathwork practices to unlock stored emotion, expand awareness, and reconnect with parts of yourself that modern life has numbed."
+                  title: "Breathwork Drills",
+                  desc: "Cold-water breathing protocols, recovery work, and conditioning under load. Practical techniques you'll keep using long after the trip is over."
                 },
                 {
                   icon: Mountain,
-                  title: "Winter Land Connection",
-                  desc: "Silent walks through frozen forest. Time alone with the land. The winter landscape mirrors the descent inward — stark, honest, and deeply clarifying."
+                  title: "Winter Travel",
+                  desc: "Snowshoe hikes, route-finding, building shelter and fire in winter conditions. The land at its most demanding — and its most beautiful."
                 },
               ].map((item, i) => (
                 <motion.div 
@@ -149,13 +149,13 @@ export default function RetreatWinter() {
               <motion.div {...fadeIn}>
                 <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Why Winter?</h2>
                 <h3 className="font-serif text-3xl md:text-4xl text-white mb-6">
-                  The Season of Descent
+                  The Hardest Season Pays the Best
                 </h3>
                 <p className="text-muted-foreground leading-loose mb-6">
-                  Winter is not a season of growth — it is a season of rest, reflection, and going inward. Nature teaches us that dormancy is not death, but preparation.
+                  Most men avoid the cold. The ones who go in find out fast what their body, breath, and nerve are actually capable of.
                 </p>
                 <p className="text-muted-foreground leading-loose mb-6">
-                  The cold strips away comfort. The short days invite introspection. The frozen landscape mirrors the work of examining what lies beneath the surface.
+                  Subzero air sharpens you. The ice plunge resets you. The fire feels like a reward you actually earned. And the company of men who showed up for it hits different than any other trip of the year.
                 </p>
                 <p className="text-white font-serif text-xl italic">
                   "In the depth of winter, I finally learned that within me there lay an invincible summer."
@@ -187,15 +187,15 @@ export default function RetreatWinter() {
             <div className="max-w-2xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  "3 days / 2 nights accommodation",
-                  "All meals (locally sourced)",
-                  "Cold immersion sessions",
-                  "Fire ceremony facilitation",
-                  "Guided breathwork practices",
-                  "Men's circle work",
-                  "Solo time in nature",
-                  "Preparation materials",
-                  "Post-retreat integration call",
+                  "3 days / 2 nights backcountry lodging",
+                  "All meals (hearty, locally sourced)",
+                  "Daily ice plunges with coached entry",
+                  "Wood-fired sauna",
+                  "Council fire each night",
+                  "Breathwork & winter skills coaching",
+                  "Solo time on the land",
+                  "Pre-trip prep packet & gear list",
+                  "Post-trip integration call",
                   "Lifetime community access",
                 ].map((item, i) => (
                   <motion.div 
@@ -237,17 +237,17 @@ export default function RetreatWinter() {
 
             <div className="space-y-6">
               {[
-                { time: "6:30 AM", activity: "Wake with the sun. Quiet time." },
-                { time: "7:00 AM", activity: "Breathwork & movement practice" },
-                { time: "8:00 AM", activity: "Cold water immersion" },
-                { time: "9:00 AM", activity: "Communal breakfast" },
-                { time: "10:30 AM", activity: "Men's circle work" },
-                { time: "12:30 PM", activity: "Lunch & rest" },
-                { time: "2:00 PM", activity: "Solo time / forest walk" },
-                { time: "4:30 PM", activity: "Optional second immersion" },
+                { time: "6:30 AM", activity: "Wake with the sun. Coffee at the fire." },
+                { time: "7:00 AM", activity: "Breathwork & movement warm-up" },
+                { time: "8:00 AM", activity: "Ice plunge & sauna" },
+                { time: "9:00 AM", activity: "Hot communal breakfast" },
+                { time: "10:30 AM", activity: "Snowshoe trek / winter skills" },
+                { time: "12:30 PM", activity: "Lunch on the trail" },
+                { time: "2:00 PM", activity: "Solo time / route work" },
+                { time: "4:30 PM", activity: "Optional second plunge" },
                 { time: "6:00 PM", activity: "Dinner together" },
-                { time: "7:30 PM", activity: "Fire ceremony & storytelling" },
-                { time: "10:00 PM", activity: "Rest" },
+                { time: "7:30 PM", activity: "Council fire & stories" },
+                { time: "10:00 PM", activity: "Rack out under canvas" },
               ].map((item, i) => (
                 <motion.div 
                   key={i}
@@ -268,10 +268,10 @@ export default function RetreatWinter() {
           <div className="container px-6 mx-auto text-center">
             <motion.div {...fadeIn}>
               <h2 className="font-serif text-3xl md:text-5xl text-white mb-6">
-                Ready to Descend?
+                Ready to Drop In?
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto mb-8 text-lg">
-                This is not for everyone. It's for men ready to step out of comfort, face themselves honestly, and return home changed.
+                This isn't for everyone. It's for men who want a hard winter trip, the ice plunge, the fire, and a tight crew of brothers to do it with.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 

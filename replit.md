@@ -2,7 +2,7 @@
 
 ## Overview
 
-Grounded Warriors is a website for a men's healing retreat focused on trauma recovery, father wound work, and reconnection through nature. The site features a dark, forest-themed design that evokes quiet strength and grounded calm. It includes pages for retreat information, past events galleries, contact forms, and newsletter subscriptions.
+Grounded Warriors is a website for a men's wilderness expedition company based in Ontario, Canada. The brand is adventure-forward — backcountry canoe trips, cold-lake plunges, ice plunges, fire-craft, and physical challenge in the wild. Tone: capable, direct, no wellness/healing/therapy language. The site features a dark, forest-themed design and includes pages for expedition information, past trip galleries, contact forms, newsletter subscriptions, and a member portal.
 
 ## User Preferences
 

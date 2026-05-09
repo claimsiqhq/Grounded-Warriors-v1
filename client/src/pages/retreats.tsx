@@ -21,9 +21,9 @@ export default function Retreats() {
       <div className="pt-32 pb-20 bg-background min-h-screen">
         <div className="container px-6 mx-auto">
           <div className="text-center mb-20">
-            <h1 className="font-serif text-4xl md:text-7xl text-white mb-6">Upcoming Retreats</h1>
+            <h1 className="font-serif text-4xl md:text-7xl text-white mb-6">Upcoming Expeditions</h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Choose your descent. Spaces are strictly limited to ensure the integrity of the container.
+              Pick your trip. Spots are strictly limited so every man on the land gets a real seat at the fire.
             </p>
           </div>
 
@@ -146,13 +146,13 @@ export default function Retreats() {
                 </div>
                 <div className="md:w-1/2 p-8 md:p-10">
                   <span className="text-amber-500 text-xs uppercase tracking-widest mb-3 block">April 3-5, 2026 (Tentative)</span>
-                  <h3 className="font-serif text-2xl md:text-3xl text-white mb-3">First Responders & Veterans Retreat</h3>
+                  <h3 className="font-serif text-2xl md:text-3xl text-white mb-3">First Responders & Veterans Expedition</h3>
                   <p className="text-muted-foreground mb-4">Ontario, Canada</p>
                   
                   <p className="text-white/70 text-sm mb-6 leading-relaxed">
-                    A specialized healing retreat honoring those who serve. We speak your language—tactical introspection, 
-                    emergency protocols for the soul, and brotherhood-led ceremonies. This isn't therapy. 
-                    It's the most elite operation of your life: reclaiming your peace.
+                    A backcountry trip built for men who've worn the uniform. Tactical, off-grid, no nonsense.
+                    Real terrain, real cold, real fire, and a crew of brothers who've been through it.
+                    This isn't therapy. It's the next operation — and the objective is your own ground.
                   </p>
                   
                   <div className="space-y-2 mb-6 text-sm">

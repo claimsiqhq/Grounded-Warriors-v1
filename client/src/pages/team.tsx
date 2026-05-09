@@ -26,7 +26,7 @@ export default function Team() {
                 The Team
               </h1>
               <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-                Men who have walked the path. Guides who create space for transformation.
+                Wilderness guides, builders, and athletes who lead every trip from the front.
               </p>
             </motion.div>
           </div>
@@ -68,12 +68,12 @@ export default function Team() {
             <motion.div {...fadeIn}>
               <h2 className="font-serif text-3xl md:text-4xl text-white mb-8">Our Approach</h2>
               <p className="text-muted-foreground text-lg leading-relaxed mb-6">
-                We believe that healing happens in community. Each of us has walked through our own fires, 
-                faced our shadows, and emerged with a deeper understanding of what it means to be a grounded man.
+                We lead from the front. Same canoe, same cold water, same packs, same fire as everyone on the trip.
+                Between us we've spent decades on the land — guiding, building, paddling, climbing, plunging, and teaching the skills that make a man at home in the wild.
               </p>
               <p className="text-muted-foreground text-lg leading-relaxed">
-                Together, we create a container of safety, challenge, and brotherhood—guiding men back 
-                to themselves through the timeless wisdom of nature, cold, fire, and breath.
+                Our job is to set the route, hold the standard, and trust you to rise to it.
+                The land does the rest.
               </p>
             </motion.div>
           </div>

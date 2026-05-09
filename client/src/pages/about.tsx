@@ -7,30 +7,28 @@ export default function About() {
     <Layout>
       <div className="pt-32 pb-20 bg-background">
         <div className="container px-6 mx-auto">
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl mx-auto text-center mb-20"
           >
             <h1 className="font-serif text-5xl md:text-7xl text-white mb-6">The Work</h1>
             <p className="text-xl text-muted-foreground leading-relaxed">
-              We believe that modern masculinity is often a performance—a mask worn to survive. 
-              Grounded Warriors is about taking off the mask and returning to the root.
+              Modern life keeps men comfortable, indoors, and online.
+              Grounded Warriors takes them out — into the cold, the fire, and the backcountry — to remember what they're built for.
             </p>
           </motion.div>
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center mb-20 md:mb-32">
             <div className="relative aspect-[4/3] md:aspect-[4/5] overflow-hidden">
-              <img src={images.water} alt="Cold Water" className="w-full h-full object-cover opacity-80" />
+              <img src={images.water} alt="Cold lake plunge" className="w-full h-full object-cover opacity-80" />
             </div>
             <div className="space-y-6 md:space-y-8">
-              <h2 className="font-serif text-3xl md:text-4xl text-white">Why Descent?</h2>
+              <h2 className="font-serif text-3xl md:text-4xl text-white">Why Adventure?</h2>
               <p className="text-muted-foreground leading-loose">
-                Most personal development tells you to "level up," "crush it," or "ascend." 
-                But nature teaches us something different. Trees grow stronger by deepening their roots, not just stretching their branches.
+                Most men know how to push hard at work. Fewer know how to push hard in the wild — to read a trail, build a fire in the rain, take the cold without flinching, paddle a loaded canoe across a lake at dusk.
                 <br /><br />
-                We guide men into the descent—into the body, into the emotions, into the dark soil of the psyche where true transformation happens.
-                It is in the descent that we find the gold.
+                These are old skills, and they change a man fast. Out here, results come from your hands, your lungs, and the man beside you. There's no résumé, no inbox, no signal. Just the next mile.
               </p>
             </div>
           </div>
@@ -38,15 +36,15 @@ export default function About() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center mb-20 md:mb-32">
             <div className="space-y-6 md:space-y-8 order-2 md:order-1">
               <h2 className="font-serif text-3xl md:text-4xl text-white">The Guides</h2>
-              <h3 className="text-primary text-lg italic">Walking the Path Together</h3>
+              <h3 className="text-primary text-lg italic">Lead From the Front</h3>
               <p className="text-muted-foreground leading-loose">
-                Grounded Warriors is facilitated by men who walk this path themselves.
-                The guides have lived through grief, loss, transition, and rebuilding — and bring decades of experience in men's work, somatic practices, breath, cold exposure, and time on the land.
+                Grounded Warriors is led by men who live this stuff year-round —
+                wilderness guides, off-grid builders, endurance athletes, cold-water practitioners with thousands of plunges behind them.
               </p>
               <p className="text-muted-foreground leading-loose">
-                We are not gurus.<br />
-                We are not above the work.<br />
-                We are fellow travelers who know how to build a fire in the dark — and how to hold space while others learn to do the same.
+                We're not coaches.<br />
+                We're not standing on the bank with a clipboard.<br />
+                We're in the same canoe, the same cold water, and the same fire-circle as everyone on the trip — setting the pace and trusting you to keep it.
               </p>
             </div>
              <div className="relative aspect-[4/3] md:aspect-[4/5] overflow-hidden order-1 md:order-2">
@@ -54,7 +52,7 @@ export default function About() {
             </div>
           </div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
@@ -63,18 +61,18 @@ export default function About() {
             <div className="border-l-2 border-primary/30 pl-8 py-4">
               <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">The Intention</h2>
               <p className="text-muted-foreground leading-loose text-lg mb-6">
-                This work isn't about fixing what's broken.<br />
-                It's about remembering what's been buried.
+                You don't need fixing.<br />
+                You need a real day in the wild with men who'll match your effort.
               </p>
               <p className="text-muted-foreground leading-loose">
-                When men return to the body, the land, and honest connection, clarity follows.<br />
-                From clarity comes grounded strength.<br />
-                From grounded strength comes integrity, presence, and leadership.
+                Push your body. Sleep on the land. Eat what you cooked.<br />
+                Come home sharper than you left.<br />
+                That's the whole program.
               </p>
             </div>
           </motion.div>
 
-          <motion.div 
+          <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}

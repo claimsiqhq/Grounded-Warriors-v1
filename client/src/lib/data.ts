@@ -157,7 +157,7 @@ export const retreats = [
 
 export const testimonials = [
   {
-    text: "I came here looking for a break. I found a brotherhood I didn't know I was starving for.",
+    text: "I came here for a hard trip. I left with brothers, callouses, and the best sleep of my life.",
     author: "James T.",
   },
   {
@@ -165,11 +165,11 @@ export const testimonials = [
     author: "Marcus R.",
   },
   {
-    text: "For the first time in years, I felt permission to just be. No performance. No mask. Just presence.",
+    text: "First real wilderness trip I've done in years. I'm in better shape, sharper at work, and already signed up for the next one.",
     author: "David K.",
   },
   {
-    text: "The descent changed everything. I returned home a different man—more grounded, more alive.",
+    text: "Hardest four days I've had in a long time. Came home a sharper version of myself.",
     author: "Andrew P.",
   },
 ];
@@ -177,14 +177,14 @@ export const testimonials = [
 export const facilitators = [
   {
     name: "John Shoust",
-    role: "Co-Founder & Facilitator",
-    bio: "Lifelong wilderness lover, off-grid expert, endurance athlete, and entrepreneur. With degrees spanning engineering, business, and psychology, John brings deep knowledge to both the physical and mental aspects of the retreats. A longtime practitioner and facilitator of cold therapy, he guides men through challenge with grounded presence.",
+    role: "Co-Founder & Lead Guide",
+    bio: "Lifelong wilderness traveler, off-grid builder, endurance athlete, and entrepreneur. With degrees spanning engineering, business, and psychology, John brings serious knowledge to the routes, the gear, and the conditioning. Thousands of cold plunges in, he leads the cold-water work and the long days under load.",
     image: johnPhoto,
   },
   {
     name: "Brian Coones",
-    role: "Co-Founder & Facilitator",
-    bio: "Brian has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines cold water therapy, somatic practices, breathwork, and ancient fire ceremony traditions. A certified facilitator, he creates space for men to reconnect with their bodies and find strength through surrender.",
+    role: "Co-Founder & Lead Guide",
+    bio: "Brian has spent over a decade leading men into the backcountry — paddling, portaging, building, plunging. His approach combines cold-water conditioning, breathwork drills, and old-school wilderness craft. Calm under pressure and built for the hard miles.",
     image: marchWinterHike,
   },
 ];
@@ -192,26 +192,26 @@ export const facilitators = [
 export const springRetreatHosts = [
   {
     name: "John Shoust",
-    role: "Co-Founder & Facilitator",
-    bio: "Lifelong wilderness lover, off-grid expert, endurance athlete, and entrepreneur. With degrees spanning engineering, business, and psychology, John brings deep knowledge to both the physical and mental aspects of the retreats. A longtime practitioner and facilitator of cold therapy, he guides men through challenge with grounded presence.",
+    role: "Co-Founder & Lead Guide",
+    bio: "Lifelong wilderness traveler, off-grid builder, endurance athlete, and entrepreneur. With degrees spanning engineering, business, and psychology, John brings serious knowledge to the routes, the gear, and the conditioning. Thousands of cold plunges in, he leads the cold-water work and the long days under load.",
     image: johnPhoto,
   },
   {
     name: "Brian Coones",
-    role: "Co-Founder & Facilitator",
-    bio: "Brian has spent over a decade guiding men through transformative experiences in the wilderness. His approach combines cold water therapy, somatic practices, breathwork, and ancient fire ceremony traditions. A certified facilitator, he creates space for men to reconnect with their bodies and find strength through surrender.",
+    role: "Co-Founder & Lead Guide",
+    bio: "Brian has spent over a decade leading men into the backcountry — paddling, portaging, building, plunging. His approach combines cold-water conditioning, breathwork drills, and old-school wilderness craft. Calm under pressure and built for the hard miles.",
     image: marchWinterHike,
   },
   {
     name: "Rawa",
-    role: "Facilitator",
-    bio: "Founder of Bold & Centered, a men's empowerment movement devoted to the awakening of men's hearts. Rawa guides men through initiatory processes that restore sacred brotherhood and embodied leadership, cultivating safety through somatic practices and ritual.",
+    role: "Guide",
+    bio: "Founder of Bold & Centered. Rawa brings years of experience leading men's expeditions and a sharp eye for crew dynamics on the trail. The guy you want at the fire when the night runs long.",
     image: rawaPhoto,
   },
   {
     name: "Chris \"CK\" Kelly",
-    role: "Facilitator & Wilderness Guide",
-    bio: "World traveler, dreamer, coach, and guide of 12 years. Chris's deep love for nature and ability to connect with people creates an environment that encourages exploration, openness, and deep reflection. His mission is to be the bridge between society and the natural world.",
+    role: "Wilderness Guide",
+    bio: "World traveler, coach, and certified wilderness guide of 12 years. CK has paddled, hiked, and climbed across continents. Reads terrain and people equally well — and is usually the first one in the cold water.",
     image: chrisPhoto,
   },
 ];

@@ -115,22 +115,22 @@ export async function sendNewsletterWelcomeEmail(data: {
     subject: 'Welcome to the Circle — Grounded Warriors',
     text: `Brother,
 
-Thank you for stepping into the circle. You'll hear from us when a new retreat opens, when stories from the land are worth sharing, and when there's a quiet moment we think you'd want to know about.
+You're in. Expect a dispatch when a new expedition opens, when there are tracks worth sharing from the trail, and when something out of the field is worth a read.
 
-When you're ready, create a free account in the Member Portal:
+When you're ready, lock in a free Member Portal account:
 ${registerLink}
 
 From there you can:
 
-  • Register for an upcoming retreat — ${retreatsLink}
-  • Join the General Commons, our open conversation space for men walking this path — ${commonsLink}
+  • Reserve a spot on an upcoming expedition — ${retreatsLink}
+  • Join the General Commons, our open chat for the broader crew — ${commonsLink}
 
-No pressure. The trees aren't going anywhere, and neither are we.
+No rush. The wild isn't going anywhere, and neither are we.
 
 —
 Grounded Warriors
 Return to the Elements. Return to Yourself.
-Men's Healing Retreats in Ontario`,
+Wilderness Expeditions for Men · Ontario, Canada`,
     html: `<!DOCTYPE html>
 <html>
 <head>
@@ -170,11 +170,11 @@ Men's Healing Retreats in Ontario`,
               </p>
 
               <p style="margin:0 0 18px 0; font-size:16px; line-height:1.75; color:#c5b393;">
-                Thank you for stepping into the circle. You'll hear from us when a new retreat opens, when stories from the land are worth sharing, and when there's a quiet moment we think you'd want to know about.
+                You're in. Expect a dispatch when a new expedition opens, when there are tracks worth sharing from the trail, and when something out of the field is worth a read.
               </p>
 
               <p style="margin:0 0 32px 0; font-size:16px; line-height:1.75; color:#c5b393;">
-                When you're ready, take one more step — create a free account in the Member Portal. From there you can register for an upcoming retreat, or simply join the General Commons, our open conversation space for men walking this path together.
+                When you're ready, take one more step &mdash; lock in a free Member Portal account. From there you can reserve a spot on an upcoming expedition, or join the General Commons, our open chat for the broader crew.
               </p>
 
               <!-- CTA -->
@@ -198,13 +198,13 @@ Men's Healing Retreats in Ontario`,
                 <tr>
                   <td style="padding:0 12px 0 0; vertical-align:top; width:50%;">
                     <div style="font-family:${headingFont}; font-size:20px; font-weight:500; color:#c5b393; margin-bottom:8px;">
-                      Register for a Retreat
+                      Reserve a Spot
                     </div>
                     <p style="margin:0 0 12px 0; font-size:14px; line-height:1.65; color:#90a190;">
-                      See upcoming gatherings and reserve your seat by the fire.
+                      See upcoming expeditions and lock in your seat by the fire.
                     </p>
                     <a href="${retreatsLink}" style="font-size:13px; letter-spacing:1px; text-transform:uppercase; color:#c5b393; text-decoration:none; border-bottom:1px solid #3e5d48; padding-bottom:2px;">
-                      View Retreats
+                      View Expeditions
                     </a>
                   </td>
                   <td style="padding:0 0 0 12px; vertical-align:top; width:50%;">
@@ -212,7 +212,7 @@ Men's Healing Retreats in Ontario`,
                       Join the General Commons
                     </div>
                     <p style="margin:0 0 12px 0; font-size:14px; line-height:1.65; color:#90a190;">
-                      Our open conversation space for any man walking this path.
+                      Our open chat for the broader crew of Grounded Warriors.
                     </p>
                     <a href="${commonsLink}" style="font-size:13px; letter-spacing:1px; text-transform:uppercase; color:#c5b393; text-decoration:none; border-bottom:1px solid #3e5d48; padding-bottom:2px;">
                       Enter the Commons
@@ -222,7 +222,7 @@ Men's Healing Retreats in Ontario`,
               </table>
 
               <p style="margin:36px 0 0 0; font-size:14px; line-height:1.75; color:#90a190; font-style:italic; text-align:center;">
-                No pressure. The trees aren't going anywhere, and neither are we.
+                No rush. The wild isn't going anywhere, and neither are we.
               </p>
 
             </td>
@@ -235,7 +235,7 @@ Men's Healing Retreats in Ontario`,
                 Grounded Warriors
               </div>
               <div style="margin-top:6px; font-size:12px; color:#90a190;">
-                Men's Healing Retreats &middot; Ontario, Canada
+                Wilderness Expeditions for Men &middot; Ontario, Canada
               </div>
             </td>
           </tr>
@@ -313,7 +313,7 @@ Return to the Elements. Return to Yourself.`,
         
         <p style="color: #666; font-size: 12px; text-align: center;">
           Grounded Warriors<br/>
-          Men's Healing Retreats in Ontario
+          Wilderness Expeditions for Men · Ontario, Canada
         </p>
       </div>
     `

@@ -7,27 +7,27 @@ import { motion } from "framer-motion";
 export default function FAQ() {
   const faqCategories = [
     {
-      title: "About the Retreats",
+      title: "About the Expeditions",
       faqs: [
         {
-          question: "What happens at a Grounded Warriors retreat?",
-          answer: "Our retreats are immersive 3-4 day experiences in the Ontario wilderness. You'll participate in cold water immersion, fire ceremonies, breathwork sessions, men's circle work, solo time in nature, and shared meals. Everything is designed to help you reconnect with yourself, process difficult emotions, and build genuine connections with other men."
+          question: "What actually happens on a Grounded Warriors trip?",
+          answer: "Three to four days off-grid in the Ontario wild. Depending on the trip you'll be paddling, portaging, hiking, plunging in cold lakes, building fires, sleeping under canvas, cooking communal meals, and gathering at the fire each night. It's physical, it's simple, and it's done with a tight crew of men."
         },
         {
-          question: "Do I need previous experience with men's work?",
-          answer: "No. You only need a willingness to be honest and show up fully. We guide you through the rest. Many men come to us having never done anything like this before."
+          question: "Do I need previous wilderness experience?",
+          answer: "No. You need a base level of fitness and a willingness to push. We handle the route, the gear list, the canoes, and the skills coaching. Plenty of our men have never portaged a canoe or taken a winter plunge before their first trip."
         },
         {
           question: "What if I've never done cold immersion?",
-          answer: "Perfect. We teach you the breathwork and mindset required. It is a challenge by design, but you will be supported every second. The cold is a powerful teacher, and we make sure you're prepared before you enter the water."
+          answer: "You'll be ready. We teach the breathing, the entry, and the warm-up protocol before you ever set foot in the water. It's hard by design, but you're supported every second. The cold is a teacher, and we make sure you meet it prepared."
         },
         {
-          question: "Is this a religious retreat?",
-          answer: "No. We draw on ancient traditions and archetypal psychology, but we are not affiliated with any religion. All beliefs are welcome. Our work is about connecting with yourself and nature, not adopting any particular belief system."
+          question: "Is this a religious trip?",
+          answer: "No. We're not affiliated with any religion. We borrow from old wilderness and council-fire traditions, but everyone is welcome at the fire — the work is about you, the land, and the men around you."
         },
         {
-          question: "What is the schedule like?",
-          answer: "Days begin early with breathwork or movement. Mornings include cold immersion and circle work. Afternoons offer solo time, nature walks, or skill-building activities. Evenings are centered around fire ceremony, storytelling, and deeper conversation. We prioritize presence over productivity."
+          question: "What does a day look like?",
+          answer: "Up early. Breathwork or movement. Cold plunge. Hot breakfast around the fire. Then move — paddle, hike, portage, or work on the land — until late afternoon. Dinner together. Council fire after dark. Sleep hard. Repeat."
         },
       ]
     },
@@ -35,45 +35,45 @@ export default function FAQ() {
       title: "Logistics & Preparation",
       faqs: [
         {
-          question: "What is the accommodation like?",
-          answer: "Rustic and grounded. Depending on the location, it may be canvas tents, simple cabins, or sleeping under the stars. We strip away luxury to focus on what matters. Expect basic but comfortable sleeping arrangements with proper bedding provided."
+          question: "What's the accommodation like?",
+          answer: "Backcountry. Canvas tents, simple cabins, or under the stars depending on the trip. Real beds, warm sleeping bags, dry shelter. No spa. No hot tub. No wifi."
         },
         {
           question: "What should I bring?",
-          answer: "We'll send you a detailed packing list after registration. Essentials include warm layers, a good sleeping bag (or we can provide one), comfortable clothes for movement, a journal, and an open mind. Leave your phone habits at home—we encourage digital detox during the retreat."
+          answer: "We send a detailed packing list after registration. Essentials: warm layers, a good sleeping bag (or borrow one of ours), broken-in boots, swim trunks for the plunge, a knife, a headlamp, and a notebook if you keep one. Leave the phone in the truck — there's no signal anyway."
         },
         {
           question: "Are meals provided?",
-          answer: "Yes. All meals are included—simple, nourishing food prepared communally. We accommodate dietary restrictions when possible. Let us know your needs during registration."
+          answer: "Yes. All meals are included — simple, hearty, locally sourced food, cooked together over fire or camp stove. We accommodate dietary needs where we can. Let us know during registration."
         },
         {
-          question: "Where are the retreats held?",
-          answer: "We hold retreats in various locations across Ontario, including Marmora, Gravenhurst, Muskoka, and Algonquin. Each location is chosen for its natural beauty, privacy, and connection to the land. Specific directions are provided after registration."
+          question: "Where are the trips held?",
+          answer: "Across Ontario — Marmora, Gravenhurst, Muskoka, and Algonquin Park. Each location is picked for its terrain, water, and remoteness. Exact coordinates and meeting points are sent after registration."
         },
         {
           question: "How do I get there?",
-          answer: "Most retreats are within 2-3 hours of Toronto. We provide detailed directions and can help coordinate carpools with other participants. Some locations are accessible by public transit to nearby towns, with pickup arranged from there."
+          answer: "Most trips are 2–3 hours from Toronto. We send detailed directions and help coordinate carpools. For deeper backcountry trips we set a meeting point at a base camp or trailhead."
         },
       ]
     },
     {
-      title: "Safety & Support",
+      title: "Safety & Conditioning",
       faqs: [
         {
           question: "Is cold water immersion safe?",
-          answer: "When done properly with guidance, yes. We follow strict safety protocols, including proper warm-up, controlled exposure times, and immediate warming after. Our facilitators are trained in cold exposure techniques. Men with certain heart conditions or health concerns should consult their doctor first."
+          answer: "When done with proper coaching and warm-up, yes — and we follow strict protocols. Controlled entry, controlled exposure times, immediate re-warming, eyes on every man in the water. Anyone with significant heart conditions or other concerns should clear it with their doctor first."
+        },
+        {
+          question: "What kind of fitness do I need?",
+          answer: "Solid baseline cardio and the ability to carry 30–40 lbs over uneven ground for an hour or two. If you can rucksack a few kilometres without stopping, you're ready. Trips have varying intensities — talk to us if you're unsure which is right."
         },
         {
           question: "What if I have physical limitations?",
-          answer: "We adapt the experience to meet you where you are. Not every activity is mandatory, and there are always alternatives. The most important thing is your presence and participation in whatever way feels right for you."
-        },
-        {
-          question: "Is there mental health support available?",
-          answer: "Our facilitators are trained to hold space for emotional processing. However, we are not therapists, and these retreats are not therapy. If you're currently in crisis or managing acute mental health challenges, please consult with your mental health provider before attending."
+          answer: "Reach out before you book. We can usually adapt routes and gear for most situations, but some of our trips have hard requirements (long portages, multi-day paddles) where we want to make sure it's the right fit."
         },
         {
           question: "What's the group size?",
-          answer: "We keep groups intentionally small—typically 8-12 men per retreat. This ensures everyone receives personal attention and the container remains intimate enough for deep work."
+          answer: "Small on purpose — usually 8–12 men. Big enough for a real crew, small enough that the guides know every man on the trip and every man knows every other."
         },
       ]
     },
@@ -82,19 +82,19 @@ export default function FAQ() {
       faqs: [
         {
           question: "How do I register?",
-          answer: "Visit our Retreats page and click 'Reserve Your Spot' on your chosen retreat. You'll provide your information and pay a deposit to secure your place. We'll follow up with preparation materials and any additional details."
+          answer: "Head to the Retreats page and hit 'Reserve' on the trip you want. Pay the deposit to lock in your spot, and we'll follow up with the prep packet, gear list, and route brief."
         },
         {
           question: "What is the refund policy?",
-          answer: "Due to the intimate nature of these retreats and limited spots, deposits are non-refundable. Full payment is required 30 days prior to the retreat. In exceptional circumstances, we may offer credit toward a future retreat."
+          answer: "Spots are limited and gear is reserved per man, so deposits are non-refundable. Full payment is due 30 days before the trip. In exceptional circumstances we can offer credit toward a future expedition."
         },
         {
           question: "Can I pay in installments?",
-          answer: "Yes. You can secure your spot with a deposit and pay the remaining balance before the 30-day cutoff. Contact us if you need to discuss alternative payment arrangements."
+          answer: "Yes. Lock your spot with the deposit and pay the balance before the 30-day cutoff. If you need to spread it out further, just ask."
         },
         {
           question: "What's included in the price?",
-          answer: "The retreat fee covers all accommodations, meals, facilitation, materials, and activities for the duration of the retreat. Transportation to and from the location is not included."
+          answer: "Lodging, meals, all group gear (canoes, paddles, safety equipment), guides, instruction, and the post-trip integration call. Travel to and from the meeting point is on you."
         },
       ]
     },
@@ -113,7 +113,7 @@ export default function FAQ() {
               Frequently Asked Questions
             </h1>
             <p className="text-xl text-muted-foreground max-w-2xl mx-auto">
-              Everything you need to know before you descend.
+              Everything you need to know before you head into the wild.
             </p>
           </motion.div>
 

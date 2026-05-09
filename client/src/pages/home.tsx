@@ -169,10 +169,10 @@ export default function Home() {
               Return to the Elements.<br />Return to Yourself.
             </h1>
             <p className="text-lg md:text-xl text-muted-foreground mb-4 max-w-2xl mx-auto leading-relaxed">
-              Grounded Warriors is a primal retreat experience for men who are ready to step out of performance, reconnect with their bodies, and remember what it feels like to be fully alive.
+              Grounded Warriors is a wilderness brotherhood for men who answer the call to push into the cold, the fire, and the backcountry — and come home sharper, stronger, more themselves.
             </p>
             <p className="text-primary/80 font-serif italic mb-10 max-w-xl mx-auto">
-              Rooted in nature. Guided by the elements. Held in brotherhood.
+              Into the cold. Into the fire. Into the wild.
             </p>
             <div className="flex flex-col sm:flex-row gap-6 justify-center">
               <Link href="/retreats">
@@ -205,19 +205,19 @@ export default function Home() {
           <motion.div {...fadeIn}>
             <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-6 font-semibold">Our Philosophy</h2>
             <h3 className="font-serif text-3xl md:text-4xl leading-relaxed text-white mb-8">
-              This Is Not About Fixing You
+              Built for the Backcountry
             </h3>
             <p className="text-muted-foreground text-lg leading-loose max-w-3xl mx-auto mb-6">
-              This is not a bootcamp. This is not therapy. This is not about self-improvement or becoming someone else.
+              This isn't a workshop. This isn't a wellness weekend. This is a true wilderness expedition — paddle, portage, plunge, build, sweat, sleep on the land.
             </p>
             <p className="text-muted-foreground text-lg leading-loose max-w-3xl mx-auto mb-6">
-              Grounded Warriors exists to create space for men to slow down, drop into the body, and reconnect with what modern life quietly strips away — presence, truth, and grounded strength.
+              Grounded Warriors takes men off the grid and into the elements. We carry our own gear, build our own fires, swim in cold lakes, and earn every mile. The work is physical, the standards are real, and the brotherhood is forged the old way — shoulder to shoulder.
             </p>
             <p className="text-muted-foreground text-lg leading-loose max-w-3xl mx-auto mb-6">
-              In a world built on constant acceleration, noise, and pressure, this work offers something different: <span className="text-primary italic">a return.</span>
+              In a world that's gone soft, fast, and digital, this offers something different: <span className="text-primary italic">a hard, simple, real day in the wild.</span>
             </p>
             <p className="font-serif text-xl text-white/90 max-w-2xl mx-auto">
-              A return to the body. A return to nature. A return to what is real.
+              Cold water. Open fire. Wild country. Good men.
             </p>
           </motion.div>
         </div>
@@ -228,9 +228,9 @@ export default function Home() {
         <div className="container px-6 mx-auto">
           <motion.div {...fadeIn} className="text-center mb-16">
             <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Work</h2>
-            <h3 className="font-serif text-3xl md:text-4xl text-white mb-4">Guided by the Elements</h3>
+            <h3 className="font-serif text-3xl md:text-4xl text-white mb-4">Forged by the Elements</h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              The retreats are simple, ancient, and intentional. Each experience is shaped by the four elements — not as concepts, but as lived teachers.
+              Every expedition is shaped by the four elements — not as metaphors, but as the actual terrain you'll cross.
             </p>
           </motion.div>
           <motion.div 
@@ -241,10 +241,10 @@ export default function Home() {
             className="grid grid-cols-2 md:grid-cols-4 gap-6 md:gap-12"
           >
             {[
-              { icon: Flame, title: "Fire", desc: "Ceremony, truth, and release. Fire is where men burn what no longer serves — old stories, armour, and patterns that keep them disconnected." },
-              { icon: Droplets, title: "Water", desc: "Cold immersion and nervous system awakening. Water teaches resilience, breath, and trust in the body under pressure." },
-              { icon: Wind, title: "Air", desc: "Breathwork and conscious respiration. Air opens awareness, releases stored tension, and reconnects men to emotion, clarity, and inner space." },
-              { icon: Mountain, title: "Earth", desc: "Nature, movement, and stillness. Earth grounds the work — reminding men they belong to something older, steadier, and wiser than the mind." }
+              { icon: Flame, title: "Fire", desc: "Building, tending, and sleeping by the fire you made yourself. Open flame for cooking, warmth, and the long evening councils that hold the brotherhood together." },
+              { icon: Droplets, title: "Water", desc: "Cold lake plunges, river crossings, and canoe paddles. The water tests your nerve, sharpens your breath, and reminds you exactly what your body can do." },
+              { icon: Wind, title: "Air", desc: "Breathwork drills under load and out in the open. The same techniques used by free-divers and athletes — to keep you calm in cold water and clear under pressure." },
+              { icon: Mountain, title: "Earth", desc: "Backcountry travel under your own power. Portage, hike, climb, carry. The land is the gym, the classroom, and the proving ground all at once." }
             ].map((el, i) => (
               <motion.div 
                 key={i} 
@@ -260,7 +260,7 @@ export default function Home() {
             ))}
           </motion.div>
           <motion.p {...fadeIn} className="text-center text-muted-foreground italic mt-12 max-w-xl mx-auto">
-            Brotherhood is not forced here. It emerges naturally when men walk through the elements together.
+            Brotherhood isn't manufactured here. It's earned the way it always has been — by men who get cold, tired, and hungry together, then build the fire and tell the story.
           </motion.p>
         </div>
       </section>
@@ -279,9 +279,9 @@ export default function Home() {
         <div className="container px-6 mx-auto">
           <motion.div {...fadeIn} className="text-center mb-16">
             <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Experience</h2>
-            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">See the Work</h3>
+            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">See It for Yourself</h3>
             <p className="text-muted-foreground max-w-2xl mx-auto">
-              Words can only say so much. This is what happens when men gather on the land.
+              Words can only say so much. This is what it actually looks like out on the land.
             </p>
           </motion.div>
 
@@ -308,12 +308,12 @@ export default function Home() {
         <div className="container px-6 mx-auto">
           <motion.div {...fadeIn} className="text-center mb-16">
             <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Your Guides</h2>
-            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">Holding the Container</h3>
+            <h3 className="font-serif text-4xl md:text-5xl text-white mb-4">Leading From the Front</h3>
             <p className="text-muted-foreground max-w-3xl mx-auto mb-4">
-              Grounded Warriors is co-facilitated by men who walk this path themselves.
+              Grounded Warriors is led by men who actually live this — wilderness guides, off-grid builders, endurance athletes, cold-water practitioners.
             </p>
             <p className="text-muted-foreground max-w-3xl mx-auto">
-              The role of the guides is not to lead from above, but to hold a grounded, respectful container where men can meet themselves honestly — without pressure, posturing, or performance. Leadership here is quiet, embodied, and present.
+              We carry the same packs, paddle the same lakes, and take the same plunges as everyone else on the trip. No coaching from the sidelines. Just experienced men setting the pace, calling the shots when it counts, and trusting you to rise to the work.
             </p>
           </motion.div>
 
@@ -373,7 +373,7 @@ export default function Home() {
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Retreats</h2>
               <h3 className="font-serif text-4xl md:text-5xl text-white">Upcoming Gatherings</h3>
               <p className="text-muted-foreground mt-4 max-w-lg">
-                Each retreat is intentionally small and held on the land. The work deepens through simplicity, presence, and shared experience.
+                Every expedition is intentionally small and held deep on the land. Cold water, open fire, real miles, and a tight crew of men.
               </p>
             </div>
             <Link href="/retreats">
@@ -423,10 +423,10 @@ export default function Home() {
             <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Community</h2>
             <h3 className="font-serif text-3xl md:text-4xl text-white mb-4">Join the Circle</h3>
             <p className="text-muted-foreground max-w-2xl mx-auto mb-4">
-              Grounded Warriors is more than a series of retreats. It is a growing community of men committed to living with presence, integrity, and grounded strength.
+              Grounded Warriors is more than a series of trips. It's a growing crew of men who keep saying yes to cold water, open fire, and the next adventure.
             </p>
             <p className="text-muted-foreground max-w-xl mx-auto mb-8">
-              Receive updates on upcoming retreats, reflections from the fire, and community offerings.
+              Be the first to hear when new expeditions open, dispatches from the trail, and gear notes from the field.
             </p>
             <NewsletterSignup />
           </motion.div>

@@ -72,24 +72,24 @@ export default function Contact() {
 
   const faqs = [
     {
-      question: "Do I need previous experience with men's work?",
-      answer: "No. You only need a willingness to be honest and show up fully. We guide you through the rest."
+      question: "Do I need previous wilderness or expedition experience?",
+      answer: "No. You need a baseline of fitness and a willingness to push. We handle the route, the gear list, and the skills training. Many of our men have never paddled a canoe or taken a cold plunge before their first trip."
     },
     {
       question: "What if I've never done cold immersion?",
-      answer: "Perfect. We teach you the breathwork and mindset required. It is a challenge by design, but you will be supported every second."
+      answer: "You'll be ready. We teach the breathing, the entry, and the warm-up before you ever set foot in the water. It's hard by design, but you're always supported."
     },
     {
       question: "Is this a religious retreat?",
-      answer: "No. We draw on ancient traditions and archetypal psychology, but we are not affiliated with any religion. All beliefs are welcome."
+      answer: "No. We're not affiliated with any religion. All beliefs are welcome on the land."
     },
     {
       question: "What is the accommodation like?",
-      answer: "Rustic and grounded. Depending on the location, it may be canvas tents, simple cabins, or sleeping under the stars. We strip away luxury to focus on what matters."
+      answer: "Backcountry. Depending on the trip, that means canvas tents, simple cabins, or sleeping under the stars. No spa, no hot tub. Real beds, warm bags, and a fire."
     },
     {
       question: "What is the refund policy?",
-      answer: "Due to the intimate nature of these retreats and limited spots, deposits are non-refundable. Full payment is required 30 days prior."
+      answer: "Spots are limited and gear is reserved per man, so deposits are non-refundable. Full payment is required 30 days before the trip."
     }
   ];
 
@@ -99,9 +99,9 @@ export default function Contact() {
         <div className="container px-6 mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-24 mb-20 md:mb-32">
             <div>
-              <h1 className="font-serif text-4xl md:text-7xl text-white mb-6">Begin the Descent</h1>
+              <h1 className="font-serif text-4xl md:text-7xl text-white mb-6">Answer the Call</h1>
               <p className="text-xl text-muted-foreground leading-relaxed mb-12">
-                Questions about the retreat? Or ready to apply? 
+                Questions about an expedition? Ready to lock in your spot?
                 Send us a message. We read every single one personally.
               </p>
               
