@@ -21,6 +21,7 @@ export const RETREATS: RetreatContainer[] = [
   { id: 2, name: "Spring Awakening", date: "May 2026",                 isPast: true  },
   { id: 3, name: "Equinox Gathering", date: "September 2026",          isPast: false },
   { id: 4, name: "Spring Awakening", date: "April 30 – May 3, 2027",   isPast: false },
+  { id: 5, name: "Guatemala Expedition", date: "February 2027",         isPast: false },
 ];
 
 export function getRetreat(id: number): RetreatContainer | undefined {

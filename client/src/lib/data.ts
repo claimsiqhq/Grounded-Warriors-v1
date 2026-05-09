@@ -153,6 +153,15 @@ export const retreats = [
     depositAmount: 250,
     fullAmount: 555,
   },
+  {
+    id: 5,
+    title: "Guatemala Expedition",
+    date: "February 2027",
+    location: "Guatemala — 7 Days",
+    image: hikingImg,
+    depositAmount: 500,
+    fullAmount: 0,
+  },
 ];
 
 export const testimonials = [
