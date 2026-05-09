@@ -2,7 +2,7 @@ import { Layout } from "@/components/layout";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
-import { Shield, Heart, Users, Flame, Moon, Mountain, CheckCircle } from "lucide-react";
+import { Shield, Heart, Users, Flame, Mountain, CheckCircle } from "lucide-react";
 import veteransHero from "@/assets/images/veterans-hero.jpg";
 import firstResponder1 from "@/assets/images/first-responder-1.jpg";
 import firstResponder2 from "@/assets/images/first-responder-2.jpg";
@@ -188,64 +188,64 @@ export default function VeteransRetreat() {
             </div>
           </motion.section>
 
-          {/* Program Outcomes */}
+          {/* What You Take Home */}
           <motion.section
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             className="max-w-5xl mx-auto mb-20"
           >
-            <h2 className="font-serif text-3xl md:text-4xl text-white text-center mb-12">Program Outcomes</h2>
-            
+            <h2 className="font-serif text-3xl md:text-4xl text-white text-center mb-12">What You Take Home</h2>
+
             <div className="grid md:grid-cols-2 gap-8">
-              {/* Immediate Outcomes */}
+              {/* Off the Trip */}
               <div className="bg-card border border-white/10 p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-blue-500/20 rounded-full flex items-center justify-center">
                     <Heart className="w-5 h-5 text-blue-400" />
                   </div>
-                  <h3 className="font-serif text-xl text-white">Immediate</h3>
+                  <h3 className="font-serif text-xl text-white">Off the Trip</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-white/80">Reduced hypervigilance and improved sleep patterns</span>
+                    <span className="text-white/80">Cold-water and breathwork drills you'll keep using</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-white/80">Actionable emotional regulation protocols</span>
+                    <span className="text-white/80">Sharper sleep, lower baseline noise in the body</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-white/80">Renewed sense of purpose and brotherhood</span>
+                    <span className="text-white/80">A renewed sense of mission and brotherhood</span>
                   </li>
                 </ul>
               </div>
 
-              {/* Long-term Outcomes */}
+              {/* Down the Road */}
               <div className="bg-card border border-white/10 p-8">
                 <div className="flex items-center gap-3 mb-6">
                   <div className="w-10 h-10 bg-green-500/20 rounded-full flex items-center justify-center">
                     <Mountain className="w-5 h-5 text-green-400" />
                   </div>
-                  <h3 className="font-serif text-xl text-white">Long-term</h3>
+                  <h3 className="font-serif text-xl text-white">Down the Road</h3>
                 </div>
                 <ul className="space-y-3">
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-white/80">Decreased substance dependency and self-destructive behaviors</span>
+                    <span className="text-white/80">Stronger conditioning and a real wilderness skill set</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-white/80">Improved family relationships and communication</span>
+                    <span className="text-white/80">Steadier presence at home and at work</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-white/80">Sustainable peer support networks</span>
+                    <span className="text-white/80">A standing crew of brothers from inside and outside the service</span>
                   </li>
                   <li className="flex items-start gap-3">
                     <CheckCircle className="w-5 h-5 text-primary mt-0.5 flex-shrink-0" />
-                    <span className="text-white/80">Return to community as mentors and leaders</span>
+                    <span className="text-white/80">Coming back as a guide for the next cohort</span>
                   </li>
                 </ul>
               </div>
@@ -266,8 +266,8 @@ export default function VeteransRetreat() {
                 <div className="w-14 h-14 bg-primary/20 rounded-full flex items-center justify-center mx-auto mb-4">
                   <Shield className="w-7 h-7 text-primary" />
                 </div>
-                <h4 className="text-white font-semibold mb-2">Not Therapy-Based</h4>
-                <p className="text-muted-foreground text-sm">We use their operational frameworks, not clinical models</p>
+                <h4 className="text-white font-semibold mb-2">Mission, Not Treatment</h4>
+                <p className="text-muted-foreground text-sm">We run it on operational frameworks you already know — not clinical models</p>
               </div>
               
               <div className="bg-card border border-white/10 p-6 text-center">
@@ -320,19 +320,19 @@ export default function VeteransRetreat() {
             className="max-w-3xl mx-auto mb-20"
           >
             <div className="bg-gradient-to-br from-primary/20 to-amber-500/10 border border-primary/30 p-8 md:p-12 text-center">
-              <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">Retreat Details</h2>
+              <h2 className="font-serif text-3xl md:text-4xl text-white mb-6">Trip Details</h2>
               <div className="text-3xl md:text-4xl font-serif text-primary mb-2">3 Days, 2 Nights</div>
-              <p className="text-muted-foreground mb-6">All-inclusive immersive experience</p>
-              
+              <p className="text-muted-foreground mb-6">All-inclusive backcountry expedition</p>
+
               <div className="flex flex-wrap justify-center gap-4 text-sm text-white/70 mb-8">
                 <span className="bg-white/5 px-4 py-2 rounded">Cohort Size: 12-16</span>
                 <span className="bg-white/5 px-4 py-2 rounded">Scholarships Available</span>
-                <span className="bg-white/5 px-4 py-2 rounded">Follow-up Support Included</span>
+                <span className="bg-white/5 px-4 py-2 rounded">Post-Trip Call Included</span>
               </div>
-              
+
               <p className="text-muted-foreground text-sm max-w-xl mx-auto">
-                Your participation supports: Facility operations, facilitator training, participant scholarships, 
-                land development, and follow-up integration support.
+                Your registration covers: route logistics, group gear, guide team, all meals on the land,
+                cohort scholarships, and the post-trip call.
               </p>
             </div>
           </motion.section>

@@ -166,7 +166,7 @@ export default function Retreats() {
                       <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
                       </svg>
-                      <span>Off-grid immersion & fire ceremonies</span>
+                      <span>Off-grid backcountry & council fires</span>
                     </div>
                     <div className="flex items-center gap-2 text-white/60">
                       <svg className="w-4 h-4 text-primary" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -189,7 +189,7 @@ export default function Retreats() {
                   </div>
                   
                   <p className="text-muted-foreground text-xs mt-4 text-center italic">
-                    "Where the most elite operation is the one to reclaim your life."
+                    "The next operation is your own ground. Run it the same way you ran every other one."
                   </p>
                 </div>
               </div>

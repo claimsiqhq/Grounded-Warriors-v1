@@ -45,7 +45,7 @@ export default function RetreatSpring() {
                 Spring Awakening
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                A 4-day inner and outer journey for men in the ancient forests of Algonquin Park.
+                A 4-day backcountry expedition for men into the lakes and portages of Algonquin Park.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button 
