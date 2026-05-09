@@ -45,7 +45,10 @@ export default function MemberDiscussions() {
         credentials: "include",
         body: JSON.stringify(data),
       });
-      if (!res.ok) throw new Error("Failed to create discussion");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || `Failed to create discussion (HTTP ${res.status})`);
+      }
       return res.json();
     },
     onSuccess: () => {
@@ -55,8 +58,8 @@ export default function MemberDiscussions() {
       setNewContent("");
       toast({ title: "Posted!", description: "Your discussion has been created." });
     },
-    onError: () => {
-      toast({ title: "Error", description: "Failed to create discussion.", variant: "destructive" });
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     },
   });
 

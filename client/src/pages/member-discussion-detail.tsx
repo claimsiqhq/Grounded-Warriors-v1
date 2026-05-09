@@ -40,7 +40,10 @@ export default function MemberDiscussionDetail() {
         credentials: "include",
         body: JSON.stringify({ content }),
       });
-      if (!res.ok) throw new Error("Failed to post reply");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || `Failed to post reply (HTTP ${res.status})`);
+      }
       return res.json();
     },
     onSuccess: () => {
@@ -48,8 +51,8 @@ export default function MemberDiscussionDetail() {
       setReplyContent("");
       toast({ title: "Reply posted!" });
     },
-    onError: () => {
-      toast({ title: "Error", description: "Failed to post reply.", variant: "destructive" });
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     },
   });
 

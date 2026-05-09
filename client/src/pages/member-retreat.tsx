@@ -74,7 +74,10 @@ export default function MemberRetreat() {
         credentials: "include",
         body: JSON.stringify({ ...data, retreatId }),
       });
-      if (!res.ok) throw new Error("Failed to create discussion");
+      if (!res.ok) {
+        const body = await res.json().catch(() => ({}));
+        throw new Error(body?.error || `Couldn't create the post (HTTP ${res.status})`);
+      }
       return res.json();
     },
     onSuccess: () => {
@@ -84,8 +87,8 @@ export default function MemberRetreat() {
       setNewContent("");
       toast({ title: "Posted", description: "Your post is shared with the brothers in this container." });
     },
-    onError: () => {
-      toast({ title: "Error", description: "Couldn't create the post.", variant: "destructive" });
+    onError: (error: Error) => {
+      toast({ title: "Error", description: error.message, variant: "destructive" });
     },
   });
 
