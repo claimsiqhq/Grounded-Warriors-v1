@@ -48,7 +48,7 @@ export async function registerRoutes(
       const validatedData = insertContactSubmissionSchema.parse(req.body);
       const submission = await storage.createContactSubmission(validatedData);
       
-      // Send email notification to bcoones@gmail.com
+      // Send email notification to john.shoust@pm.me
       try {
         await sendContactFormEmail({
           name: validatedData.name,

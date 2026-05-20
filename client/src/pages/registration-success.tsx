@@ -56,8 +56,8 @@ export default function RegistrationSuccess() {
           <div className="space-y-4">
             <p className="text-muted-foreground">
               A confirmation email has been sent. If you have any questions, reach out to us at{" "}
-              <a href="mailto:bcoones@gmail.com" className="text-primary hover:underline">
-                bcoones@gmail.com
+              <a href="mailto:john.shoust@pm.me" className="text-primary hover:underline">
+                john.shoust@pm.me
               </a>
             </p>
             

@@ -56,7 +56,7 @@ export async function sendContactFormEmail(data: {
   const { client, fromEmail } = await getUncachableSendGridClient();
   
   const msg = {
-    to: 'bcoones@gmail.com',
+    to: 'john.shoust@pm.me',
     from: fromEmail,
     replyTo: data.email,
     subject: `Grounded Warriors Contact: ${data.name}`,
@@ -268,7 +268,7 @@ function getCoachingRecipients(): string[] {
     .map((s) => s.trim())
     .filter(Boolean);
   if (fromStaffVar.length > 0) return fromStaffVar;
-  return ["bcoones@gmail.com"];
+  return ["john.shoust@pm.me"];
 }
 
 function coachLabel(key: string): string {
