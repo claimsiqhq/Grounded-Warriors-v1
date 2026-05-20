@@ -13,6 +13,7 @@ import RetreatWinter from "@/pages/retreat-winter";
 import RetreatSpring from "@/pages/retreat-spring";
 import VeteransRetreat from "@/pages/retreats/veterans";
 import Contact from "@/pages/contact";
+import Coaching from "@/pages/coaching";
 import PastRetreats from "@/pages/past-retreats";
 import RegistrationSuccess from "@/pages/registration-success";
 import FAQ from "@/pages/faq";
@@ -47,6 +48,7 @@ function Router() {
       <Route path="/faq" component={FAQ} />
       <Route path="/team" component={Team} />
       <Route path="/contact" component={Contact} />
+      <Route path="/coaching" component={Coaching} />
       <Route path="/registration/success" component={RegistrationSuccess} />
       <Route path="/login" component={Login} />
       <Route path="/member" component={MemberDashboard} />

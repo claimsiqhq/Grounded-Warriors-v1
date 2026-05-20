@@ -252,6 +252,143 @@ Wilderness Expeditions for Men · Ontario, Canada`,
   return true;
 }
 
+// Brown Courage Coaching inquiry inbox.
+// Prefers COACHING_INBOX_EMAILS (comma-separated). Falls back to
+// STAFF_EMAILS so John + Brian get inquiries by default in any
+// environment where the admin bootstrap is already set. Final fallback
+// keeps things from silently dropping in dev.
+function getCoachingRecipients(): string[] {
+  const fromCoachVar = (process.env.COACHING_INBOX_EMAILS || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (fromCoachVar.length > 0) return fromCoachVar;
+  const fromStaffVar = (process.env.STAFF_EMAILS || "")
+    .split(",")
+    .map((s) => s.trim())
+    .filter(Boolean);
+  if (fromStaffVar.length > 0) return fromStaffVar;
+  return ["bcoones@gmail.com"];
+}
+
+function coachLabel(key: string): string {
+  if (key === "john") return "John Shoust";
+  if (key === "brian") return "Brian Coones";
+  return "No preference";
+}
+
+export async function sendCoachingInquiryNotification(inquiry: {
+  id: number;
+  name: string;
+  email: string;
+  phone?: string | null;
+  preferredCoach: string;
+  workingOn: string;
+  ninetyDayWin: string;
+  scheduleNotes?: string | null;
+  budgetComfort?: string | null;
+  referralSource?: string | null;
+}) {
+  const { client, fromEmail } = await getUncachableSendGridClient();
+  const recipients = getCoachingRecipients();
+  const coach = coachLabel(inquiry.preferredCoach);
+
+  const escape = (s: string) =>
+    s.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+
+  const row = (label: string, value: string | null | undefined) =>
+    value && value.trim()
+      ? `<tr><td style="padding:8px 12px; border-bottom:1px solid #2a2a2a; color:#90a190; vertical-align:top; width:200px;">${label}</td><td style="padding:8px 12px; border-bottom:1px solid #2a2a2a; color:#c5b393; white-space:pre-wrap;">${escape(value)}</td></tr>`
+      : "";
+
+  const msg = {
+    to: recipients,
+    from: fromEmail,
+    replyTo: inquiry.email,
+    subject: `Brown Courage Coaching — New Application: ${inquiry.name} (→ ${coach})`,
+    text: `New Brown Courage Coaching application
+
+Name: ${inquiry.name}
+Email: ${inquiry.email}
+Phone: ${inquiry.phone || "(not provided)"}
+Preferred coach: ${coach}
+
+What they're working on:
+${inquiry.workingOn}
+
+90-day win:
+${inquiry.ninetyDayWin}
+
+Schedule notes: ${inquiry.scheduleNotes || "(none)"}
+Budget comfort: ${inquiry.budgetComfort || "(not shared)"}
+Referral source: ${inquiry.referralSource || "(not shared)"}
+
+Reply directly to this email to reach the applicant.
+Inquiry ID: ${inquiry.id}`,
+    html: `<div style="font-family: Arial, sans-serif; max-width: 640px; margin: 0 auto; background:#0f1812; padding:24px; color:#c5b393;">
+      <h2 style="color:#c5b393; font-family:Georgia, serif; margin:0 0 4px 0;">Brown Courage Coaching</h2>
+      <p style="color:#90a190; margin:0 0 20px 0; font-size:14px;">New 1-on-1 application — #${inquiry.id}</p>
+      <table style="width:100%; border-collapse:collapse; background:#1e3329;">
+        ${row("Name", inquiry.name)}
+        ${row("Email", inquiry.email)}
+        ${row("Phone", inquiry.phone)}
+        ${row("Preferred coach", coach)}
+        ${row("Working on", inquiry.workingOn)}
+        ${row("90-day win", inquiry.ninetyDayWin)}
+        ${row("Schedule notes", inquiry.scheduleNotes)}
+        ${row("Budget comfort", inquiry.budgetComfort)}
+        ${row("Referral source", inquiry.referralSource)}
+      </table>
+      <p style="color:#90a190; font-size:12px; margin-top:16px;">Reply directly to this email to reach ${escape(inquiry.name)}.</p>
+    </div>`,
+  };
+
+  await client.send(msg);
+  return true;
+}
+
+export async function sendCoachingInquiryAutoReply(inquiry: {
+  name: string;
+  email: string;
+}) {
+  const { client, fromEmail } = await getUncachableSendGridClient();
+  const firstName = inquiry.name.split(/\s+/)[0] || "Brother";
+
+  const msg = {
+    to: inquiry.email,
+    from: fromEmail,
+    subject: "We got it — Brown Courage Coaching",
+    text: `${firstName},
+
+We got your application for Brown Courage Coaching.
+
+A coach — John or Brian — will reach out within 2 business days to set up your 30-minute intro call. We read every application personally.
+
+In the meantime, don't change a thing. Keep doing the work you're doing. We'll be in touch.
+
+—
+Grounded Warriors
+Brown Courage Coaching`,
+    html: `<div style="font-family: Georgia, serif; max-width:600px; margin:0 auto; background:#0f1812; color:#c5b393; padding:40px 32px;">
+      <div style="text-align:center; margin-bottom:28px;">
+        <div style="font-family:'Cormorant Garamond', Georgia, serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#c5b393;">Grounded Warriors</div>
+        <div style="font-family:'Cormorant Garamond', Georgia, serif; font-style:italic; color:#90a190; margin-top:6px; font-size:14px; letter-spacing:1px;">Brown Courage Coaching</div>
+      </div>
+      <div style="background:#1e3329; border:1px solid #3e5d48; padding:36px 32px;">
+        <h1 style="font-family:'Cormorant Garamond', Georgia, serif; font-weight:500; color:#c5b393; margin:0 0 20px 0; font-size:28px;">We got it.</h1>
+        <p style="line-height:1.7; color:#c5b393; margin:0 0 16px 0;">${firstName},</p>
+        <p style="line-height:1.7; color:#c5b393; margin:0 0 16px 0;">Your application is in. A coach — John or Brian — will reach out within <strong>2 business days</strong> to set up your 30-minute intro call.</p>
+        <p style="line-height:1.7; color:#c5b393; margin:0 0 16px 0;">We read every application personally. In the meantime, don't change a thing. Keep doing the work you're doing.</p>
+        <p style="line-height:1.7; color:#90a190; margin:24px 0 0 0; font-style:italic;">— John &amp; Brian</p>
+      </div>
+      <p style="text-align:center; color:#90a190; font-size:12px; margin-top:20px;">Grounded Warriors · Ontario, Canada</p>
+    </div>`,
+  };
+
+  await client.send(msg);
+  return true;
+}
+
 export async function sendPasswordResetEmail(data: {
   email: string;
   resetToken: string;

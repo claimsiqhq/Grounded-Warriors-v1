@@ -6,8 +6,10 @@ import {
   type DiscussionReply, type InsertDiscussionReply,
   type RetreatRegistration, type InsertRetreatRegistration,
   type RetreatStaff, type InsertRetreatStaff,
+  type CoachingInquiry, type InsertCoachingInquiry, type CoachingStatus,
   users, contactSubmissions, newsletterSubscriptions,
   discussions, discussionReplies, retreatRegistrations, retreatStaff,
+  coachingInquiries,
 } from "@shared/schema";
 import { db } from "./db";
 import { and, eq, isNull, sql, desc } from "drizzle-orm";
@@ -35,6 +37,10 @@ export interface IStorage {
   isUserRetreatStaff(userId: string, retreatId: number): Promise<boolean>;
   addRetreatStaff(entry: InsertRetreatStaff): Promise<RetreatStaff>;
   removeRetreatStaff(retreatId: number, userId: string): Promise<void>;
+  // Coaching inquiries
+  createCoachingInquiry(inquiry: InsertCoachingInquiry): Promise<CoachingInquiry>;
+  listCoachingInquiries(): Promise<CoachingInquiry[]>;
+  updateCoachingInquiryStatus(id: number, status: CoachingStatus): Promise<CoachingInquiry | undefined>;
 }
 
 export class DatabaseStorage implements IStorage {
@@ -163,6 +169,31 @@ export class DatabaseStorage implements IStorage {
           eq(retreatStaff.userId, userId),
         ),
       );
+  }
+
+  // Coaching inquiries
+  async createCoachingInquiry(inquiry: InsertCoachingInquiry): Promise<CoachingInquiry> {
+    const [row] = await db.insert(coachingInquiries).values(inquiry).returning();
+    return row;
+  }
+
+  async listCoachingInquiries(): Promise<CoachingInquiry[]> {
+    return await db
+      .select()
+      .from(coachingInquiries)
+      .orderBy(desc(coachingInquiries.createdAt));
+  }
+
+  async updateCoachingInquiryStatus(
+    id: number,
+    status: CoachingStatus,
+  ): Promise<CoachingInquiry | undefined> {
+    const [row] = await db
+      .update(coachingInquiries)
+      .set({ status })
+      .where(eq(coachingInquiries.id, id))
+      .returning();
+    return row;
   }
 
   async listProducts(active = true) {

@@ -8,7 +8,9 @@ import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Loader2, Shield, Trash2, UserPlus } from "lucide-react";
+import { ArrowLeft, Loader2, Shield, Trash2, UserPlus, Mail, Phone } from "lucide-react";
+import { formatDistanceToNow } from "date-fns";
+import type { CoachingInquiry, CoachingStatus } from "@shared/schema";
 
 interface Retreat {
   id: number;
@@ -149,6 +151,149 @@ function StaffPanel({ retreat }: { retreat: Retreat }) {
   );
 }
 
+function coachLabel(key: string) {
+  if (key === "john") return "John Shoust";
+  if (key === "brian") return "Brian Coones";
+  return "No preference";
+}
+
+function statusClass(s: string) {
+  if (s === "new") return "bg-primary/20 text-primary border-primary/40";
+  if (s === "contacted") return "bg-blue-500/15 text-blue-300 border-blue-500/30";
+  return "bg-white/5 text-muted-foreground border-white/10";
+}
+
+function CoachingInquiriesPanel() {
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const inquiriesQuery = useQuery({
+    queryKey: ["/api/admin/coaching/inquiries"],
+    queryFn: async () => {
+      const res = await fetch("/api/admin/coaching/inquiries", { credentials: "include" });
+      if (!res.ok) throw new Error("Failed to load inquiries");
+      return res.json() as Promise<{ inquiries: CoachingInquiry[] }>;
+    },
+  });
+
+  const updateMutation = useMutation({
+    mutationFn: async ({ id, status }: { id: number; status: CoachingStatus }) => {
+      const res = await fetch(`/api/admin/coaching/inquiries/${id}`, {
+        method: "PATCH",
+        headers: { "Content-Type": "application/json" },
+        credentials: "include",
+        body: JSON.stringify({ status }),
+      });
+      const body = await res.json();
+      if (!res.ok) throw new Error(body.error || "Failed to update");
+      return body;
+    },
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["/api/admin/coaching/inquiries"] });
+      toast({ title: "Status updated" });
+    },
+    onError: (e: Error) => {
+      toast({ title: "Couldn't update", description: e.message, variant: "destructive" });
+    },
+  });
+
+  const inquiries = inquiriesQuery.data?.inquiries || [];
+
+  return (
+    <div className="space-y-4" data-testid="section-coaching-inquiries">
+      <div className="flex items-baseline justify-between">
+        <h2 className="font-serif text-2xl text-white">Coaching Inquiries</h2>
+        <span className="text-xs text-muted-foreground uppercase tracking-widest">
+          {inquiries.length} total
+        </span>
+      </div>
+      {inquiriesQuery.isLoading ? (
+        <Loader2 className="h-6 w-6 animate-spin text-primary" />
+      ) : inquiries.length === 0 ? (
+        <Card>
+          <CardContent className="py-8 text-center text-muted-foreground">
+            No coaching applications yet.
+          </CardContent>
+        </Card>
+      ) : (
+        inquiries.map((q) => {
+          const snippet =
+            q.workingOn.length > 180 ? q.workingOn.slice(0, 180) + "…" : q.workingOn;
+          return (
+            <Card key={q.id} data-testid={`card-inquiry-${q.id}`}>
+              <CardContent className="py-5 space-y-3">
+                <div className="flex flex-wrap items-start justify-between gap-3">
+                  <div>
+                    <h3 className="text-white font-semibold text-lg" data-testid={`text-inquiry-name-${q.id}`}>
+                      {q.name}
+                    </h3>
+                    <div className="flex flex-wrap items-center gap-4 text-sm text-muted-foreground mt-1">
+                      <a
+                        href={`mailto:${q.email}`}
+                        className="inline-flex items-center gap-1 hover:text-primary"
+                        data-testid={`link-inquiry-email-${q.id}`}
+                      >
+                        <Mail className="w-3 h-3" /> {q.email}
+                      </a>
+                      {q.phone && (
+                        <span className="inline-flex items-center gap-1">
+                          <Phone className="w-3 h-3" /> {q.phone}
+                        </span>
+                      )}
+                      <span>Prefers: {coachLabel(q.preferredCoach)}</span>
+                      <span>{formatDistanceToNow(new Date(q.createdAt), { addSuffix: true })}</span>
+                    </div>
+                  </div>
+                  <span
+                    className={`text-xs uppercase tracking-widest px-2 py-1 border ${statusClass(q.status)}`}
+                    data-testid={`badge-status-${q.id}`}
+                  >
+                    {q.status}
+                  </span>
+                </div>
+                <p className="text-sm text-foreground leading-relaxed" data-testid={`text-working-on-${q.id}`}>
+                  {snippet}
+                </p>
+                <div className="flex flex-wrap gap-2 pt-1">
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={updateMutation.isPending || q.status === "contacted"}
+                    onClick={() => updateMutation.mutate({ id: q.id, status: "contacted" })}
+                    data-testid={`button-mark-contacted-${q.id}`}
+                  >
+                    Mark contacted
+                  </Button>
+                  <Button
+                    size="sm"
+                    variant="outline"
+                    disabled={updateMutation.isPending || q.status === "closed"}
+                    onClick={() => updateMutation.mutate({ id: q.id, status: "closed" })}
+                    data-testid={`button-mark-closed-${q.id}`}
+                  >
+                    Mark closed
+                  </Button>
+                  {q.status !== "new" && (
+                    <Button
+                      size="sm"
+                      variant="ghost"
+                      disabled={updateMutation.isPending}
+                      onClick={() => updateMutation.mutate({ id: q.id, status: "new" })}
+                      data-testid={`button-mark-new-${q.id}`}
+                    >
+                      Reopen
+                    </Button>
+                  )}
+                </div>
+              </CardContent>
+            </Card>
+          );
+        })
+      )}
+    </div>
+  );
+}
+
 export default function AdminPage() {
   const { user, isLoading } = useAuth();
 
@@ -211,13 +356,19 @@ export default function AdminPage() {
           </div>
         </section>
 
-        <section className="py-8 pb-24">
+        <section className="py-8 pb-12">
           <div className="container px-6 mx-auto space-y-6">
             {retreatsQuery.isLoading ? (
               <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
             ) : (
               retreats.map((r) => <StaffPanel key={r.id} retreat={r} />)
             )}
+          </div>
+        </section>
+
+        <section className="py-8 pb-24 border-t border-white/5">
+          <div className="container px-6 mx-auto">
+            <CoachingInquiriesPanel />
           </div>
         </section>
       </div>

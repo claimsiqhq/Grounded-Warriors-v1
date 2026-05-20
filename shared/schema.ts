@@ -116,3 +116,43 @@ export const insertDiscussionReplySchema = createInsertSchema(discussionReplies)
 
 export type InsertDiscussionReply = z.infer<typeof insertDiscussionReplySchema>;
 export type DiscussionReply = typeof discussionReplies.$inferSelect;
+
+// Brown Courage Coaching: 1-on-1 application inquiries
+export const coachingInquiries = pgTable("coaching_inquiries", {
+  id: serial("id").primaryKey(),
+  name: text("name").notNull(),
+  email: text("email").notNull(),
+  phone: text("phone"),
+  preferredCoach: text("preferred_coach").notNull(),
+  workingOn: text("working_on").notNull(),
+  ninetyDayWin: text("ninety_day_win").notNull(),
+  scheduleNotes: text("schedule_notes"),
+  budgetComfort: text("budget_comfort"),
+  referralSource: text("referral_source"),
+  status: text("status").notNull().default("new"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+});
+
+export const insertCoachingInquirySchema = createInsertSchema(coachingInquiries, {
+  name: z.string().min(2, "Name is required"),
+  email: z.string().email("Valid email is required"),
+  phone: z.string().optional().nullable(),
+  preferredCoach: z.enum(["john", "brian", "no_preference"], {
+    errorMap: () => ({ message: "Pick a preferred coach" }),
+  }),
+  workingOn: z.string().min(10, "Tell us a bit more about what you're working on"),
+  ninetyDayWin: z.string().min(10, "Tell us what a 90-day win looks like"),
+  scheduleNotes: z.string().optional().nullable(),
+  budgetComfort: z.string().optional().nullable(),
+  referralSource: z.string().optional().nullable(),
+}).omit({
+  id: true,
+  createdAt: true,
+  status: true,
+});
+
+export type InsertCoachingInquiry = z.infer<typeof insertCoachingInquirySchema>;
+export type CoachingInquiry = typeof coachingInquiries.$inferSelect;
+
+export const COACHING_STATUSES = ["new", "contacted", "closed"] as const;
+export type CoachingStatus = (typeof COACHING_STATUSES)[number];

@@ -26,6 +26,7 @@ export function Navbar() {
   const links = [
     { href: "/about", label: "The Work" },
     { href: "/retreats", label: "Retreats" },
+    { href: "/coaching", label: "Coaching" },
     { href: "/past-retreats", label: "Past Retreats" },
     { href: "/faq", label: "FAQ" },
     { href: "/team", label: "Team" },
@@ -192,6 +193,7 @@ export function Footer() {
         <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 text-muted-foreground text-sm tracking-widest uppercase">
           <Link href="/about"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">The Work</span></Link>
           <Link href="/retreats"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Retreats</span></Link>
+          <Link href="/coaching"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Coaching</span></Link>
           <Link href="/past-retreats"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Past Retreats</span></Link>
           <Link href="/faq"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">FAQ</span></Link>
           <Link href="/contact"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Contact</span></Link>

@@ -1,11 +1,11 @@
 import type { Express, Request, Response, NextFunction } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema } from "@shared/schema";
+import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema, insertCoachingInquirySchema, COACHING_STATUSES, type CoachingStatus } from "@shared/schema";
 import { isFlodeskConfigured, upsertFlodeskSubscriber } from "./flodeskClient";
 import { fromZodError } from "zod-validation-error";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
-import { sendContactFormEmail, sendNewsletterWelcomeEmail } from "./sendgridClient";
+import { sendContactFormEmail, sendNewsletterWelcomeEmail, sendCoachingInquiryNotification, sendCoachingInquiryAutoReply } from "./sendgridClient";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
 import { db } from "./db";
 import { users } from "@shared/models/auth";
@@ -482,6 +482,60 @@ export async function registerRoutes(
     } catch (error) {
       console.error("Error removing staff:", error);
       res.status(500).json({ error: "Failed to remove staff" });
+    }
+  });
+
+  // ------------------------------------------------------------------
+  // Brown Courage Coaching: 1-on-1 inquiries
+  // ------------------------------------------------------------------
+  app.post("/api/coaching/inquiries", async (req, res) => {
+    try {
+      const validated = insertCoachingInquirySchema.parse(req.body);
+      const inquiry = await storage.createCoachingInquiry(validated);
+
+      // Best-effort emails — never block the response on failure.
+      sendCoachingInquiryNotification(inquiry).catch((err) => {
+        console.error("Coaching notification email error:", err?.message || err);
+      });
+      sendCoachingInquiryAutoReply(inquiry).catch((err) => {
+        console.error("Coaching auto-reply email error:", err?.message || err);
+      });
+
+      res.status(201).json({ success: true, inquiry });
+    } catch (error: any) {
+      if (error.name === "ZodError") {
+        const validationError = fromZodError(error);
+        return res.status(400).json({ error: validationError.message });
+      }
+      console.error("Error creating coaching inquiry:", error);
+      res.status(500).json({ error: "Failed to submit application" });
+    }
+  });
+
+  app.get("/api/admin/coaching/inquiries", requireAdmin, async (_req, res) => {
+    try {
+      const inquiries = await storage.listCoachingInquiries();
+      res.json({ inquiries });
+    } catch (error) {
+      console.error("Error listing coaching inquiries:", error);
+      res.status(500).json({ error: "Failed to list inquiries" });
+    }
+  });
+
+  app.patch("/api/admin/coaching/inquiries/:id", requireAdmin, async (req, res) => {
+    try {
+      const id = parseInt(req.params.id, 10);
+      if (Number.isNaN(id)) return res.status(400).json({ error: "Invalid id" });
+      const status = String(req.body?.status || "") as CoachingStatus;
+      if (!COACHING_STATUSES.includes(status)) {
+        return res.status(400).json({ error: "Invalid status" });
+      }
+      const updated = await storage.updateCoachingInquiryStatus(id, status);
+      if (!updated) return res.status(404).json({ error: "Inquiry not found" });
+      res.json({ inquiry: updated });
+    } catch (error) {
+      console.error("Error updating coaching inquiry:", error);
+      res.status(500).json({ error: "Failed to update inquiry" });
     }
   });
 
