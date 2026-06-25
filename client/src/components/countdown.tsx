@@ -96,37 +96,6 @@ export function MiniCountdown({ targetDate, variant = "banner" }: MiniCountdownP
           <span className="text-xs text-primary">→</span>
         </motion.div>
       </Link>
-    );
-  }
-
-  return (
-    <Link href="/retreats">
-      <motion.div 
-        className="flex items-center gap-2 px-3 py-1.5 bg-primary/10 border border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer group"
-        data-testid="mini-countdown-desktop"
-        animate={{
-          boxShadow: [
-            "0 0 0px rgba(139, 195, 74, 0)",
-            "0 0 8px rgba(139, 195, 74, 0.4)",
-            "0 0 0px rgba(139, 195, 74, 0)",
-          ],
-        }}
-        transition={{
-          duration: 3,
-          repeat: Infinity,
-          ease: "easeInOut",
-        }}
-      >
-        <span className="text-[10px] text-muted-foreground uppercase tracking-wider">Next Retreat</span>
-        <motion.span 
-          className="text-sm font-semibold text-primary group-hover:text-white transition-colors"
-          animate={{ scale: [1, 1.05, 1] }}
-          transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
-        >
-          {timeLeft.days}d {timeLeft.hours}h
-        </motion.span>
-      </motion.div>
-    </Link>
   );
 }
 
