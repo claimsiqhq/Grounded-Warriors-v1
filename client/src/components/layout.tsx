@@ -69,10 +69,6 @@ export function Navbar() {
                 {link.label}
             </Link>
           ))}
-          {isHomePage && (
-            <MiniCountdown targetDate={nextRetreatDate} />
-          )}
-          
           {/* Auth buttons */}
           {!isLoading && (
             user ? (
@@ -168,6 +164,13 @@ export function Navbar() {
           </Sheet>
         </div>
       </div>
+
+      {/* Desktop countdown banner under the navigation */}
+      {isHomePage && (
+        <div className="hidden md:block">
+          <MiniCountdown targetDate={nextRetreatDate} variant="banner" />
+        </div>
+      )}
     </nav>
   );
 }

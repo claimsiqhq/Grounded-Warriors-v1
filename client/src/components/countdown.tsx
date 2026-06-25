@@ -7,10 +7,10 @@ interface CountdownProps {
 }
 
 interface MiniCountdownProps extends CountdownProps {
-  variant?: "desktop" | "mobile";
+  variant?: "mobile" | "banner";
 }
 
-export function MiniCountdown({ targetDate, variant = "desktop" }: MiniCountdownProps) {
+export function MiniCountdown({ targetDate, variant = "banner" }: MiniCountdownProps) {
   const [timeLeft, setTimeLeft] = useState(calculateTimeLeft());
 
   function calculateTimeLeft() {
@@ -34,9 +34,41 @@ export function MiniCountdown({ targetDate, variant = "desktop" }: MiniCountdown
     return () => clearInterval(timer);
   }, [targetDate]);
 
-  if (variant === "mobile") {
+  if (variant === "banner") {
     return (
       <Link href="/retreats">
+        <motion.div
+          className="flex items-center justify-center gap-4 py-3 bg-primary/10 border-t border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer group"
+          data-testid="mini-countdown-banner"
+          animate={{
+            backgroundColor: [
+              "rgba(139, 195, 74, 0.08)",
+              "rgba(139, 195, 74, 0.16)",
+              "rgba(139, 195, 74, 0.08)",
+            ],
+          }}
+          transition={{
+            duration: 3,
+            repeat: Infinity,
+            ease: "easeInOut",
+          }}
+        >
+          <span className="text-sm uppercase tracking-[0.25em] text-muted-foreground">Next Retreat in</span>
+          <motion.span
+            className="font-serif text-2xl md:text-3xl font-semibold text-primary group-hover:text-white transition-colors"
+            animate={{ scale: [1, 1.04, 1] }}
+            transition={{ duration: 2, repeat: Infinity, ease: "easeInOut" }}
+          >
+            {timeLeft.days} days, {timeLeft.hours} hours
+          </motion.span>
+          <span className="text-primary text-lg group-hover:translate-x-1 transition-transform">→</span>
+        </motion.div>
+      </Link>
+    );
+  }
+
+  return (
+    <Link href="/retreats">
         <motion.div 
           className="flex items-center justify-center gap-3 py-2 bg-primary/10 border-b border-primary/20 hover:bg-primary/20 transition-colors cursor-pointer"
           data-testid="mini-countdown-mobile"
