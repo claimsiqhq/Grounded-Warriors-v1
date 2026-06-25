@@ -33,7 +33,7 @@ export function Navbar() {
     { href: "/contact", label: "Contact" },
   ];
 
-  const nextRetreatDate = new Date("2026-09-01");
+  const nextRetreatDate = new Date("2026-10-02");
   const isHomePage = location === "/";
 
   return (
