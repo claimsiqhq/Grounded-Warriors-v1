@@ -19,7 +19,7 @@ export interface RetreatContainer {
 export const RETREATS: RetreatContainer[] = [
   { id: 1, name: "Winter Descent",   date: "February 2026",            isPast: true  },
   { id: 2, name: "Spring Awakening", date: "May 2026",                 isPast: true  },
-  { id: 3, name: "Equinox Gathering", date: "October 2 – 4, 2026",     isPast: false },
+  { id: 3, name: "Equinox Gathering", date: "October 9 – 11, 2026",    isPast: false },
   { id: 4, name: "Spring Awakening", date: "April 30 – May 3, 2027",   isPast: false },
   { id: 5, name: "Guatemala Expedition", date: "February 2027",         isPast: false },
 ];

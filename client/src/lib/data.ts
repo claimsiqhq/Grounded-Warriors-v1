@@ -138,11 +138,11 @@ export const retreats = [
   {
     id: 3,
     title: "Equinox Gathering",
-    date: "October 2 – 4, 2026",
+    date: "October 9 – 11, 2026",
     location: "Marmora, ON",
     image: driftwoodForest,
     depositAmount: 250,
-    fullAmount: 555,
+    fullAmount: 499,
   },
   {
     id: 4,
