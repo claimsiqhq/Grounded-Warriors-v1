@@ -493,6 +493,7 @@ export default function RetreatSpring() {
         <RegistrationModal
           isOpen={showModal}
           onClose={() => setShowModal(false)}
+          retreatId={4}
           retreatTitle="Spring Awakening"
           depositAmount={250}
           fullAmount={1999}

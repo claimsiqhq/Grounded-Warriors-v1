@@ -226,6 +226,7 @@ export default function Retreats() {
         <RegistrationModal
           isOpen={!!selectedRetreat}
           onClose={() => setSelectedRetreat(null)}
+          retreatId={selectedRetreat.id}
           retreatTitle={selectedRetreat.title}
           depositAmount={selectedRetreat.depositAmount}
           fullAmount={selectedRetreat.fullAmount}

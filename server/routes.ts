@@ -10,7 +10,7 @@ import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
 import { db } from "./db";
 import { users } from "@shared/models/auth";
 import { eq } from "drizzle-orm";
-import { RETREATS, getRetreat, isValidRetreatId } from "./retreats";
+import { RETREATS, getRetreat, isValidRetreatId, getRetreatPrice } from "./retreats";
 
 async function getUserFromSession(req: Request) {
   if (!req.session.userId) return null;
@@ -178,7 +178,30 @@ export async function registerRoutes(
 
   app.post("/api/checkout", async (req, res) => {
     try {
-      const { priceId, customerEmail, customerName, retreatName, amount, paymentType } = req.body;
+      const { customerEmail, customerName, retreatId, paymentType } = req.body;
+
+      // Validate the retreat reference. Pricing is ALWAYS derived from the
+      // server-side canonical registry - we never trust a client-supplied
+      // amount, which would allow a tampered request to underpay.
+      const parsedId =
+        typeof retreatId === "number" ? retreatId : parseInt(String(retreatId), 10);
+      if (Number.isNaN(parsedId) || !isValidRetreatId(parsedId)) {
+        return res.status(400).json({ error: "Invalid retreatId" });
+      }
+      if (paymentType !== "deposit" && paymentType !== "full") {
+        return res.status(400).json({ error: "Invalid paymentType" });
+      }
+
+      const retreat = getRetreat(parsedId)!;
+      const baseAmount = getRetreatPrice(parsedId, paymentType);
+      if (baseAmount === null) {
+        return res
+          .status(400)
+          .json({ error: "This retreat is not available for online payment." });
+      }
+
+      const baseCents = Math.round(baseAmount * 100);
+      const hstCents = Math.round(baseCents * 0.13);
 
       const stripe = await getUncachableStripeClient();
       const baseUrl =
@@ -188,41 +211,32 @@ export async function registerRoutes(
           ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
           : `${req.protocol}://${req.get('host')}`);
 
-      let lineItems;
-      
-      if (priceId && priceId !== "price_placeholder") {
-        lineItems = [{ price: priceId, quantity: 1 }];
-      } else if (amount) {
-        const hstAmount = Math.round(amount * 0.13 * 100) / 100;
-        lineItems = [
-          {
-            price_data: {
-              currency: 'cad',
-              unit_amount: Math.round(amount * 100),
-              product_data: {
-                name: retreatName || 'Retreat Registration',
-                description: paymentType === 'deposit'
-                  ? 'Deposit to reserve your spot'
-                  : 'Full retreat payment',
-              },
+      const lineItems = [
+        {
+          price_data: {
+            currency: 'cad',
+            unit_amount: baseCents,
+            product_data: {
+              name: retreat.name,
+              description: paymentType === 'deposit'
+                ? 'Deposit to reserve your spot'
+                : 'Full retreat payment',
             },
-            quantity: 1,
           },
-          {
-            price_data: {
-              currency: 'cad',
-              unit_amount: Math.round(hstAmount * 100),
-              product_data: {
-                name: 'HST (13%)',
-                description: 'Ontario Harmonized Sales Tax',
-              },
+          quantity: 1,
+        },
+        {
+          price_data: {
+            currency: 'cad',
+            unit_amount: hstCents,
+            product_data: {
+              name: 'HST (13%)',
+              description: 'Ontario Harmonized Sales Tax',
             },
-            quantity: 1,
           },
-        ];
-      } else {
-        return res.status(400).json({ error: "Price ID or amount is required" });
-      }
+          quantity: 1,
+        },
+      ];
 
       const session = await stripe.checkout.sessions.create({
         payment_method_types: ['card'],
@@ -233,8 +247,9 @@ export async function registerRoutes(
         customer_email: customerEmail,
         metadata: {
           customerName: customerName || '',
-          retreatName: retreatName || '',
-          paymentType: paymentType || '',
+          retreatId: String(parsedId),
+          retreatName: retreat.name,
+          paymentType,
         },
       });
 

@@ -14,15 +14,22 @@ export interface RetreatContainer {
   name: string;
   date: string;
   isPast: boolean;
+  // Canonical pricing (CAD, pre-tax). This is the source of truth used by
+  // the Stripe checkout flow - the server NEVER trusts a client-supplied
+  // amount. Keep these values in sync with what the client displays.
+  depositAmount: number;
+  fullAmount: number;
 }
 
 export const RETREATS: RetreatContainer[] = [
-  { id: 1, name: "Winter Descent",   date: "February 2026",            isPast: true  },
-  { id: 2, name: "Spring Awakening", date: "May 2026",                 isPast: true  },
-  { id: 3, name: "Equinox Gathering", date: "October 9 – 11, 2026",    isPast: false },
-  { id: 4, name: "Spring Awakening", date: "April 30 – May 3, 2027",   isPast: false },
-  { id: 5, name: "Guatemala Expedition", date: "February 2027",         isPast: false },
+  { id: 1, name: "Winter Descent",   date: "February 2026",            isPast: true,  depositAmount: 250, fullAmount: 555  },
+  { id: 2, name: "Spring Awakening", date: "May 2026",                 isPast: true,  depositAmount: 250, fullAmount: 555  },
+  { id: 3, name: "Equinox Gathering", date: "October 9 – 11, 2026",    isPast: false, depositAmount: 250, fullAmount: 499  },
+  { id: 4, name: "Spring Awakening", date: "April 30 – May 3, 2027",   isPast: false, depositAmount: 250, fullAmount: 1999 },
+  { id: 5, name: "Guatemala Expedition", date: "February 2027",         isPast: false, depositAmount: 500, fullAmount: 0    },
 ];
+
+export type PaymentType = "deposit" | "full";
 
 export function getRetreat(id: number): RetreatContainer | undefined {
   return RETREATS.find((r) => r.id === id);
@@ -30,4 +37,14 @@ export function getRetreat(id: number): RetreatContainer | undefined {
 
 export function isValidRetreatId(id: number): boolean {
   return RETREATS.some((r) => r.id === id);
+}
+
+// Returns the canonical pre-tax amount for a retreat + payment type, or
+// null if the retreat is unknown or not payable online (e.g. amount <= 0).
+export function getRetreatPrice(id: number, paymentType: PaymentType): number | null {
+  const retreat = getRetreat(id);
+  if (!retreat) return null;
+  const amount = paymentType === "deposit" ? retreat.depositAmount : retreat.fullAmount;
+  if (!amount || amount <= 0) return null;
+  return amount;
 }

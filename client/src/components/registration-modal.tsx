@@ -9,6 +9,7 @@ import { useToast } from "@/hooks/use-toast";
 interface RegistrationModalProps {
   isOpen: boolean;
   onClose: () => void;
+  retreatId: number;
   retreatTitle: string;
   depositAmount: number;
   fullAmount: number;
@@ -17,6 +18,7 @@ interface RegistrationModalProps {
 export function RegistrationModal({ 
   isOpen, 
   onClose, 
+  retreatId,
   retreatTitle, 
   depositAmount, 
   fullAmount 
@@ -33,16 +35,15 @@ export function RegistrationModal({
 
   const checkoutMutation = useMutation({
     mutationFn: async () => {
-      const amount = paymentType === "deposit" ? depositAmount : fullAmount;
-      
+      // Pricing is derived server-side from retreatId + paymentType; the
+      // client never sends an amount (it could be tampered with).
       const response = await fetch("/api/checkout", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           customerEmail: email,
           customerName: name,
-          retreatName: retreatTitle,
-          amount: amount,
+          retreatId: retreatId,
           paymentType: paymentType,
         }),
       });

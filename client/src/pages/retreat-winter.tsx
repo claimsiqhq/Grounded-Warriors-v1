@@ -300,6 +300,7 @@ export default function RetreatWinter() {
         <RegistrationModal
           isOpen={showModal}
           onClose={() => setShowModal(false)}
+          retreatId={1}
           retreatTitle="Winter Descent"
           depositAmount={250}
           fullAmount={555}
