@@ -75,6 +75,7 @@ export default function Retreats() {
                         {!isPlaceholder ? (
                           <p className="text-white/80 text-sm mb-6">
                             Full Price: <span className="text-primary font-semibold">${retreat.fullAmount}</span>
+                            <span className="text-muted-foreground"> + 13% HST</span>
                           </p>
                         ) : (
                           <p className="text-white/80 text-sm mb-6 italic">

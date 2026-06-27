@@ -193,19 +193,33 @@ export async function registerRoutes(
       if (priceId && priceId !== "price_placeholder") {
         lineItems = [{ price: priceId, quantity: 1 }];
       } else if (amount) {
-        lineItems = [{
-          price_data: {
-            currency: 'cad',
-            unit_amount: Math.round(amount * 100),
-            product_data: {
-              name: retreatName || 'Retreat Registration',
-              description: paymentType === 'deposit' 
-                ? 'Deposit to reserve your spot' 
-                : 'Full retreat payment',
+        const hstAmount = Math.round(amount * 0.13 * 100) / 100;
+        lineItems = [
+          {
+            price_data: {
+              currency: 'cad',
+              unit_amount: Math.round(amount * 100),
+              product_data: {
+                name: retreatName || 'Retreat Registration',
+                description: paymentType === 'deposit'
+                  ? 'Deposit to reserve your spot'
+                  : 'Full retreat payment',
+              },
             },
+            quantity: 1,
           },
-          quantity: 1,
-        }];
+          {
+            price_data: {
+              currency: 'cad',
+              unit_amount: Math.round(hstAmount * 100),
+              product_data: {
+                name: 'HST (13%)',
+                description: 'Ontario Harmonized Sales Tax',
+              },
+            },
+            quantity: 1,
+          },
+        ];
       } else {
         return res.status(400).json({ error: "Price ID or amount is required" });
       }

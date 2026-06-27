@@ -26,6 +26,11 @@ export function RegistrationModal({
   const [email, setEmail] = useState("");
   const [paymentType, setPaymentType] = useState<"deposit" | "full">("deposit");
 
+  const HST_RATE = 0.13;
+  const selectedAmount = paymentType === "deposit" ? depositAmount : fullAmount;
+  const hstAmount = Math.round(selectedAmount * HST_RATE * 100) / 100;
+  const totalAmount = selectedAmount + hstAmount;
+
   const checkoutMutation = useMutation({
     mutationFn: async () => {
       const amount = paymentType === "deposit" ? depositAmount : fullAmount;
@@ -154,6 +159,21 @@ export function RegistrationModal({
             </div>
           </div>
 
+          <div className="border-t border-white/10 pt-4 space-y-2 text-sm" data-testid="summary-totals">
+            <div className="flex justify-between text-muted-foreground">
+              <span>{paymentType === "deposit" ? "Deposit" : "Full Payment"}</span>
+              <span data-testid="text-subtotal">${selectedAmount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between text-muted-foreground">
+              <span>HST (13%)</span>
+              <span data-testid="text-hst">${hstAmount.toFixed(2)}</span>
+            </div>
+            <div className="flex justify-between text-white font-semibold">
+              <span>Total (CAD)</span>
+              <span data-testid="text-total">${totalAmount.toFixed(2)}</span>
+            </div>
+          </div>
+
           <Button
             type="submit"
             className="w-full bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
@@ -164,7 +184,7 @@ export function RegistrationModal({
           </Button>
 
           <p className="text-muted-foreground text-xs text-center">
-            Deposits are non-refundable. Full payment due 30 days before retreat.
+            Prices in CAD. 13% HST added at checkout. Deposits are non-refundable. Full payment due 30 days before retreat.
           </p>
         </form>
       </DialogContent>
