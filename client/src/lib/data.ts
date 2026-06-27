@@ -143,6 +143,7 @@ export const retreats = [
     image: driftwoodForest,
     depositAmount: 250,
     fullAmount: 499,
+    registrationOpen: true,
   },
   {
     id: 4,
@@ -152,6 +153,7 @@ export const retreats = [
     image: may2026Cabin,
     depositAmount: 250,
     fullAmount: 555,
+    registrationOpen: false,
   },
   {
     id: 5,
@@ -161,6 +163,7 @@ export const retreats = [
     image: hikingImg,
     depositAmount: 500,
     fullAmount: 0,
+    registrationOpen: false,
   },
 ];
 

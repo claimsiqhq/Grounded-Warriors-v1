@@ -9,9 +9,6 @@ import { RegistrationModal } from "@/components/registration-modal";
 const retreatSlugs: Record<number, string> = {
   1: "/retreats/winter-descent",
   2: "/retreats/spring-awakening",
-  3: "/contact",
-  4: "/contact",
-  5: "/contact",
 };
 
 export default function Retreats() {
@@ -38,10 +35,14 @@ export default function Retreats() {
                 className="bg-card border border-white/5 overflow-hidden group"
               >
                 {(() => {
-                  const isPlaceholder = retreatSlugs[retreat.id] === "/contact";
+                  const detailSlug = retreatSlugs[retreat.id];
+                  const hasDetailPage = Boolean(detailSlug);
+                  const isPlaceholder = !retreat.registrationOpen;
+                  const ImageWrapper = ({ children }: { children: React.ReactNode }) =>
+                    hasDetailPage ? <Link href={detailSlug}>{children}</Link> : <>{children}</>;
                   return (
                     <>
-                      <Link href={retreatSlugs[retreat.id]}>
+                      <ImageWrapper>
                         <div className="relative h-64 cursor-pointer">
                           <img 
                             src={retreat.image} 
@@ -60,12 +61,16 @@ export default function Retreats() {
                             </div>
                           )}
                         </div>
-                      </Link>
+                      </ImageWrapper>
                       <div className="p-8">
                         <span className="text-primary text-xs uppercase tracking-widest mb-3 block">{retreat.date}</span>
-                        <Link href={retreatSlugs[retreat.id]}>
-                          <h3 className="font-serif text-3xl text-white mb-2 hover:text-primary transition-colors cursor-pointer">{retreat.title}</h3>
-                        </Link>
+                        {hasDetailPage ? (
+                          <Link href={detailSlug}>
+                            <h3 className="font-serif text-3xl text-white mb-2 hover:text-primary transition-colors cursor-pointer">{retreat.title}</h3>
+                          </Link>
+                        ) : (
+                          <h3 className="font-serif text-3xl text-white mb-2">{retreat.title}</h3>
+                        )}
                         <p className="text-muted-foreground mb-2">{retreat.location}</p>
                         {!isPlaceholder ? (
                           <p className="text-white/80 text-sm mb-6">
@@ -89,21 +94,23 @@ export default function Retreats() {
                             </Link>
                           ) : (
                             <>
-                              <Link href={retreatSlugs[retreat.id]} className="flex-1">
-                                <Button 
-                                  variant="outline"
-                                  className="w-full border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground rounded-none uppercase tracking-widest py-6"
-                                  data-testid={`button-details-${retreat.id}`}
-                                >
-                                  Learn More
-                                </Button>
-                              </Link>
+                              {hasDetailPage && (
+                                <Link href={detailSlug} className="flex-1">
+                                  <Button 
+                                    variant="outline"
+                                    className="w-full border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground rounded-none uppercase tracking-widest py-6"
+                                    data-testid={`button-details-${retreat.id}`}
+                                  >
+                                    Learn More
+                                  </Button>
+                                </Link>
+                              )}
                               <Button 
                                 onClick={() => setSelectedRetreat(retreat)}
                                 className="flex-1 bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
                                 data-testid={`button-register-${retreat.id}`}
                               >
-                                Reserve
+                                Reserve — ${retreat.depositAmount} Deposit
                               </Button>
                             </>
                           )}
