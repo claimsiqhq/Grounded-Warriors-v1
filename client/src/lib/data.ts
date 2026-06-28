@@ -152,6 +152,10 @@ export const retreats = [
     location: "Algonquin Park, ON",
     image: may2026Cabin,
     depositAmount: 250,
+    // NOTE: this card is a placeholder (registrationOpen: false) so fullAmount
+    // is not shown or charged here. The bookable Spring Awakening price lives
+    // server-side in server/retreats.ts (canonical, currently $1999) and is the
+    // only value used at checkout. These intentionally differ for now.
     fullAmount: 555,
     registrationOpen: false,
   },
