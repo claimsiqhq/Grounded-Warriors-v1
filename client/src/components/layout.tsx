@@ -45,7 +45,7 @@ export function Navbar() {
     >
       {/* Mobile countdown banner */}
       {isHomePage && (
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <MiniCountdown targetDate={nextRetreatDate} variant="mobile" />
         </div>
       )}
@@ -56,13 +56,13 @@ export function Navbar() {
               alt="Grounded Warriors" 
               className="h-10 w-10 object-contain opacity-90 group-hover:opacity-100 transition-opacity" 
             />
-            <span className="font-serif text-xl tracking-widest uppercase font-semibold text-foreground hidden sm:block">
+            <span className="font-serif text-xl tracking-widest uppercase font-semibold text-foreground hidden sm:block lg:hidden xl:block">
               Grounded Warriors
             </span>
         </Link>
 
         {/* Desktop Nav */}
-        <div className="hidden md:flex items-center gap-6">
+        <div className="hidden lg:flex items-center gap-5 xl:gap-6">
           {links.map((link) => (
             <Link key={link.href} href={link.href} className={`text-sm tracking-widest uppercase hover:text-white transition-colors duration-300 ${
                   location === link.href ? "text-white border-b border-primary" : "text-muted-foreground"
@@ -108,7 +108,7 @@ export function Navbar() {
         </div>
 
         {/* Mobile Nav */}
-        <div className="md:hidden">
+        <div className="lg:hidden">
           <Sheet open={isOpen} onOpenChange={setIsOpen}>
             <SheetTrigger asChild>
               <Button variant="ghost" size="icon" className="text-foreground">
@@ -192,7 +192,7 @@ export function Navbar() {
 
       {/* Desktop countdown banner under the navigation */}
       {isHomePage && (
-        <div className="hidden md:block">
+        <div className="hidden lg:block">
           <MiniCountdown targetDate={nextRetreatDate} variant="banner" />
         </div>
       )}
