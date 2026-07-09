@@ -12,8 +12,10 @@ const NotFound = lazy(() => import("@/pages/not-found"));
 const About = lazy(() => import("@/pages/about"));
 const Experience = lazy(() => import("@/pages/experience"));
 const Retreats = lazy(() => import("@/pages/retreats"));
-const RetreatEquinox = lazy(() => import("@/pages/retreat-marmora"));
+const RetreatMarmora = lazy(() => import("@/pages/retreat-marmora"));
 const VeteransRetreat = lazy(() => import("@/pages/retreats/veterans"));
+const EventDinner = lazy(() => import("@/pages/event-dinner"));
+const EventPlunge = lazy(() => import("@/pages/event-plunge"));
 const Contact = lazy(() => import("@/pages/contact"));
 const Coaching = lazy(() => import("@/pages/coaching"));
 const PastRetreats = lazy(() => import("@/pages/past-retreats"));
@@ -64,8 +66,13 @@ function Router() {
         <Route path="/about" component={About} />
         <Route path="/experience" component={Experience} />
         <Route path="/retreats" component={Retreats} />
-        <Route path="/retreats/equinox-gathering" component={RetreatEquinox} />
-        {/* Past retreats: their landing pages are retired */}
+        <Route path="/retreats/marmora" component={RetreatMarmora} />
+        <Route path="/events/mens-dinner" component={EventDinner} />
+        <Route path="/events/train-breath-plunge" component={EventPlunge} />
+        {/* Renamed/retired pages keep working via redirects */}
+        <Route path="/retreats/equinox-gathering">
+          <Redirect to="/retreats/marmora" />
+        </Route>
         <Route path="/retreats/winter-descent">
           <Redirect to="/past-retreats" />
         </Route>

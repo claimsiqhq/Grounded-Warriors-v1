@@ -136,7 +136,7 @@ export default function Home() {
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
 
-  const nextRetreatDate = new Date("2026-10-09");
+  const nextRetreatDate = new Date("2026-10-16");
 
   return (
     <Layout>
@@ -357,7 +357,7 @@ export default function Home() {
           <div className="container px-6 mx-auto text-center">
             <motion.div {...fadeIn}>
               <h2 className="text-primary text-sm md:text-base uppercase tracking-[0.3em] mb-6 font-semibold">Next Retreat</h2>
-              <h3 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-12">Equinox Gathering — October 9–11, 2026</h3>
+              <h3 className="font-serif text-4xl md:text-5xl lg:text-6xl text-white mb-12">Grounded Warriors Marmora — October 16–18, 2026</h3>
               <div className="w-full flex items-center justify-center">
                 <Countdown targetDate={nextRetreatDate} />
               </div>
