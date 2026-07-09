@@ -21,18 +21,18 @@ const RETREAT_ID = 3;
 const DEPOSIT_AMOUNT = 250;
 const FULL_AMOUNT = 499;
 
-export default function RetreatEquinox() {
+export default function RetreatMarmora() {
   const [showModal, setShowModal] = useState(false);
-  const retreatDate = new Date("2026-10-09");
+  const retreatDate = new Date("2026-10-16");
 
   const eventJsonLd = {
     "@context": "https://schema.org",
     "@type": "Event",
-    name: "Equinox Gathering",
+    name: "Grounded Warriors Marmora",
     description:
       "A 3-day autumn gathering for men on the land in Marmora, Ontario. Cold lake plunges, wood-fired sauna, breathwork, and council fires.",
-    startDate: "2026-10-09",
-    endDate: "2026-10-11",
+    startDate: "2026-10-16",
+    endDate: "2026-10-18",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",
@@ -51,9 +51,9 @@ export default function RetreatEquinox() {
   return (
     <Layout>
       <Seo
-        title="Equinox Gathering — October 2026 | Grounded Warriors"
-        description="A 3-day autumn retreat for men in Marmora, Ontario. October 9–11, 2026. Cold lake plunges, wood-fired sauna, breathwork, and council fires. $499 all-inclusive."
-        path="/retreats/equinox-gathering"
+        title="Grounded Warriors Marmora — October 2026 | Grounded Warriors"
+        description="A 3-day autumn retreat for men in Marmora, Ontario. October 16–18, 2026. Cold lake plunges, wood-fired sauna, breathwork, and council fires. $499 all-inclusive."
+        path="/retreats/marmora"
         jsonLd={eventJsonLd}
       />
       <div className="min-h-screen bg-background">
@@ -62,7 +62,7 @@ export default function RetreatEquinox() {
           <div className="absolute inset-0 z-0">
             <img
               src={images.driftwoodForest}
-              alt="Equinox Gathering - Autumn forest path in Ontario"
+              alt="Grounded Warriors Marmora - Autumn forest path in Ontario"
               className="w-full h-full object-cover opacity-50"
               style={{ objectPosition: "center 40%" }}
             />
@@ -75,9 +75,9 @@ export default function RetreatEquinox() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
             >
-              <span className="text-primary text-sm uppercase tracking-[0.3em] mb-4 block font-semibold">October 9 – 11, 2026</span>
+              <span className="text-primary text-sm uppercase tracking-[0.3em] mb-4 block font-semibold">October 16 – 18, 2026</span>
               <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
-                Equinox Gathering
+                Grounded Warriors Marmora
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
                 A 3-day autumn gathering for men on the land in Marmora, Ontario. Cold water, fire, and a crew worth standing beside.
@@ -109,7 +109,7 @@ export default function RetreatEquinox() {
           <div className="container px-6 mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
               {[
-                { icon: Calendar, label: "Date", value: "Oct 9 – 11, 2026" },
+                { icon: Calendar, label: "Date", value: "Oct 16 – 18, 2026" },
                 { icon: MapPin, label: "Location", value: "Marmora, ON" },
                 { icon: Users, label: "Group Size", value: "8-12 Men" },
                 { icon: Clock, label: "Duration", value: "3 Days" },
@@ -136,7 +136,7 @@ export default function RetreatEquinox() {
                   Meet the Fall Head-On
                 </h3>
                 <p className="text-muted-foreground leading-loose mb-6">
-                  The equinox is the hinge of the year — equal parts light and dark. It's the right weekend to step out of the noise, get on the land with a crew of good men, and take stock of where you stand before winter comes.
+                  Mid-October in Ontario — the colour in the trees, the cold creeping into the water, the last long weekends before winter. It's the right time to step out of the noise, get on the land with a crew of good men, and take stock of where you stand.
                 </p>
                 <p className="text-white font-serif text-xl mb-6">
                   Three days. Cold water. Big fires. Real talk.
@@ -347,7 +347,7 @@ export default function RetreatEquinox() {
           <div className="container px-6 mx-auto max-w-3xl">
             <motion.div {...fadeIn} className="text-center mb-12">
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">Is This For You?</h2>
-              <h3 className="font-serif text-3xl md:text-4xl text-white">The Equinox Gathering is For Men Who...</h3>
+              <h3 className="font-serif text-3xl md:text-4xl text-white">Marmora is For Men Who...</h3>
             </motion.div>
 
             <div className="space-y-4">
@@ -410,7 +410,7 @@ export default function RetreatEquinox() {
           isOpen={showModal}
           onClose={() => setShowModal(false)}
           retreatId={RETREAT_ID}
-          retreatTitle="Equinox Gathering"
+          retreatTitle="Grounded Warriors Marmora"
           depositAmount={DEPOSIT_AMOUNT}
           fullAmount={FULL_AMOUNT}
         />

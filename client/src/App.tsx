@@ -12,7 +12,7 @@ const NotFound = lazy(() => import("@/pages/not-found"));
 const About = lazy(() => import("@/pages/about"));
 const Experience = lazy(() => import("@/pages/experience"));
 const Retreats = lazy(() => import("@/pages/retreats"));
-const RetreatEquinox = lazy(() => import("@/pages/retreat-equinox"));
+const RetreatEquinox = lazy(() => import("@/pages/retreat-marmora"));
 const VeteransRetreat = lazy(() => import("@/pages/retreats/veterans"));
 const Contact = lazy(() => import("@/pages/contact"));
 const Coaching = lazy(() => import("@/pages/coaching"));
