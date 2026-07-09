@@ -8,7 +8,6 @@ import { ArrowDown, Flame, Droplets, Wind, Mountain, ChevronLeft, ChevronRight, 
 import { useState, useEffect, useRef } from "react";
 import { Countdown } from "@/components/countdown";
 import { NewsletterSignup } from "@/components/newsletter";
-import { PageLoader } from "@/components/loading";
 
 const fadeIn = {
   initial: { opacity: 0, y: 20 },
@@ -68,29 +67,36 @@ function TestimonialsCarousel() {
         </motion.div>
       </div>
 
-      <div className="flex justify-center gap-3 mt-10">
+      <div className="flex justify-center gap-1 mt-8">
         {testimonials.map((_, i) => (
           <button
             key={i}
             onClick={() => goTo(i)}
-            className={`w-2 h-2 rounded-full transition-all duration-300 ${
-              i === currentIndex ? "bg-primary w-6" : "bg-white/20 hover:bg-white/40"
-            }`}
+            aria-label={`Go to testimonial ${i + 1}`}
+            className="p-2.5 group/dot"
             data-testid={`testimonial-dot-${i}`}
-          />
+          >
+            <span
+              className={`block h-2 rounded-full transition-all duration-300 ${
+                i === currentIndex ? "bg-primary w-6" : "bg-white/20 group-hover/dot:bg-white/40 w-2"
+              }`}
+            />
+          </button>
         ))}
       </div>
 
       <button
         onClick={prev}
-        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 text-white/40 hover:text-white transition-colors"
+        aria-label="Previous testimonial"
+        className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-12 p-3 text-white/40 hover:text-white transition-colors"
         data-testid="testimonial-prev"
       >
         <ChevronLeft className="w-8 h-8" />
       </button>
       <button
         onClick={next}
-        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 text-white/40 hover:text-white transition-colors"
+        aria-label="Next testimonial"
+        className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-12 p-3 text-white/40 hover:text-white transition-colors"
         data-testid="testimonial-next"
       >
         <ChevronRight className="w-8 h-8" />
@@ -113,7 +119,7 @@ function ParallaxSection({ image, children, speed = 0.5 }: { image: string; chil
         style={{ y }}
         className="absolute inset-0 -top-[20%] -bottom-[20%]"
       >
-        <img src={image} alt="" className="w-full h-full object-cover opacity-40" />
+        <img src={image} alt="" role="presentation" loading="lazy" decoding="async" className="w-full h-full object-cover opacity-40" />
       </motion.div>
       <div className="absolute inset-0 bg-background/60 backdrop-blur-[2px]" />
       <div className="relative z-10">{children}</div>
@@ -122,7 +128,6 @@ function ParallaxSection({ image, children, speed = 0.5 }: { image: string; chil
 }
 
 export default function Home() {
-  const [isLoading, setIsLoading] = useState(false);
   const heroRef = useRef<HTMLDivElement>(null);
   const { scrollYProgress } = useScroll({
     target: heroRef,
@@ -130,11 +135,6 @@ export default function Home() {
   });
   const heroY = useTransform(scrollYProgress, [0, 1], ["0%", "30%"]);
   const heroOpacity = useTransform(scrollYProgress, [0, 0.5], [1, 0]);
-
-  useEffect(() => {
-    const timer = setTimeout(() => setIsLoading(false), 800);
-    return () => clearTimeout(timer);
-  }, []);
 
   const nextRetreatDate = new Date("2026-10-09");
 
@@ -146,10 +146,8 @@ export default function Home() {
         path="/"
         jsonLd={organizationJsonLd()}
       />
-      {isLoading && <PageLoader />}
-      
       {/* Hero Section with Parallax */}
-      <section ref={heroRef} className="relative h-screen min-h-[800px] flex items-center justify-center overflow-hidden">
+      <section ref={heroRef} className="relative h-screen min-h-[600px] md:min-h-[800px] flex items-center justify-center overflow-hidden">
         <motion.div 
           style={{ y: heroY }}
           className="absolute inset-0 z-0"
@@ -158,6 +156,7 @@ export default function Home() {
             src={images.hero} 
             alt="Forest at twilight" 
             className="w-full h-full object-cover opacity-60"
+            fetchPriority="high"
           />
           <div className="absolute inset-0 bg-gradient-to-b from-background/30 via-background/20 to-background" />
         </motion.div>
@@ -336,6 +335,8 @@ export default function Home() {
                   <img
                     src={facilitator.image}
                     alt={facilitator.name}
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
                   />
                 </div>
@@ -401,6 +402,8 @@ export default function Home() {
                   <img 
                     src={retreat.image} 
                     alt={retreat.title} 
+                    loading="lazy"
+                    decoding="async"
                     className="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100"
                     style={{ objectPosition: "center 35%" }}
                   />
@@ -411,11 +414,19 @@ export default function Home() {
                   </span>
                   <h4 className="font-serif text-2xl md:text-3xl text-white mb-2 group-hover:text-primary transition-colors">{retreat.title}</h4>
                   <p className="text-muted-foreground mb-4">{retreat.location}</p>
-                  <Link href="/contact">
-                    <Button variant="outline" className="w-full md:w-auto border-white/20 text-white hover:bg-white hover:text-black rounded-none uppercase text-xs tracking-widest">
-                      Apply Now
-                    </Button>
-                  </Link>
+                  {retreat.registrationOpen ? (
+                    <Link href="/retreats">
+                      <Button className="w-full md:w-auto bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase text-xs tracking-widest">
+                        Reserve Your Spot
+                      </Button>
+                    </Link>
+                  ) : (
+                    <Link href="/contact">
+                      <Button variant="outline" className="w-full md:w-auto border-white/20 text-white hover:bg-white hover:text-black rounded-none uppercase text-xs tracking-widest">
+                        Express Interest
+                      </Button>
+                    </Link>
+                  )}
                 </div>
               </motion.div>
             ))}

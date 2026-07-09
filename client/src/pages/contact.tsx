@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout";
 import { Seo } from "@/components/seo";
+import { SITE_CONTACT_EMAIL } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -114,7 +115,9 @@ export default function Contact() {
               <div className="space-y-8">
                 <div>
                   <h3 className="text-white text-lg font-serif mb-2">Email</h3>
-                  <p className="text-muted-foreground">john.shoust@pm.me</p>
+                  <p className="text-muted-foreground">
+                    <a href={`mailto:${SITE_CONTACT_EMAIL}`} className="hover:text-white transition-colors">{SITE_CONTACT_EMAIL}</a>
+                  </p>
                 </div>
                 <div>
                   <h3 className="text-white text-lg font-serif mb-2">Location</h3>
@@ -205,7 +208,7 @@ export default function Contact() {
                       className="w-full bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
                       disabled={submitMutation.isPending}
                     >
-                      {submitMutation.isPending ? "Sending..." : "Send Application"}
+                      {submitMutation.isPending ? "Sending..." : "Send Message"}
                     </Button>
                   </form>
                 </Form>

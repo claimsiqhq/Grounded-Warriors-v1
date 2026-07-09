@@ -151,6 +151,8 @@ export default function PastRetreats() {
                               <img 
                                   src={img.src} 
                                   alt={img.alt}
+                                  loading="lazy"
+                                  decoding="async"
                                   style={{ objectPosition: img.position }}
                                   className="w-full h-full object-cover transition-all duration-700 group-hover:scale-105 opacity-80 group-hover:opacity-100 grayscale-[30%] hover:grayscale-0"
                               />

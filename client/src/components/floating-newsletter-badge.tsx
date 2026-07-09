@@ -26,7 +26,13 @@ export function FloatingNewsletterBadge() {
   if (dismissed) return null;
 
   return (
-    <div className="fixed bottom-6 right-6 z-50 flex flex-col items-end gap-3">
+    <div
+      className="fixed z-50 flex flex-col items-end gap-3"
+      style={{
+        bottom: "max(1.5rem, calc(env(safe-area-inset-bottom) + 0.75rem))",
+        right: "max(1.5rem, calc(env(safe-area-inset-right) + 0.75rem))",
+      }}
+    >
       <AnimatePresence>
         {open && (
           <motion.div
@@ -41,7 +47,7 @@ export function FloatingNewsletterBadge() {
             <button
               type="button"
               onClick={handleDismiss}
-              className="absolute top-3 right-3 text-white/60 hover:text-white transition-colors"
+              className="absolute top-1 right-1 p-3 text-white/60 hover:text-white transition-colors"
               aria-label="Dismiss newsletter"
               data-testid="button-floating-newsletter-dismiss"
             >

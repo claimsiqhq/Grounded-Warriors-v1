@@ -1,5 +1,5 @@
 import { motion } from "framer-motion";
-import { images } from "@/lib/data";
+import { brand } from "@/lib/brand";
 
 export function PageLoader() {
   return (
@@ -16,7 +16,7 @@ export function PageLoader() {
         transition={{ duration: 0.3 }}
       >
         <motion.img
-          src={images.logo}
+          src={brand.logo}
           alt="Loading"
           className="w-16 h-16 opacity-80"
           animate={{ opacity: [0.5, 1, 0.5] }}

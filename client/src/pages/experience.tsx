@@ -82,6 +82,8 @@ export default function Experience() {
                          <img 
                           src={img.src} 
                           alt={img.alt}
+                          loading="lazy"
+                          decoding="async"
                           style={{ objectPosition: img.position }}
                           className="w-full h-full object-cover opacity-80 hover:opacity-100 hover:scale-105 transition-all duration-700 grayscale-[30%] hover:grayscale-0" 
                         />

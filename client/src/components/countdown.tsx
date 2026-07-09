@@ -34,6 +34,11 @@ export function MiniCountdown({ targetDate, variant = "banner" }: MiniCountdownP
     return () => clearInterval(timer);
   }, [targetDate]);
 
+  // Once the retreat has started, stop advertising a countdown.
+  if (targetDate.getTime() <= Date.now()) {
+    return null;
+  }
+
   if (variant === "banner") {
     return (
       <Link href="/retreats">
@@ -125,8 +130,20 @@ export function Countdown({ targetDate }: CountdownProps) {
     return () => clearInterval(timer);
   }, [targetDate]);
 
+  // After the event begins, show a clear message instead of zeros.
+  if (targetDate.getTime() <= Date.now()) {
+    return (
+      <div className="text-center" data-testid="text-countdown-passed">
+        <p className="font-serif text-2xl md:text-3xl text-white mb-2">This gathering is underway.</p>
+        <p className="text-muted-foreground">
+          Check the retreats page for the next expedition.
+        </p>
+      </div>
+    );
+  }
+
   return (
-    <div className="flex gap-4 md:gap-6 justify-center">
+    <div className="flex gap-2 sm:gap-4 md:gap-6 justify-center">
       {[
         { value: timeLeft.days, label: "Days", id: "days" },
         { value: timeLeft.hours, label: "Hours", id: "hours" },
@@ -135,7 +152,7 @@ export function Countdown({ targetDate }: CountdownProps) {
       ].map((item) => (
         <div key={item.id} className="text-center">
           <motion.div 
-            className="bg-card border border-primary/20 w-20 h-20 md:w-28 md:h-28 flex items-center justify-center relative overflow-hidden"
+            className="bg-card border border-primary/20 w-16 h-16 sm:w-20 sm:h-20 md:w-28 md:h-28 flex items-center justify-center relative overflow-hidden"
             animate={{
               boxShadow: [
                 "0 0 0px rgba(139, 195, 74, 0)",

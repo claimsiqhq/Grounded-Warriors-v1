@@ -27,7 +27,7 @@ export default function About() {
 
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-16 items-center mb-20 md:mb-32">
             <div className="relative aspect-[4/3] md:aspect-[4/5] overflow-hidden">
-              <img src={images.water} alt="Cold lake plunge" className="w-full h-full object-cover opacity-80" />
+              <img src={images.water} alt="Cold lake plunge" loading="lazy" decoding="async" className="w-full h-full object-cover opacity-80" />
             </div>
             <div className="space-y-6 md:space-y-8">
               <h2 className="font-serif text-3xl md:text-4xl text-white">Why Adventure?</h2>
@@ -54,7 +54,7 @@ export default function About() {
               </p>
             </div>
              <div className="relative aspect-[4/3] md:aspect-[4/5] overflow-hidden order-1 md:order-2">
-              <img src={images.fire} alt="Fire" className="w-full h-full object-cover opacity-80" />
+              <img src={images.fire} alt="Campfire at night" loading="lazy" decoding="async" className="w-full h-full object-cover opacity-80" />
             </div>
           </div>
 

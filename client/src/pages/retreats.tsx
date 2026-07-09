@@ -53,6 +53,8 @@ export default function Retreats() {
                           <img 
                             src={retreat.image} 
                             alt={retreat.title} 
+                            loading="lazy"
+                            decoding="async"
                             className="w-full h-full object-cover object-center opacity-80 group-hover:opacity-100 transition-opacity"
                             style={{ objectPosition: "center 35%" }}
                           />

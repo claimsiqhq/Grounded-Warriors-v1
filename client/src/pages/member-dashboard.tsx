@@ -79,13 +79,13 @@ export default function MemberDashboard() {
               initial={{ opacity: 0, y: 30 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
-              className="flex items-center gap-6"
+              className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6"
             >
               {user.profileImageUrl && (
                 <img 
                   src={user.profileImageUrl} 
                   alt={firstName}
-                  className="w-20 h-20 rounded-full border-2 border-primary"
+                  className="w-20 h-20 rounded-full border-2 border-primary flex-shrink-0"
                 />
               )}
               <div>

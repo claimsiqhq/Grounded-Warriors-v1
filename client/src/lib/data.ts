@@ -1,67 +1,69 @@
-import hikingImg from "@assets/generated_images/men_hiking_through_moody_misty_forest.png";
-import mugImg from "@assets/generated_images/close_up_of_hands_holding_a_metal_mug_by_a_fire.png";
-import riverImg from "@assets/generated_images/man_sitting_alone_in_contemplation_by_a_river.png";
-import heroBg from "@assets/generated_images/moody_deep_forest_landscape_at_twilight.png";
-import fireImg from "@assets/generated_images/men_around_a_campfire_at_night.png";
-import waterImg from "@assets/generated_images/cold_water_immersion_in_a_dark_lake.png";
-import logoImg from "@assets/gw-logo-light-256_1765998189312.png";
-import badgeImg from "@assets/gw-badge-400_1765998189310.png";
+// All images are pre-optimized WebP (max 1600px) generated from the
+// originals in attached_assets/ — see attached_assets/optimized/.
+import hikingImg from "@assets/optimized/generated_images/men_hiking_through_moody_misty_forest.webp";
+import mugImg from "@assets/optimized/generated_images/close_up_of_hands_holding_a_metal_mug_by_a_fire.webp";
+import riverImg from "@assets/optimized/generated_images/man_sitting_alone_in_contemplation_by_a_river.webp";
+import heroBg from "@assets/optimized/generated_images/moody_deep_forest_landscape_at_twilight.webp";
+import fireImg from "@assets/optimized/generated_images/men_around_a_campfire_at_night.webp";
+import waterImg from "@assets/optimized/generated_images/cold_water_immersion_in_a_dark_lake.webp";
+import logoImg from "@assets/optimized/gw-logo-light-256_1765998189312.webp";
+import badgeImg from "@assets/optimized/gw-badge-400_1765998189310.webp";
 
 // Real retreat photos
-import coldPlungeCelebration from "@assets/IMG_4320_1766007733128.JPG";
-import coldWaterImmersion from "@assets/IMG_4292_1766007733129.JPG";
-import fireBuildingPrep from "@assets/IMG_4367_1766007733129.JPG";
-import manByFire from "@assets/IMG_4381_1766007733129.JPG";
-import groundingOutdoors from "@assets/IMG_4238_1766007733129.JPG";
-import handsWithMaterials from "@assets/IMG_4396_1766007733129.JPG";
+import coldPlungeCelebration from "@assets/optimized/IMG_4320_1766007733128.webp";
+import coldWaterImmersion from "@assets/optimized/IMG_4292_1766007733129.webp";
+import fireBuildingPrep from "@assets/optimized/IMG_4367_1766007733129.webp";
+import manByFire from "@assets/optimized/IMG_4381_1766007733129.webp";
+import groundingOutdoors from "@assets/optimized/IMG_4238_1766007733129.webp";
+import handsWithMaterials from "@assets/optimized/IMG_4396_1766007733129.webp";
 
 // July 2025 retreat photos
-import julyGroupIndoor from "@assets/IMG_7190_1766009456061.PNG";
-import julyGroupForest from "@assets/1bcda273-0203-4b6a-867d-4e2fadf1cb0e_1766010770474.JPG";
-import julyCommunalMeal from "@assets/IMG_2841_1766010770475.JPG";
-import julyLakeSauna from "@assets/IMG_2843_1766010770475.JPG";
-import julyColdPlunge from "@assets/febb25ac-27e4-43b8-9ff9-e676a71caf6e_1766010770475.JPG";
-import julyTipi from "@assets/IMG_2831_1766010770475.JPG";
-import julyGroupDeck from "@assets/IMG_2832_1766010770475.JPG";
+import julyGroupIndoor from "@assets/optimized/IMG_7190_1766009456061.webp";
+import julyGroupForest from "@assets/optimized/1bcda273-0203-4b6a-867d-4e2fadf1cb0e_1766010770474.webp";
+import julyCommunalMeal from "@assets/optimized/IMG_2841_1766010770475.webp";
+import julyLakeSauna from "@assets/optimized/IMG_2843_1766010770475.webp";
+import julyColdPlunge from "@assets/optimized/febb25ac-27e4-43b8-9ff9-e676a71caf6e_1766010770475.webp";
+import julyTipi from "@assets/optimized/IMG_2831_1766010770475.webp";
+import julyGroupDeck from "@assets/optimized/IMG_2832_1766010770475.webp";
 
 // May 2025 retreat photos
-import mayCircle from "@assets/DSC03480_1766011513258.JPG";
-import mayForestWalk from "@assets/DSC03647_1766011513259.JPG";
-import mayColdPlunge from "@assets/DSC03772_1766011513259.JPG";
-import mayLogBalance from "@assets/DSC03683_1766011513259.JPG";
-import mayConversation from "@assets/DSC03458_1766011513259.JPG";
-import mayMeditation from "@assets/DSC03744_1766011513259.JPG";
+import mayCircle from "@assets/optimized/DSC03480_1766011513258.webp";
+import mayForestWalk from "@assets/optimized/DSC03647_1766011513259.webp";
+import mayColdPlunge from "@assets/optimized/DSC03772_1766011513259.webp";
+import mayLogBalance from "@assets/optimized/DSC03683_1766011513259.webp";
+import mayConversation from "@assets/optimized/DSC03458_1766011513259.webp";
+import mayMeditation from "@assets/optimized/DSC03744_1766011513259.webp";
 
 // March 2025 retreat photos
-import marchIcePlunge from "@assets/PXL_20250309_141603234.MP_1766011933410.jpg";
-import marchSauna from "@assets/20250308_084333_1766011948997.jpg";
-import marchRest from "@assets/20250308_182718_1766011948998.jpg";
-import marchSnowTraining from "@assets/IMG_4074_1766011897386.JPG";
-import marchWinterHike from "@assets/IMG_4108_1766011897387.JPG";
-import marchContemplation from "@assets/IMG_4127_1766011897387.JPG";
-import johnPhoto from "@assets/DSC03772_2_1768960016124.JPG";
-import rawaPhoto from "@assets/Rawa_Bo_PHoto_1768788413370.jpeg";
-import chrisPhoto from "@assets/Chris_Bio_Photo_1768788413370.jpeg";
+import marchIcePlunge from "@assets/optimized/PXL_20250309_141603234.MP_1766011933410.webp";
+import marchSauna from "@assets/optimized/20250308_084333_1766011948997.webp";
+import marchRest from "@assets/optimized/20250308_182718_1766011948998.webp";
+import marchSnowTraining from "@assets/optimized/IMG_4074_1766011897386.webp";
+import marchWinterHike from "@assets/optimized/IMG_4108_1766011897387.webp";
+import marchContemplation from "@assets/optimized/IMG_4127_1766011897387.webp";
+import johnPhoto from "@assets/optimized/DSC03772_2_1768960016124.webp";
+import rawaPhoto from "@assets/optimized/Rawa_Bo_PHoto_1768788413370.webp";
+import chrisPhoto from "@assets/optimized/Chris_Bio_Photo_1768788413370.webp";
 
 // May 2026 Spring Awakening retreat photos
-import may2026Cabin from "@assets/IMG_6433_1778154539671.jpeg";
-import may2026LakePlunge from "@assets/IMG_6434_1778154539671.jpeg";
-import may2026Firepit from "@assets/IMG_6437_1778154539671.jpeg";
-import may2026CanoePortage from "@assets/IMG_6440_1778154652138.jpeg";
-import may2026CampMeal from "@assets/IMG_6438_1778154652138.jpeg";
-import may2026CanoeFirewood from "@assets/IMG_6439_1778154652138.jpeg";
+import may2026Cabin from "@assets/optimized/IMG_6433_1778154539671.webp";
+import may2026LakePlunge from "@assets/optimized/IMG_6434_1778154539671.webp";
+import may2026Firepit from "@assets/optimized/IMG_6437_1778154539671.webp";
+import may2026CanoePortage from "@assets/optimized/IMG_6440_1778154652138.webp";
+import may2026CampMeal from "@assets/optimized/IMG_6438_1778154652138.webp";
+import may2026CanoeFirewood from "@assets/optimized/IMG_6439_1778154652138.webp";
 
 // Driftwood Paddle photos for Spring Awakening
-import driftwoodHero from "@assets/driftwood_photos/hero_canoe.jpg";
-import driftwoodSunset from "@assets/driftwood_photos/sunset_lake.jpg";
-import driftwoodGroup from "@assets/driftwood_photos/group_canoes.png";
-import driftwoodPaddling from "@assets/driftwood_photos/paddling.jpg";
-import driftwoodCampfire from "@assets/driftwood_photos/campfire_cooking.jpg";
-import driftwoodTent from "@assets/driftwood_photos/tent_camp.jpg";
-import driftwoodMist from "@assets/driftwood_photos/morning_mist.jpg";
-import driftwoodPortage from "@assets/driftwood_photos/portage.jpg";
-import driftwoodReflection from "@assets/driftwood_photos/water_reflection.jpg";
-import driftwoodForest from "@assets/driftwood_photos/forest_path.jpg";
+import driftwoodHero from "@assets/optimized/driftwood_photos/hero_canoe.webp";
+import driftwoodSunset from "@assets/optimized/driftwood_photos/sunset_lake.webp";
+import driftwoodGroup from "@assets/optimized/driftwood_photos/group_canoes.webp";
+import driftwoodPaddling from "@assets/optimized/driftwood_photos/paddling.webp";
+import driftwoodCampfire from "@assets/optimized/driftwood_photos/campfire_cooking.webp";
+import driftwoodTent from "@assets/optimized/driftwood_photos/tent_camp.webp";
+import driftwoodMist from "@assets/optimized/driftwood_photos/morning_mist.webp";
+import driftwoodPortage from "@assets/optimized/driftwood_photos/portage.webp";
+import driftwoodReflection from "@assets/optimized/driftwood_photos/water_reflection.webp";
+import driftwoodForest from "@assets/optimized/driftwood_photos/forest_path.webp";
 
 export const images = {
   hero: heroBg,

@@ -1,5 +1,5 @@
 import { Link, useLocation } from "wouter";
-import { images } from "@/lib/data";
+import { brand } from "@/lib/brand";
 import { Menu, User, LogIn, LogOut } from "lucide-react";
 import { useState, useEffect } from "react";
 import { Button } from "@/components/ui/button";
@@ -13,7 +13,7 @@ export function Navbar() {
   const [location] = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { user, isLoading } = useAuth();
+  const { user, isLoading, logout, isLoggingOut } = useAuth();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -25,6 +25,7 @@ export function Navbar() {
 
   const links = [
     { href: "/about", label: "The Work" },
+    { href: "/experience", label: "Experience" },
     { href: "/retreats", label: "Retreats" },
     { href: "/coaching", label: "Coaching" },
     { href: "/past-retreats", label: "Past Retreats" },
@@ -51,7 +52,7 @@ export function Navbar() {
       <div className={`container mx-auto px-6 flex items-center justify-between ${scrolled ? "py-4" : "py-6"}`}>
         <Link href="/" className="flex items-center gap-3 group">
             <img 
-              src={images.logo} 
+              src={brand.logo} 
               alt="Grounded Warriors" 
               className="h-10 w-10 object-contain opacity-90 group-hover:opacity-100 transition-opacity" 
             />
@@ -72,7 +73,7 @@ export function Navbar() {
           {/* Auth buttons */}
           {!isLoading && (
             user ? (
-              <div className="flex items-center gap-3 ml-2">
+              <div className="flex items-center gap-1 ml-2">
                 <Link href="/member">
                   <Button variant="ghost" size="sm" className="gap-2 text-primary hover:text-white" data-testid="button-member-portal">
                     {user.profileImageUrl ? (
@@ -83,6 +84,17 @@ export function Navbar() {
                     Portal
                   </Button>
                 </Link>
+                <Button
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => logout()}
+                  disabled={isLoggingOut}
+                  className="gap-2 text-muted-foreground hover:text-white"
+                  data-testid="button-logout"
+                >
+                  <LogOut className="w-4 h-4" />
+                  Log Out
+                </Button>
               </div>
             ) : (
               <Link href="/login">
@@ -107,7 +119,7 @@ export function Navbar() {
                <div className="flex flex-col h-full bg-background relative overflow-hidden">
                  {/* Decorative background logo */}
                  <div className="absolute -right-20 -bottom-20 opacity-5 pointer-events-none">
-                    <img src={images.logo} className="w-96 h-96 invert" />
+                    <img src={brand.logo} alt="" aria-hidden="true" className="w-96 h-96 invert" />
                  </div>
 
                  <div className="p-8 flex justify-end">
@@ -141,12 +153,25 @@ export function Navbar() {
                       className="pt-4 border-t border-white/10 mt-4"
                     >
                       {user ? (
-                        <div className="flex flex-col items-center gap-4">
+                        <div className="flex flex-col items-center gap-2">
                           <Link href="/member" onClick={() => setIsOpen(false)}>
                             <span className="font-serif text-2xl text-primary hover:text-white transition-colors block py-2 px-4">
                               Member Portal
                             </span>
                           </Link>
+                          <button
+                            type="button"
+                            onClick={() => {
+                              setIsOpen(false);
+                              logout();
+                            }}
+                            disabled={isLoggingOut}
+                            className="font-serif text-xl text-muted-foreground hover:text-white transition-colors py-2 px-4 flex items-center gap-2"
+                            data-testid="button-mobile-logout"
+                          >
+                            <LogOut className="w-5 h-5" />
+                            Log Out
+                          </button>
                         </div>
                       ) : (
                         <Link href="/login" onClick={() => setIsOpen(false)}>
@@ -181,8 +206,9 @@ export function Footer() {
       {/* Texture overlay could go here */}
       <div className="container mx-auto px-6 text-center">
         <img 
-          src={images.badge} 
+          src={brand.badge} 
           alt="Grounded Warriors Badge" 
+          loading="lazy"
           className="h-24 w-24 mx-auto mb-8 opacity-80 hover:opacity-100 transition-opacity invert" 
         />
         
@@ -193,12 +219,14 @@ export function Footer() {
           Return to the Elements. Return to Yourself.
         </p>
 
-        <div className="flex flex-col md:flex-row justify-center items-center gap-8 mb-12 text-muted-foreground text-sm tracking-widest uppercase">
+        <div className="flex flex-col md:flex-row md:flex-wrap justify-center items-center gap-2 md:gap-8 mb-12 text-muted-foreground text-sm tracking-widest uppercase">
           <Link href="/about"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">The Work</span></Link>
+          <Link href="/experience"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Experience</span></Link>
           <Link href="/retreats"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Retreats</span></Link>
           <Link href="/coaching"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Coaching</span></Link>
           <Link href="/past-retreats"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Past Retreats</span></Link>
           <Link href="/faq"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">FAQ</span></Link>
+          <Link href="/team"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Team</span></Link>
           <Link href="/contact"><span className="hover:text-white transition-colors cursor-pointer block py-2 px-2">Contact</span></Link>
         </div>
 

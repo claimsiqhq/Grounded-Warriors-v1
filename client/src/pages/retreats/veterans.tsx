@@ -1,5 +1,6 @@
 import { Layout } from "@/components/layout";
 import { Seo } from "@/components/seo";
+import { SITE_CONTACT_EMAIL } from "@/lib/site";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
@@ -41,9 +42,9 @@ export default function VeteransRetreat() {
             <p className="text-xl text-white/80 max-w-2xl mx-auto mb-8">
               The next operation is your own ground. Run it the same way you ran every other one.
             </p>
-            <div className="inline-block bg-amber-600/20 border border-amber-500/30 px-6 py-3 rounded backdrop-blur-sm">
+            <div className="inline-flex flex-wrap items-center justify-center gap-x-3 gap-y-1 bg-amber-600/20 border border-amber-500/30 px-6 py-3 rounded backdrop-blur-sm">
               <span className="text-amber-400 font-semibold">Tentative Date: April 3-5, 2026</span>
-              <span className="text-white/50 mx-3">|</span>
+              <span className="text-white/50 hidden sm:inline">|</span>
               <span className="text-white">Ontario, Canada</span>
             </div>
           </motion.div>
@@ -57,16 +58,16 @@ export default function VeteransRetreat() {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="grid grid-cols-3 gap-4 max-w-4xl mx-auto -mt-16 relative z-10 mb-20"
+            className="grid grid-cols-1 sm:grid-cols-3 gap-4 max-w-4xl mx-auto -mt-16 relative z-10 mb-20"
           >
             <div className="aspect-[4/3] overflow-hidden border-2 border-primary/20">
-              <img src={firstResponder1} alt="Firefighter" className="w-full h-full object-cover" />
+              <img src={firstResponder1} alt="Firefighter" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
             <div className="aspect-[4/3] overflow-hidden border-2 border-primary/20">
-              <img src={firstResponder2} alt="Paramedic" className="w-full h-full object-cover" />
+              <img src={firstResponder2} alt="Paramedic" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
             <div className="aspect-[4/3] overflow-hidden border-2 border-primary/20">
-              <img src={firstResponder3} alt="Police officer" className="w-full h-full object-cover" />
+              <img src={firstResponder3} alt="Police officer" loading="lazy" decoding="async" className="w-full h-full object-cover" />
             </div>
           </motion.div>
 
@@ -392,7 +393,7 @@ export default function VeteransRetreat() {
             </div>
             
             <p className="text-muted-foreground text-sm mt-8">
-              Contact: <a href="mailto:john@groundedwarriors.com" className="text-primary hover:underline">john@groundedwarriors.com</a>
+              Contact: <a href={`mailto:${SITE_CONTACT_EMAIL}`} className="text-primary hover:underline">{SITE_CONTACT_EMAIL}</a>
             </p>
           </motion.section>
         </div>
