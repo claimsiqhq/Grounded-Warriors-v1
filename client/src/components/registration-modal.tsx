@@ -11,6 +11,7 @@ interface RegistrationModalProps {
   onClose: () => void;
   retreatId: number;
   retreatTitle: string;
+  /** 0 disables the deposit option (full payment only, e.g. one-day events). */
   depositAmount: number;
   fullAmount: number;
 }
@@ -26,7 +27,10 @@ export function RegistrationModal({
   const { toast } = useToast();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const [paymentType, setPaymentType] = useState<"deposit" | "full">("deposit");
+  const fullPaymentOnly = depositAmount <= 0;
+  const [paymentType, setPaymentType] = useState<"deposit" | "full">(
+    fullPaymentOnly ? "full" : "deposit",
+  );
 
   const HST_RATE = 0.13;
   const selectedAmount = paymentType === "deposit" ? depositAmount : fullAmount;
@@ -104,6 +108,7 @@ export function RegistrationModal({
               value={name}
               onChange={(e) => setName(e.target.value)}
               placeholder="Your full name"
+              required
               className="bg-background border-white/10 focus:border-primary text-white"
               data-testid="input-registration-name"
             />
@@ -119,11 +124,13 @@ export function RegistrationModal({
               value={email}
               onChange={(e) => setEmail(e.target.value)}
               placeholder="your@email.com"
+              required
               className="bg-background border-white/10 focus:border-primary text-white"
               data-testid="input-registration-email"
             />
           </div>
 
+          {!fullPaymentOnly && (
           <div className="space-y-3">
             <Label className="text-primary uppercase tracking-widest text-xs">
               Payment Option
@@ -159,10 +166,11 @@ export function RegistrationModal({
               </button>
             </div>
           </div>
+          )}
 
           <div className="border-t border-white/10 pt-4 space-y-2 text-sm" data-testid="summary-totals">
             <div className="flex justify-between text-muted-foreground">
-              <span>{paymentType === "deposit" ? "Deposit" : "Full Payment"}</span>
+              <span>{fullPaymentOnly ? "Ticket" : paymentType === "deposit" ? "Deposit" : "Full Payment"}</span>
               <span data-testid="text-subtotal">${selectedAmount.toFixed(2)}</span>
             </div>
             <div className="flex justify-between text-muted-foreground">
@@ -185,7 +193,9 @@ export function RegistrationModal({
           </Button>
 
           <p className="text-muted-foreground text-xs text-center">
-            Prices in CAD. 13% HST added at checkout. Deposits are non-refundable. Full payment due 30 days before retreat.
+            {fullPaymentOnly
+              ? "Prices in CAD. 13% HST added at checkout. Tickets are non-refundable."
+              : "Prices in CAD. 13% HST added at checkout. Deposits are non-refundable. Full payment due 30 days before retreat."}
           </p>
         </form>
       </DialogContent>

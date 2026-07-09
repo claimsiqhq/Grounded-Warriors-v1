@@ -9,7 +9,9 @@ import { RegistrationModal } from "@/components/registration-modal";
 
 // Detail pages for retreats in the live catalog (ids match server/retreats.ts).
 const retreatSlugs: Record<number, string> = {
-  3: "/retreats/equinox-gathering",
+  3: "/retreats/marmora",
+  6: "/events/mens-dinner",
+  7: "/events/train-breath-plunge",
 };
 
 export default function Retreats() {
@@ -60,7 +62,9 @@ export default function Retreats() {
                           />
                           {!isPlaceholder && (
                             <div className="absolute top-4 right-4 bg-primary/90 text-primary-foreground px-3 py-1 text-sm font-semibold">
-                              ${retreat.depositAmount} Deposit
+                              {retreat.depositAmount > 0
+                                ? `$${retreat.depositAmount} Deposit`
+                                : `$${retreat.fullAmount}`}
                             </div>
                           )}
                           {isPlaceholder && (
@@ -82,7 +86,8 @@ export default function Retreats() {
                         <p className="text-muted-foreground mb-2">{retreat.location}</p>
                         {!isPlaceholder ? (
                           <p className="text-white/80 text-sm mb-6">
-                            Full Price: <span className="text-primary font-semibold">${retreat.fullAmount}</span>
+                            {retreat.depositAmount > 0 ? "Full Price: " : "Price: "}
+                            <span className="text-primary font-semibold">${retreat.fullAmount}</span>
                             <span className="text-muted-foreground"> + 13% HST</span>
                           </p>
                         ) : (
@@ -119,7 +124,9 @@ export default function Retreats() {
                                 className="flex-1 bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
                                 data-testid={`button-register-${retreat.id}`}
                               >
-                                Reserve — ${retreat.depositAmount} Deposit
+                                {retreat.depositAmount > 0
+                                  ? `Reserve — $${retreat.depositAmount} Deposit`
+                                  : `Register — $${retreat.fullAmount}`}
                               </Button>
                             </>
                           )}

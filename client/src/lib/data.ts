@@ -1,6 +1,8 @@
 // All images are pre-optimized WebP (max 1600px) generated from the
 // originals in attached_assets/ — see attached_assets/optimized/.
 import hikingImg from "@assets/optimized/generated_images/men_hiking_through_moody_misty_forest.webp";
+import mensDinnerImg from "@assets/optimized/generated_images/mens_dinner_candlelit_table.webp";
+import dawnPlungeImg from "@assets/optimized/generated_images/dawn_train_breath_plunge.webp";
 import mugImg from "@assets/optimized/generated_images/close_up_of_hands_holding_a_metal_mug_by_a_fire.webp";
 import riverImg from "@assets/optimized/generated_images/man_sitting_alone_in_contemplation_by_a_river.webp";
 import heroBg from "@assets/optimized/generated_images/moody_deep_forest_landscape_at_twilight.webp";
@@ -69,6 +71,8 @@ export const images = {
   hero: heroBg,
   fire: fireImg,
   water: waterImg,
+  mensDinner: mensDinnerImg,
+  dawnPlunge: dawnPlungeImg,
   logo: logoImg,
   badge: badgeImg,
   hiking: hikingImg,
@@ -136,11 +140,34 @@ export const springRetreatGallery = [
   { src: driftwoodTent, alt: "Backcountry campsite" },
 ];
 
+// Keep ids, dates, and prices in sync with server/retreats.ts — the server
+// registry is canonical and is the only source used at checkout.
+// depositAmount 0 = full-payment-only event (no deposit option).
 export const retreats = [
   {
+    id: 6,
+    title: "Grounded Warriors Men's Dinner",
+    date: "Thu, Aug 20, 2026 · 6–9 PM",
+    location: "Toronto — West End (details to follow)",
+    image: mensDinnerImg,
+    depositAmount: 0,
+    fullAmount: 100,
+    registrationOpen: true,
+  },
+  {
+    id: 7,
+    title: "GW Train, Breath & Plunge",
+    date: "Sat, Sep 12, 2026 · 6–9 AM",
+    location: "Toronto / Mississauga (details to follow)",
+    image: dawnPlungeImg,
+    depositAmount: 0,
+    fullAmount: 150,
+    registrationOpen: true,
+  },
+  {
     id: 3,
-    title: "Equinox Gathering",
-    date: "October 9 – 11, 2026",
+    title: "Grounded Warriors Marmora",
+    date: "October 16 – 18, 2026",
     location: "Marmora, ON",
     image: driftwoodForest,
     depositAmount: 250,

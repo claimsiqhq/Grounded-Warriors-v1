@@ -52,10 +52,9 @@ async function initStripe() {
 
   try {
     console.log('Initializing Stripe schema...');
-    await runMigrations({ 
-      databaseUrl,
-      schema: 'stripe'
-    });
+    // Migrations always target the 'stripe' schema; the config only takes
+    // a connection string (see stripe-replit-sync MigrationConfig).
+    await runMigrations({ databaseUrl });
     console.log('Stripe schema ready');
 
     const stripeSync = await getStripeSync();

@@ -5,7 +5,7 @@ services:
     plan: starter
     region: oregon
     branch: main
-    buildCommand: npm install --include=dev && npm run build && npm run db:push
+    buildCommand: npm install --include=dev && npm run check && npm run build && npm run db:migrate
     startCommand: npm run start
     healthCheckPath: /
     autoDeploy: true
