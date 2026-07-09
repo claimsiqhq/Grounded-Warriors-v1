@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import { Seo } from "@/components/seo";
 import { retreats } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
@@ -6,9 +7,9 @@ import { Link } from "wouter";
 import { useState } from "react";
 import { RegistrationModal } from "@/components/registration-modal";
 
+// Detail pages for retreats in the live catalog (ids match server/retreats.ts).
 const retreatSlugs: Record<number, string> = {
-  1: "/retreats/winter-descent",
-  2: "/retreats/spring-awakening",
+  3: "/retreats/equinox-gathering",
 };
 
 export default function Retreats() {
@@ -16,6 +17,11 @@ export default function Retreats() {
 
   return (
     <Layout>
+      <Seo
+        title="Upcoming Expeditions | Grounded Warriors"
+        description="Upcoming wilderness expeditions for men in Ontario — the Equinox Gathering, Spring Awakening in Algonquin, and more. Spots are strictly limited."
+        path="/retreats"
+      />
       <div className="pt-32 pb-20 bg-background min-h-screen">
         <div className="container px-6 mx-auto">
           <div className="text-center mb-20">

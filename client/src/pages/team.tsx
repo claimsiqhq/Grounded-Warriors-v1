@@ -1,5 +1,6 @@
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout";
+import { Seo } from "@/components/seo";
 import { springRetreatHosts } from "@/lib/data";
 
 const fadeIn = {
@@ -10,8 +11,23 @@ const fadeIn = {
 };
 
 export default function Team() {
+  const teamJsonLd = springRetreatHosts.map((member) => ({
+    "@context": "https://schema.org",
+    "@type": "Person",
+    name: member.name,
+    jobTitle: member.role,
+    description: member.bio,
+    worksFor: { "@type": "Organization", name: "Grounded Warriors" },
+  }));
+
   return (
     <Layout>
+      <Seo
+        title="The Team | Grounded Warriors"
+        description="Meet the Grounded Warriors guides — wilderness guides, builders, and athletes who lead every expedition from the front."
+        path="/team"
+        jsonLd={teamJsonLd}
+      />
       <div className="min-h-screen bg-background">
         {/* Hero Section */}
         <section className="pt-32 pb-20 bg-gradient-to-b from-card to-background">

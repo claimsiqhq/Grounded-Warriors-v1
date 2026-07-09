@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import { Seo } from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -120,6 +121,11 @@ export default function Coaching() {
 
   return (
     <Layout>
+      <Seo
+        title="Brown Courage Coaching | Grounded Warriors"
+        description="1-on-1 coaching for men with John Shoust and Brian Coones. Direct, practical coaching to build momentum in your work, body, and life."
+        path="/coaching"
+      />
       {/* Hero */}
       <section
         className="relative pt-40 pb-24 md:pt-48 md:pb-32 bg-background overflow-hidden"

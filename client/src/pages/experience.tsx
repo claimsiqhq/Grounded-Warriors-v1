@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import { Seo } from "@/components/seo";
 import { images } from "@/lib/data";
 import { motion } from "framer-motion";
 import {
@@ -29,6 +30,11 @@ export default function Experience() {
 
   return (
     <Layout>
+      <Seo
+        title="The Experience | Grounded Warriors"
+        description="What a day on a Grounded Warriors expedition actually looks like — sunrise breathwork, cold plunges, wilderness travel, and nights at the council fire."
+        path="/experience"
+      />
       <div className="pt-32 pb-20 bg-background">
         <div className="container px-6 mx-auto">
           <motion.div 

@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import { Seo } from "@/components/seo";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
 import { Button } from "@/components/ui/button";
 import { Link } from "wouter";
@@ -100,8 +101,26 @@ export default function FAQ() {
     },
   ];
 
+  const faqJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "FAQPage",
+    mainEntity: faqCategories.flatMap((category) =>
+      category.faqs.map((faq) => ({
+        "@type": "Question",
+        name: faq.question,
+        acceptedAnswer: { "@type": "Answer", text: faq.answer },
+      })),
+    ),
+  };
+
   return (
     <Layout>
+      <Seo
+        title="FAQ | Grounded Warriors"
+        description="Everything you need to know before a Grounded Warriors wilderness expedition — logistics, preparation, safety, cold immersion, registration, and payment."
+        path="/faq"
+        jsonLd={faqJsonLd}
+      />
       <div className="pt-32 pb-20 bg-background min-h-screen">
         <div className="container px-6 mx-auto">
           <motion.div 

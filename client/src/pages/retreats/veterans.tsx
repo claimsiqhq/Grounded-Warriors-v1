@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import { Seo } from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { motion } from "framer-motion";
 import { Link } from "wouter";
@@ -11,6 +12,11 @@ import firstResponder3 from "@/assets/images/first-responder-3.jpg";
 export default function VeteransRetreat() {
   return (
     <Layout>
+      <Seo
+        title="First Responders & Veterans Expedition | Grounded Warriors"
+        description="A backcountry expedition built for men who've worn the uniform. Tactical, off-grid, no nonsense — led by veteran and first responder facilitators in Ontario."
+        path="/retreats/first-responders-veterans"
+      />
       {/* Hero Image Section */}
       <div className="relative h-[50vh] min-h-[400px]">
         <div className="absolute inset-0">

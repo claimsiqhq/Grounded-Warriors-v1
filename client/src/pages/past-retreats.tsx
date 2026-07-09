@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import { Seo } from "@/components/seo";
 import { images } from "@/lib/data";
 import { motion } from "framer-motion";
 
@@ -92,6 +93,11 @@ export default function PastRetreats() {
 
   return (
     <Layout>
+      <Seo
+        title="Past Retreats | Grounded Warriors"
+        description="Photos and stories from past Grounded Warriors expeditions — cold plunges, council fires, and backcountry travel across Ontario."
+        path="/past-retreats"
+      />
       <div className="pt-32 pb-20 bg-background min-h-screen">
         <div className="container px-6 mx-auto">
           <motion.div 

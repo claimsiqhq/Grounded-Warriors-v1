@@ -13,7 +13,11 @@ export const contactSubmissions = pgTable("contact_submissions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const insertContactSubmissionSchema = createInsertSchema(contactSubmissions).omit({
+export const insertContactSubmissionSchema = createInsertSchema(contactSubmissions, {
+  name: z.string().min(2, "Name is required").max(200),
+  email: z.string().email("Valid email is required").max(320),
+  message: z.string().min(10, "Message is too short").max(5000),
+}).omit({
   id: true,
   createdAt: true,
 });
@@ -27,7 +31,9 @@ export const newsletterSubscriptions = pgTable("newsletter_subscriptions", {
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
-export const insertNewsletterSubscriptionSchema = createInsertSchema(newsletterSubscriptions).omit({
+export const insertNewsletterSubscriptionSchema = createInsertSchema(newsletterSubscriptions, {
+  email: z.string().email("Valid email is required").max(320),
+}).omit({
   id: true,
   createdAt: true,
 });
@@ -38,14 +44,19 @@ export type NewsletterSubscription = typeof newsletterSubscriptions.$inferSelect
 // Member portal tables
 export const retreatRegistrations = pgTable("retreat_registrations", {
   id: serial("id").primaryKey(),
-  userId: text("user_id").notNull(),
+  // Nullable: paid registrations may arrive before the customer creates a
+  // member account. They are claimed by email on register/login.
+  userId: text("user_id"),
+  // Customer email captured at checkout, used to claim the registration.
+  email: text("email"),
   // Canonical retreat ID (see server/retreats.ts). Nullable for legacy rows.
   retreatId: integer("retreat_id"),
   retreatName: text("retreat_name").notNull(),
   retreatDate: text("retreat_date").notNull(),
   paymentStatus: text("payment_status").notNull().default("pending"),
   paymentAmount: text("payment_amount"),
-  stripeSessionId: text("stripe_session_id"),
+  // Unique so webhook + success-page fulfillment can't double-register.
+  stripeSessionId: text("stripe_session_id").unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 

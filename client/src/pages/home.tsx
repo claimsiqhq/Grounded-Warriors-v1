@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import { Seo, organizationJsonLd } from "@/components/seo";
 import { images, testimonials, retreats, facilitators } from "@/lib/data";
 import { Button } from "@/components/ui/button";
 import { motion, useScroll, useTransform } from "framer-motion";
@@ -139,6 +140,12 @@ export default function Home() {
 
   return (
     <Layout>
+      <Seo
+        title="Grounded Warriors | Wilderness Expeditions for Men"
+        description="Wilderness brotherhood for men. Cold plunges, fire, backcountry canoe trips, and primal challenge in the Ontario wild. Come home sharper, stronger, more yourself."
+        path="/"
+        jsonLd={organizationJsonLd()}
+      />
       {isLoading && <PageLoader />}
       
       {/* Hero Section with Parallax */}

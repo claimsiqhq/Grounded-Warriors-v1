@@ -12,7 +12,7 @@ export function metaImagesPlugin(): Plugin {
     transformIndexHtml(html) {
       const baseUrl = getDeploymentUrl();
       if (!baseUrl) {
-        log('[meta-images] no Replit deployment domain found, skipping meta tag updates');
+        log('[meta-images] no deployment URL found (set APP_URL), skipping meta tag updates');
         return html;
       }
 
@@ -56,6 +56,19 @@ export function metaImagesPlugin(): Plugin {
 }
 
 function getDeploymentUrl(): string | null {
+  // Render (and any other host): explicit public URL takes precedence.
+  if (process.env.APP_URL) {
+    const url = process.env.APP_URL.replace(/\/+$/, '');
+    log('[meta-images] using APP_URL:', url);
+    return url;
+  }
+
+  if (process.env.RENDER_EXTERNAL_URL) {
+    const url = process.env.RENDER_EXTERNAL_URL.replace(/\/+$/, '');
+    log('[meta-images] using RENDER_EXTERNAL_URL:', url);
+    return url;
+  }
+
   if (process.env.REPLIT_INTERNAL_APP_DOMAIN) {
     const url = `https://${process.env.REPLIT_INTERNAL_APP_DOMAIN}`;
     log('[meta-images] using internal app domain:', url);

@@ -32,6 +32,8 @@ export interface IStorage {
   createRetreatRegistration(registration: InsertRetreatRegistration): Promise<RetreatRegistration>;
   getUserRegistrations(userId: string): Promise<RetreatRegistration[]>;
   userHasRegistrationForRetreat(userId: string, retreatId: number): Promise<boolean>;
+  getRegistrationByStripeSessionId(sessionId: string): Promise<RetreatRegistration | undefined>;
+  claimRegistrationsByEmail(userId: string, email: string): Promise<void>;
   // Retreat staff
   getRetreatStaff(retreatId: number): Promise<RetreatStaff[]>;
   isUserRetreatStaff(userId: string, retreatId: number): Promise<boolean>;
@@ -130,6 +132,29 @@ export class DatabaseStorage implements IStorage {
       )
       .limit(1);
     return rows.length > 0;
+  }
+
+  async getRegistrationByStripeSessionId(sessionId: string): Promise<RetreatRegistration | undefined> {
+    const [row] = await db
+      .select()
+      .from(retreatRegistrations)
+      .where(eq(retreatRegistrations.stripeSessionId, sessionId))
+      .limit(1);
+    return row;
+  }
+
+  // Attach any unclaimed (userId = null) registrations that were paid with
+  // this email to the given member account.
+  async claimRegistrationsByEmail(userId: string, email: string): Promise<void> {
+    await db
+      .update(retreatRegistrations)
+      .set({ userId })
+      .where(
+        and(
+          isNull(retreatRegistrations.userId),
+          eq(retreatRegistrations.email, email.toLowerCase()),
+        ),
+      );
   }
 
   // Retreat staff methods

@@ -1,10 +1,16 @@
 import { Layout } from "@/components/layout";
+import { Seo } from "@/components/seo";
 import { images } from "@/lib/data";
 import { motion } from "framer-motion";
 
 export default function About() {
   return (
     <Layout>
+      <Seo
+        title="About | Grounded Warriors"
+        description="The philosophy behind Grounded Warriors — cold water, fire, and wilderness as the oldest tools for building sharper, stronger men."
+        path="/about"
+      />
       <div className="pt-32 pb-20 bg-background">
         <div className="container px-6 mx-auto">
           <motion.div

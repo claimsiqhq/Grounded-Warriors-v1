@@ -4,9 +4,11 @@ import connectPgSimple from "connect-pg-simple";
 import bcrypt from "bcryptjs";
 import crypto from "crypto";
 import { db } from "./db";
-import { users, sessions } from "@shared/models/auth";
+import { users } from "@shared/models/auth";
 import { eq } from "drizzle-orm";
 import { sendPasswordResetEmail } from "./sendgridClient";
+import { storage } from "./storage";
+import { authLimiter } from "./rateLimit";
 
 // Bootstrap admin role from STAFF_EMAILS env var (comma-separated).
 // Any user whose email matches will be promoted to role='admin' on
@@ -78,7 +80,7 @@ export function isAuthenticated(req: Request, res: Response, next: NextFunction)
 
 export async function registerAuthRoutes(app: Express) {
   // Register new user
-  app.post("/api/auth/register", async (req: Request, res: Response) => {
+  app.post("/api/auth/register", authLimiter, async (req: Request, res: Response) => {
     try {
       const { email, password, firstName, lastName } = req.body;
 
@@ -115,6 +117,12 @@ export async function registerAuthRoutes(app: Express) {
       // Set session
       req.session.userId = newUser.id;
 
+      // Attach any retreat registrations paid with this email before the
+      // account existed, so the member gets container access immediately.
+      storage.claimRegistrationsByEmail(newUser.id, newUser.email).catch((err) => {
+        console.error("Failed to claim registrations on register:", err);
+      });
+
       res.status(201).json({
         user: {
           id: newUser.id,
@@ -132,7 +140,7 @@ export async function registerAuthRoutes(app: Express) {
   });
 
   // Login
-  app.post("/api/auth/login", async (req: Request, res: Response) => {
+  app.post("/api/auth/login", authLimiter, async (req: Request, res: Response) => {
     try {
       const { email, password } = req.body;
 
@@ -154,6 +162,11 @@ export async function registerAuthRoutes(app: Express) {
 
       // Re-sync admin role on every login so STAFF_EMAILS changes take effect.
       const role = await syncAdminRole(user.id, user.email, user.role);
+
+      // Attach any unclaimed paid registrations matching this email.
+      storage.claimRegistrationsByEmail(user.id, user.email).catch((err) => {
+        console.error("Failed to claim registrations on login:", err);
+      });
 
       res.json({
         user: {
@@ -214,7 +227,7 @@ export async function registerAuthRoutes(app: Express) {
   });
 
   // Request password reset
-  app.post("/api/auth/forgot-password", async (req: Request, res: Response) => {
+  app.post("/api/auth/forgot-password", authLimiter, async (req: Request, res: Response) => {
     try {
       const { email } = req.body;
 
@@ -259,7 +272,7 @@ export async function registerAuthRoutes(app: Express) {
   });
 
   // Reset password with token
-  app.post("/api/auth/reset-password", async (req: Request, res: Response) => {
+  app.post("/api/auth/reset-password", authLimiter, async (req: Request, res: Response) => {
     try {
       const { token, password } = req.body;
 

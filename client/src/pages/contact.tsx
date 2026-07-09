@@ -1,4 +1,5 @@
 import { Layout } from "@/components/layout";
+import { Seo } from "@/components/seo";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -95,6 +96,11 @@ export default function Contact() {
 
   return (
     <Layout>
+      <Seo
+        title="Contact | Grounded Warriors"
+        description="Questions about an upcoming expedition? Get in touch with the Grounded Warriors team — we'll help you find the right trip."
+        path="/contact"
+      />
       <div className="pt-32 pb-20 bg-background min-h-screen">
         <div className="container px-6 mx-auto">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-10 lg:gap-24 mb-20 md:mb-32">

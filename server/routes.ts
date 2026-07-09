@@ -7,6 +7,9 @@ import { fromZodError } from "zod-validation-error";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sendContactFormEmail, sendNewsletterWelcomeEmail, sendCoachingInquiryNotification, sendCoachingInquiryAutoReply } from "./sendgridClient";
 import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
+import { fulfillCheckoutSession } from "./fulfillment";
+import { publicFormLimiter } from "./rateLimit";
+import { z } from "zod";
 import { db } from "./db";
 import { users } from "@shared/models/auth";
 import { eq } from "drizzle-orm";
@@ -35,6 +38,31 @@ async function requireAdmin(req: Request, res: Response, next: NextFunction) {
   next();
 }
 
+// Public, indexable routes for the sitemap (keep in sync with client/src/App.tsx).
+const PUBLIC_ROUTES = [
+  "/",
+  "/about",
+  "/experience",
+  "/retreats",
+  "/retreats/equinox-gathering",
+  "/retreats/first-responders-veterans",
+  "/past-retreats",
+  "/faq",
+  "/team",
+  "/contact",
+  "/coaching",
+];
+
+function getPublicBaseUrl(req: Request): string {
+  return (
+    process.env.APP_URL ||
+    process.env.RENDER_EXTERNAL_URL ||
+    (process.env.REPLIT_DOMAINS
+      ? `https://${process.env.REPLIT_DOMAINS.split(",")[0]}`
+      : `${req.protocol}://${req.get("host")}`)
+  ).replace(/\/+$/, "");
+}
+
 export async function registerRoutes(
   httpServer: Server,
   app: Express
@@ -42,8 +70,36 @@ export async function registerRoutes(
   // Setup authentication BEFORE other routes
   setupAuth(app);
   await registerAuthRoutes(app);
+
+  app.get("/robots.txt", (req, res) => {
+    const baseUrl = getPublicBaseUrl(req);
+    res.type("text/plain").send(
+      [
+        "User-agent: *",
+        "Allow: /",
+        "Disallow: /login",
+        "Disallow: /member",
+        "Disallow: /admin",
+        "Disallow: /registration/success",
+        "Disallow: /api/",
+        "",
+        `Sitemap: ${baseUrl}/sitemap.xml`,
+        "",
+      ].join("\n"),
+    );
+  });
+
+  app.get("/sitemap.xml", (req, res) => {
+    const baseUrl = getPublicBaseUrl(req);
+    const urls = PUBLIC_ROUTES.map(
+      (route) => `  <url>\n    <loc>${baseUrl}${route}</loc>\n  </url>`,
+    ).join("\n");
+    res.type("application/xml").send(
+      `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
+    );
+  });
   // Contact form submission endpoint
-  app.post("/api/contact", async (req, res) => {
+  app.post("/api/contact", publicFormLimiter, async (req, res) => {
     try {
       const validatedData = insertContactSubmissionSchema.parse(req.body);
       const submission = await storage.createContactSubmission(validatedData);
@@ -78,8 +134,8 @@ export async function registerRoutes(
     }
   });
 
-  // Get all contact submissions (optional - for admin use)
-  app.get("/api/contact", async (req, res) => {
+  // Get all contact submissions (admin only - contains PII)
+  app.get("/api/contact", requireAdmin, async (req, res) => {
     try {
       const submissions = await storage.getContactSubmissions();
       res.json({ success: true, submissions });
@@ -93,7 +149,7 @@ export async function registerRoutes(
   });
 
   // Newsletter subscription endpoint
-  app.post("/api/newsletter", async (req, res) => {
+  app.post("/api/newsletter", publicFormLimiter, async (req, res) => {
     try {
       const validatedData = insertNewsletterSubscriptionSchema.parse(req.body);
       const subscription = await storage.createNewsletterSubscription(validatedData);
@@ -176,9 +232,20 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/checkout", async (req, res) => {
+  const checkoutSchema = z.object({
+    customerEmail: z.string().email("A valid email is required").max(320),
+    customerName: z.string().max(200).optional().default(""),
+    retreatId: z.union([z.number(), z.string()]),
+    paymentType: z.enum(["deposit", "full"]),
+  });
+
+  app.post("/api/checkout", publicFormLimiter, async (req, res) => {
     try {
-      const { customerEmail, customerName, retreatId, paymentType } = req.body;
+      const parsedBody = checkoutSchema.safeParse(req.body);
+      if (!parsedBody.success) {
+        return res.status(400).json({ error: fromZodError(parsedBody.error).message });
+      }
+      const { customerEmail, customerName, retreatId, paymentType } = parsedBody.data;
 
       // Validate the retreat reference. Pricing is ALWAYS derived from the
       // server-side canonical registry - we never trust a client-supplied
@@ -187,9 +254,6 @@ export async function registerRoutes(
         typeof retreatId === "number" ? retreatId : parseInt(String(retreatId), 10);
       if (Number.isNaN(parsedId) || !isValidRetreatId(parsedId)) {
         return res.status(400).json({ error: "Invalid retreatId" });
-      }
-      if (paymentType !== "deposit" && paymentType !== "full") {
-        return res.status(400).json({ error: "Invalid paymentType" });
       }
 
       const retreat = getRetreat(parsedId)!;
@@ -204,12 +268,7 @@ export async function registerRoutes(
       const hstCents = Math.round(baseCents * 0.13);
 
       const stripe = await getUncachableStripeClient();
-      const baseUrl =
-        process.env.APP_URL ||
-        process.env.RENDER_EXTERNAL_URL ||
-        (process.env.REPLIT_DOMAINS
-          ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
-          : `${req.protocol}://${req.get('host')}`);
+      const baseUrl = getPublicBaseUrl(req);
 
       const lineItems = [
         {
@@ -263,12 +322,35 @@ export async function registerRoutes(
   app.get("/api/checkout/session/:sessionId", async (req, res) => {
     try {
       const { sessionId } = req.params;
+      if (!/^cs_[a-zA-Z0-9_]+$/.test(sessionId)) {
+        return res.status(400).json({ error: "Invalid session id" });
+      }
       const stripe = await getUncachableStripeClient();
       const session = await stripe.checkout.sessions.retrieve(sessionId);
-      res.json({ session });
+
+      // Backup fulfillment path: if the webhook hasn't landed yet (or isn't
+      // configured in this environment), create the registration now. The
+      // session came from Stripe via our secret key, so it's trusted.
+      try {
+        await fulfillCheckoutSession(session);
+      } catch (fulfillError) {
+        console.error("Success-page fulfillment error:", fulfillError);
+      }
+
+      // Only expose what the success page needs — never the raw session.
+      res.json({
+        session: {
+          id: session.id,
+          payment_status: session.payment_status,
+          customer_email: session.customer_details?.email || session.customer_email,
+          amount_total: session.amount_total,
+          currency: session.currency,
+          retreatName: session.metadata?.retreatName || null,
+        },
+      });
     } catch (error: any) {
       console.error("Error retrieving checkout session:", error);
-      res.status(500).json({ error: error.message || "Failed to retrieve session" });
+      res.status(500).json({ error: "Failed to retrieve session" });
     }
   });
 
@@ -517,7 +599,7 @@ export async function registerRoutes(
   // ------------------------------------------------------------------
   // Brown Courage Coaching: 1-on-1 inquiries
   // ------------------------------------------------------------------
-  app.post("/api/coaching/inquiries", async (req, res) => {
+  app.post("/api/coaching/inquiries", publicFormLimiter, async (req, res) => {
     try {
       const validated = insertCoachingInquirySchema.parse(req.body);
       const inquiry = await storage.createCoachingInquiry(validated);

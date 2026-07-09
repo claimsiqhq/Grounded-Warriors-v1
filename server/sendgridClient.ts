@@ -48,6 +48,25 @@ export async function getUncachableSendGridClient() {
   };
 }
 
+// Escape user-supplied strings before interpolating into email HTML.
+function escapeHtml(s: string): string {
+  return s
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;");
+}
+
+function getPublicBaseUrl(): string {
+  return (
+    process.env.APP_URL ||
+    process.env.RENDER_EXTERNAL_URL ||
+    (process.env.REPLIT_DOMAINS?.split(',')[0]
+      ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
+      : 'http://localhost:5000')
+  );
+}
+
 export async function sendContactFormEmail(data: {
   name: string;
   email: string;
@@ -73,10 +92,10 @@ This message was sent via the Grounded Warriors website contact form.`,
     html: `
       <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto;">
         <h2 style="color: #b4a06e;">New Contact Form Submission</h2>
-        <p><strong>Name:</strong> ${data.name}</p>
-        <p><strong>Email:</strong> <a href="mailto:${data.email}">${data.email}</a></p>
+        <p><strong>Name:</strong> ${escapeHtml(data.name)}</p>
+        <p><strong>Email:</strong> <a href="mailto:${escapeHtml(data.email)}">${escapeHtml(data.email)}</a></p>
         <h3 style="color: #b4a06e;">Message:</h3>
-        <p style="white-space: pre-wrap;">${data.message}</p>
+        <p style="white-space: pre-wrap;">${escapeHtml(data.message)}</p>
         <hr style="border: 1px solid #eee; margin: 20px 0;" />
         <p style="color: #888; font-size: 12px;">This message was sent via the Grounded Warriors website contact form.</p>
       </div>
@@ -92,12 +111,7 @@ export async function sendNewsletterWelcomeEmail(data: {
 }) {
   const { client, fromEmail } = await getUncachableSendGridClient();
 
-  const baseUrl =
-    process.env.APP_URL ||
-    process.env.RENDER_EXTERNAL_URL ||
-    (process.env.REPLIT_DOMAINS?.split(',')[0]
-      ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
-      : 'http://localhost:5000');
+  const baseUrl = getPublicBaseUrl();
   const registerLink = `${baseUrl}/login?mode=register&email=${encodeURIComponent(data.email)}`;
   const retreatsLink = `${baseUrl}/retreats`;
   const commonsLink = `${baseUrl}/member/discussions`;
@@ -389,19 +403,89 @@ Brown Courage Coaching`,
   return true;
 }
 
+// Sent once after a successful Stripe checkout for a retreat.
+export async function sendRetreatConfirmationEmail(data: {
+  email: string;
+  name: string;
+  retreatName: string;
+  retreatDate: string;
+  amountPaid: string | null;
+  paymentType: "deposit" | "full";
+  hasAccount: boolean;
+}) {
+  const { client, fromEmail } = await getUncachableSendGridClient();
+  const baseUrl = getPublicBaseUrl();
+  const portalLink = data.hasAccount
+    ? `${baseUrl}/member`
+    : `${baseUrl}/login?mode=register&email=${encodeURIComponent(data.email)}`;
+  const firstName = escapeHtml((data.name || "").split(/\s+/)[0] || "Brother");
+  const paymentLine =
+    data.paymentType === "deposit"
+      ? "Your deposit is in and your spot is held."
+      : "Your payment is in and your spot is confirmed.";
+  const amountLine = data.amountPaid ? `Amount paid: $${data.amountPaid} CAD (incl. HST)` : "";
+  const portalCta = data.hasAccount
+    ? "Head to your Member Portal to join your retreat's private container."
+    : "Create your free Member Portal account with this email address to unlock your retreat's private container.";
+
+  const msg = {
+    to: data.email,
+    from: fromEmail,
+    subject: `You're In — ${data.retreatName} | Grounded Warriors`,
+    text: `${firstName},
+
+${paymentLine}
+
+Retreat: ${data.retreatName}
+Dates: ${data.retreatDate}
+${amountLine}
+
+${portalCta}
+${portalLink}
+
+We'll follow up with preparation materials and next steps as the date approaches. If you have any questions, just reply to this email.
+
+—
+Grounded Warriors
+Return to the Elements. Return to Yourself.
+Wilderness Expeditions for Men · Ontario, Canada`,
+    html: `<div style="font-family: Georgia, serif; max-width:600px; margin:0 auto; background:#0f1812; color:#c5b393; padding:40px 32px;">
+      <div style="text-align:center; margin-bottom:28px;">
+        <div style="font-family:'Cormorant Garamond', Georgia, serif; font-size:24px; letter-spacing:3px; text-transform:uppercase; color:#c5b393;">Grounded Warriors</div>
+        <div style="font-family:'Cormorant Garamond', Georgia, serif; font-style:italic; color:#90a190; margin-top:6px; font-size:14px; letter-spacing:1px;">Return to the Elements. Return to Yourself.</div>
+      </div>
+      <div style="background:#1e3329; border:1px solid #3e5d48; padding:36px 32px;">
+        <h1 style="font-family:'Cormorant Garamond', Georgia, serif; font-weight:500; color:#c5b393; margin:0 0 20px 0; font-size:28px;">You're in.</h1>
+        <p style="line-height:1.7; color:#c5b393; margin:0 0 16px 0;">${firstName},</p>
+        <p style="line-height:1.7; color:#c5b393; margin:0 0 16px 0;">${paymentLine}</p>
+        <table style="width:100%; border-collapse:collapse; margin:0 0 20px 0;">
+          <tr><td style="padding:6px 0; color:#90a190;">Retreat</td><td style="padding:6px 0; color:#c5b393;">${escapeHtml(data.retreatName)}</td></tr>
+          <tr><td style="padding:6px 0; color:#90a190;">Dates</td><td style="padding:6px 0; color:#c5b393;">${escapeHtml(data.retreatDate)}</td></tr>
+          ${data.amountPaid ? `<tr><td style="padding:6px 0; color:#90a190;">Amount paid</td><td style="padding:6px 0; color:#c5b393;">$${escapeHtml(data.amountPaid)} CAD (incl. HST)</td></tr>` : ""}
+        </table>
+        <p style="line-height:1.7; color:#c5b393; margin:0 0 20px 0;">${portalCta}</p>
+        <div style="text-align:center; margin:24px 0 8px 0;">
+          <a href="${portalLink}" style="background-color:#c5b393; color:#0f1812; padding:14px 36px; text-decoration:none; display:inline-block; font-family:Arial, sans-serif; font-size:14px; font-weight:bold; letter-spacing:2px; text-transform:uppercase;">
+            ${data.hasAccount ? "Open Member Portal" : "Create Your Account"}
+          </a>
+        </div>
+      </div>
+      <p style="text-align:center; color:#90a190; font-size:12px; margin-top:20px;">We'll follow up with preparation materials as the date approaches.<br/>Grounded Warriors · Wilderness Expeditions for Men · Ontario, Canada</p>
+    </div>`,
+  };
+
+  await client.send(msg);
+  return true;
+}
+
 export async function sendPasswordResetEmail(data: {
   email: string;
   resetToken: string;
   firstName?: string | null;
 }) {
   const { client, fromEmail } = await getUncachableSendGridClient();
-  
-  const baseUrl =
-    process.env.APP_URL ||
-    process.env.RENDER_EXTERNAL_URL ||
-    (process.env.REPLIT_DOMAINS?.split(',')[0]
-      ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}`
-      : 'http://localhost:5000');
+
+  const baseUrl = getPublicBaseUrl();
   const resetLink = `${baseUrl}/login?reset=${data.resetToken}`;
   const name = data.firstName || 'Warrior';
   
