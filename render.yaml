@@ -5,7 +5,7 @@ services:
     plan: starter
     region: oregon
     branch: main
-    buildCommand: npm install --include=dev && npm run check && npm run build && npm run db:migrate
+    buildCommand: corepack enable && corepack prepare pnpm@10.26.1 --activate && pnpm install --frozen-lockfile && pnpm run check && pnpm run build && pnpm run db:migrate
     startCommand: npm run start
     healthCheckPath: /
     autoDeploy: true

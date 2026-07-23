@@ -1,0 +1,25 @@
+2026-07-23T09:54:51.823991632Z ==> Cloning from https://github.com/claimsiqhq/Grounded-Warriors-v1
+2026-07-23T09:55:11.006957392Z ==> Checking out commit 985440ec428b58e01a1f4aa09e20eba5aedf1778 in branch main
+2026-07-23T09:55:13.975176143Z ==> Requesting Node.js version 20
+2026-07-23T09:55:14.287821606Z ==> Using Node.js version 20.20.2 via environment variable NODE_VERSION
+2026-07-23T09:55:14.287845906Z ==> Docs on specifying a Node.js version: https://render.com/docs/node-version
+2026-07-23T09:55:14.287858786Z ==> Installing Node.js version 20.20.2...
+2026-07-23T09:55:15.755936126Z ==> Running build command 'npm install --include=dev && npm run check && npm run build && npm run db:migrate'...
+2026-07-23T09:56:29.324548681Z npm error Exit handler never called!
+2026-07-23T09:56:29.324668561Z npm error This is an error with npm itself. Please report this error at:
+2026-07-23T09:56:29.324705142Z npm error   <https://github.com/npm/cli/issues>
+2026-07-23T09:56:29.325241486Z npm error A complete log of this run can be found in: /opt/render/.cache/_logs/2026-07-23T09_55_15_876Z-debug-0.log
+2026-07-23T09:56:29.564877225Z 
+2026-07-23T09:56:29.564906825Z > rest-express@1.0.0 check
+2026-07-23T09:56:29.564914245Z > tsc
+2026-07-23T09:56:29.564918895Z 
+2026-07-23T09:56:29.925670318Z error TS2688: Cannot find type definition file for 'node'.
+2026-07-23T09:56:29.925700618Z   The file is in the program because:
+2026-07-23T09:56:29.925705838Z     Entry point of type library 'node' specified in compilerOptions
+2026-07-23T09:56:29.925710358Z error TS2688: Cannot find type definition file for 'vite/client'.
+2026-07-23T09:56:29.925714838Z   The file is in the program because:
+2026-07-23T09:56:29.925719288Z     Entry point of type library 'vite/client' specified in compilerOptions
+2026-07-23T09:56:29.925724248Z tsconfig.json(16,5): error TS5102: Option 'baseUrl' has been removed. Please remove it from your configuration.
+2026-07-23T09:56:29.925731129Z   Use '"paths": {"*": ["./*"]}' instead.
+2026-07-23T09:56:30.036175909Z ==> Build failed 😞
+2026-07-23T09:56:30.036210489Z ==> Common ways to troubleshoot your deploy: https://render.com/docs/troubleshooting-deploys

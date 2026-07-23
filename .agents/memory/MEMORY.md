@@ -1,0 +1,1 @@
+- [Render deploys must use pnpm](render-deploy-pnpm.md) — pnpm-only project; stale npm lockfile/node_modules leftovers broke Render builds and caused phantom tsc type errors.

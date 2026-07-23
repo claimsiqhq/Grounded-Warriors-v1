@@ -66,6 +66,7 @@
     "lucide-react": "^0.545.0",
     "memoizee": "^0.4.17",
     "memorystore": "^1.6.8",
+    "nanoid": "^6.0.0",
     "next-themes": "^0.4.6",
     "openid-client": "^6.8.4",
     "passport": "^0.7.0",
@@ -101,6 +102,7 @@
     "@types/node": "^20.19.40",
     "@types/passport": "^1.0.17",
     "@types/passport-local": "^1.0.38",
+    "@types/pg": "^8.20.0",
     "@types/react": "^19.2.14",
     "@types/react-dom": "^19.2.3",
     "@types/ws": "^8.18.1",
@@ -117,5 +119,6 @@
   },
   "optionalDependencies": {
     "bufferutil": "^4.1.0"
-  }
+  },
+  "packageManager": "pnpm@10.26.1"
 }
