@@ -1,0 +1,24 @@
+/* Grounded Warriors — design tokens */
+:root {
+  /* Palette */
+  --gw-night-forest: #0f1a14; /* hsl(147 27% 8%)  background */
+  --gw-deep-pine: #1e3328;    /* hsl(149 26% 16%) cards */
+  --gw-birch: #c8b898;        /* hsl(40 30% 69%)  primary text/headings */
+  --gw-forest-floor: #3e5b48; /* hsl(141 19% 30%) secondary */
+  --gw-sage: #91a691;         /* hsl(120 11% 61%) muted text */
+  --gw-ember: #7c1d1d;        /* hsl(0 62% 30%)   destructive */
+
+  /* Semantic */
+  --background: var(--gw-night-forest);
+  --foreground: var(--gw-birch);
+  --card: var(--gw-deep-pine);
+  --primary: var(--gw-birch);
+  --primary-foreground: var(--gw-night-forest);
+  --secondary: var(--gw-forest-floor);
+  --muted-foreground: var(--gw-sage);
+  --destructive: var(--gw-ember);
+
+  /* Typography */
+  --font-serif: 'Cormorant Garamond', serif; /* headings */
+  --font-sans: 'Inter', sans-serif;          /* body & UI */
+}

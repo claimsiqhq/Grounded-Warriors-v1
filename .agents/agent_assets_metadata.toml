@@ -1,0 +1,8 @@
+uploads = []
+generated = []
+
+[[outputs]]
+id = "pGo5Dl6S2KYxlK-xfana8"
+uri = "file://grounded-warriors-brand-kit.zip"
+type = "unspecified"
+title = "Grounded Warriors Brand Kit"
