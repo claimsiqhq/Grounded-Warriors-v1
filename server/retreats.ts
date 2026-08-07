@@ -24,7 +24,7 @@ export interface RetreatContainer {
 export const RETREATS: RetreatContainer[] = [
   { id: 1, name: "Winter Descent",   date: "February 2026",            isPast: true,  depositAmount: 250, fullAmount: 555  },
   { id: 2, name: "Spring Awakening", date: "May 2026",                 isPast: true,  depositAmount: 250, fullAmount: 555  },
-  { id: 3, name: "Grounded Warriors Marmora", date: "October 16 – 18, 2026", isPast: false, depositAmount: 250, fullAmount: 499  },
+  { id: 3, name: "Grounded Warriors Marmora", date: "October 9 – 11, 2026", isPast: false, depositAmount: 250, fullAmount: 499  },
   { id: 4, name: "Spring Awakening", date: "April 30 – May 3, 2027",   isPast: false, depositAmount: 250, fullAmount: 1999 },
   { id: 5, name: "Guatemala Expedition", date: "February 2027",         isPast: false, depositAmount: 500, fullAmount: 0    },
   // Single-payment events: depositAmount 0 means "full payment only"

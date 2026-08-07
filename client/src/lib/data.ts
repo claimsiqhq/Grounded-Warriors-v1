@@ -167,7 +167,7 @@ export const retreats = [
   {
     id: 3,
     title: "Grounded Warriors Marmora",
-    date: "October 16 – 18, 2026",
+    date: "October 9 – 11, 2026",
     location: "Marmora, ON",
     image: driftwoodForest,
     depositAmount: 250,

@@ -23,7 +23,7 @@ const FULL_AMOUNT = 499;
 
 export default function RetreatMarmora() {
   const [showModal, setShowModal] = useState(false);
-  const retreatDate = new Date("2026-10-16");
+  const retreatDate = new Date("2026-10-09");
 
   const eventJsonLd = {
     "@context": "https://schema.org",
@@ -31,8 +31,8 @@ export default function RetreatMarmora() {
     name: "Grounded Warriors Marmora",
     description:
       "A 3-day autumn gathering for men on the land in Marmora, Ontario. Cold lake plunges, wood-fired sauna, breathwork, and council fires.",
-    startDate: "2026-10-16",
-    endDate: "2026-10-18",
+    startDate: "2026-10-09",
+    endDate: "2026-10-11",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",
@@ -52,7 +52,7 @@ export default function RetreatMarmora() {
     <Layout>
       <Seo
         title="Grounded Warriors Marmora — October 2026 | Grounded Warriors"
-        description="A 3-day autumn retreat for men in Marmora, Ontario. October 16–18, 2026. Cold lake plunges, wood-fired sauna, breathwork, and council fires. $499 all-inclusive."
+        description="A 3-day autumn retreat for men in Marmora, Ontario. October 9–11, 2026. Cold lake plunges, wood-fired sauna, breathwork, and council fires. $499 all-inclusive."
         path="/retreats/marmora"
         jsonLd={eventJsonLd}
       />
@@ -75,7 +75,7 @@ export default function RetreatMarmora() {
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 1 }}
             >
-              <span className="text-primary text-sm uppercase tracking-[0.3em] mb-4 block font-semibold">October 16 – 18, 2026</span>
+              <span className="text-primary text-sm uppercase tracking-[0.3em] mb-4 block font-semibold">October 9 – 11, 2026</span>
               <h1 className="font-serif text-5xl md:text-7xl lg:text-8xl font-bold text-white mb-6 tracking-tight">
                 Grounded Warriors Marmora
               </h1>
@@ -109,7 +109,7 @@ export default function RetreatMarmora() {
           <div className="container px-6 mx-auto">
             <div className="grid grid-cols-2 md:grid-cols-4 gap-8 max-w-4xl mx-auto">
               {[
-                { icon: Calendar, label: "Date", value: "Oct 16 – 18, 2026" },
+                { icon: Calendar, label: "Date", value: "Oct 9 – 11, 2026" },
                 { icon: MapPin, label: "Location", value: "Marmora, ON" },
                 { icon: Users, label: "Group Size", value: "8-12 Men" },
                 { icon: Clock, label: "Duration", value: "3 Days" },
