@@ -7,13 +7,17 @@ import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
 import { motion } from "framer-motion";
 import { MiniCountdown } from "@/components/countdown";
 import { FloatingNewsletterBadge } from "@/components/floating-newsletter-badge";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth, useClerk, useUser } from "@clerk/react";
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
 
 export function Navbar() {
   const [location] = useLocation();
   const [scrolled, setScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
-  const { user, isLoading, logout, isLoggingOut } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
+  const { signOut } = useClerk();
 
   useEffect(() => {
     const handleScroll = () => {
@@ -71,13 +75,13 @@ export function Navbar() {
             </Link>
           ))}
           {/* Auth buttons */}
-          {!isLoading && (
-            user ? (
+          {isLoaded && (
+            isSignedIn && user ? (
               <div className="flex items-center gap-1 ml-2">
                 <Link href="/member">
                   <Button variant="ghost" size="sm" className="gap-2 text-primary hover:text-white" data-testid="button-member-portal">
-                    {user.profileImageUrl ? (
-                      <img src={user.profileImageUrl} alt="" className="w-5 h-5 rounded-full" />
+                    {user.imageUrl ? (
+                      <img src={user.imageUrl} alt="" className="w-5 h-5 rounded-full" />
                     ) : (
                       <User className="w-4 h-4" />
                     )}
@@ -87,8 +91,7 @@ export function Navbar() {
                 <Button
                   variant="ghost"
                   size="sm"
-                  onClick={() => logout()}
-                  disabled={isLoggingOut}
+                  onClick={() => signOut({ redirectUrl: basePath || "/" })}
                   className="gap-2 text-muted-foreground hover:text-white"
                   data-testid="button-logout"
                 >
@@ -97,7 +100,7 @@ export function Navbar() {
                 </Button>
               </div>
             ) : (
-              <Link href="/login">
+              <Link href="/sign-in">
                 <Button variant="ghost" size="sm" className="gap-2 text-muted-foreground hover:text-white ml-2" data-testid="button-login">
                   <LogIn className="w-4 h-4" />
                   Log In
@@ -145,14 +148,14 @@ export function Navbar() {
                   ))}
                   
                   {/* Mobile Auth */}
-                  {!isLoading && (
+                  {isLoaded && (
                     <motion.div
                       initial={{ opacity: 0, y: 20 }}
                       animate={{ opacity: 1, y: 0 }}
                       transition={{ delay: links.length * 0.1 }}
                       className="pt-4 border-t border-white/10 mt-4"
                     >
-                      {user ? (
+                      {isSignedIn && user ? (
                         <div className="flex flex-col items-center gap-2">
                           <Link href="/member" onClick={() => setIsOpen(false)}>
                             <span className="font-serif text-2xl text-primary hover:text-white transition-colors block py-2 px-4">
@@ -163,9 +166,8 @@ export function Navbar() {
                             type="button"
                             onClick={() => {
                               setIsOpen(false);
-                              logout();
+                              signOut({ redirectUrl: basePath || "/" });
                             }}
-                            disabled={isLoggingOut}
                             className="font-serif text-xl text-muted-foreground hover:text-white transition-colors py-2 px-4 flex items-center gap-2"
                             data-testid="button-mobile-logout"
                           >
@@ -174,7 +176,7 @@ export function Navbar() {
                           </button>
                         </div>
                       ) : (
-                        <Link href="/login" onClick={() => setIsOpen(false)}>
+                        <Link href="/sign-in" onClick={() => setIsOpen(false)}>
                           <span className="font-serif text-2xl text-primary hover:text-white transition-colors block py-2 px-4 flex items-center gap-3">
                             <LogIn className="w-6 h-6" />
                             Log In

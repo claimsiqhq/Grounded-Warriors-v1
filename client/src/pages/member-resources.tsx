@@ -1,6 +1,6 @@
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout";
-import { useAuth } from "@/hooks/use-auth";
+import { useAuth, useUser } from "@clerk/react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -14,9 +14,10 @@ const fadeIn = {
 };
 
 export default function MemberResources() {
-  const { user, isLoading: authLoading } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
 
-  if (authLoading) {
+  if (!isLoaded) {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -26,7 +27,7 @@ export default function MemberResources() {
     );
   }
 
-  if (!user) {
+  if (!isSignedIn || !user) {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -35,7 +36,7 @@ export default function MemberResources() {
               <h2 className="font-serif text-2xl text-white mb-4">Members Only</h2>
               <p className="text-muted-foreground mb-6">Please log in to access member resources.</p>
               <Button asChild className="bg-primary">
-                <Link href="/login" data-testid="button-login">Log In</Link>
+                <Link href="/sign-in" data-testid="button-login">Log In</Link>
               </Button>
             </CardContent>
           </Card>

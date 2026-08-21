@@ -1,4 +1,6 @@
+@layer theme, base, clerk, components, utilities;
 @import "tailwindcss";
+@import "@clerk/themes/shadcn.css";
 @import "tw-animate-css";
 
 @custom-variant dark (&:is(.dark *));
@@ -103,4 +105,9 @@
 
 .bg-deep-pine {
   background-color: hsl(149 26% 16%);
+}
+
+.cl-formFieldInput::placeholder {
+  color: #8fa68f;
+  opacity: 1;
 }

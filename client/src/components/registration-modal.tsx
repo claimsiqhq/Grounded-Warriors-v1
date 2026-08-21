@@ -5,6 +5,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { useMutation } from "@tanstack/react-query";
 import { useToast } from "@/hooks/use-toast";
+import { apiRequest } from "@/lib/queryClient";
 
 interface RegistrationModalProps {
   isOpen: boolean;
@@ -41,22 +42,12 @@ export function RegistrationModal({
     mutationFn: async () => {
       // Pricing is derived server-side from retreatId + paymentType; the
       // client never sends an amount (it could be tampered with).
-      const response = await fetch("/api/checkout", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          customerEmail: email,
-          customerName: name,
-          retreatId: retreatId,
-          paymentType: paymentType,
-        }),
+      const response = await apiRequest("POST", "/api/checkout", {
+        customerEmail: email,
+        customerName: name,
+        retreatId,
+        paymentType,
       });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Checkout failed");
-      }
-
       return response.json();
     },
     onSuccess: (data) => {

@@ -1,15 +1,25 @@
 import express, { type Request, Response, NextFunction } from "express";
 import helmet from "helmet";
 import compression from "compression";
+import cors from "cors";
+import { clerkMiddleware } from "@clerk/express";
+import { publishableKeyFromHost } from "@clerk/shared/keys";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
 import { runMigrations } from 'stripe-replit-sync';
 import { getStripeSync } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
+import {
+  CLERK_PROXY_PATH,
+  clerkProxyMiddleware,
+  getClerkProxyHost,
+} from "./middlewares/clerkProxyMiddleware";
 
 const app = express();
 const httpServer = createServer(app);
+
+app.use(CLERK_PROXY_PATH, clerkProxyMiddleware());
 
 // Behind Render's (or Replit's) reverse proxy: required for secure session
 // cookies and correct client IPs in rate limiting.
@@ -24,6 +34,7 @@ app.use(
   }),
 );
 app.use(compression());
+app.use(cors({ credentials: true, origin: true }));
 
 declare module "http" {
   interface IncomingMessage {
@@ -131,6 +142,15 @@ app.use(
 );
 
 app.use(express.urlencoded({ extended: false }));
+
+app.use(
+  clerkMiddleware((req) => ({
+    publishableKey: publishableKeyFromHost(
+      getClerkProxyHost(req) ?? "",
+      process.env.CLERK_PUBLISHABLE_KEY,
+    ),
+  })),
+);
 
 app.use((req, res, next) => {
   const start = Date.now();

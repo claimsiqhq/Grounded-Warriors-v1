@@ -1,0 +1,9 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 160 160" role="img" aria-labelledby="title desc">
+  <title id="title">Grounded Warriors</title>
+  <desc id="desc">A pine tree and mountain emblem for Grounded Warriors</desc>
+  <circle cx="80" cy="80" r="74" fill="#0f1a14" stroke="#c9b896" stroke-width="5"/>
+  <path d="M28 112 62 61l18 27 20-33 32 57H28Z" fill="#3d5a47" stroke="#c9b896" stroke-linejoin="round" stroke-width="4"/>
+  <path d="m80 34 18 29h-10l16 24H91l18 29H51l18-29H56l16-24H62l18-29Z" fill="#c9b896"/>
+  <path d="M77 116h6v17h-6z" fill="#c9b896"/>
+  <text x="80" y="147" fill="#c9b896" font-family="serif" font-size="10" font-weight="700" letter-spacing="2" text-anchor="middle">GROUND</text>
+</svg>

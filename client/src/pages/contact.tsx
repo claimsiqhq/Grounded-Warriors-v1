@@ -12,6 +12,7 @@ import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
 import { useState } from "react";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
+import { apiRequest } from "@/lib/queryClient";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -36,19 +37,7 @@ export default function Contact() {
 
   const submitMutation = useMutation({
     mutationFn: async (values: FormValues) => {
-      const response = await fetch("/api/contact", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(values),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to submit");
-      }
-
+      const response = await apiRequest("POST", "/api/contact", values);
       return response.json();
     },
     onSuccess: () => {

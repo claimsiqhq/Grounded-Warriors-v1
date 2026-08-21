@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout";
-import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth, useUser } from "@clerk/react";
+import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -20,35 +21,33 @@ const fadeIn = {
 };
 
 export default function MemberDiscussions() {
-  const { user, isLoading: authLoading } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
+  const isAuthenticated = isLoaded && isSignedIn && !!user;
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const [showNewPost, setShowNewPost] = useState(false);
   const [newTitle, setNewTitle] = useState("");
   const [newContent, setNewContent] = useState("");
 
-  const { data: discussionsData, isLoading } = useQuery({
+  const { data: discussionsData, isLoading } = useQuery<{
+    discussions: Array<{
+      id: number;
+      userImage: string | null;
+      userName: string;
+      title: string;
+      content: string;
+      createdAt: string;
+    }>;
+  }>({
     queryKey: ["/api/discussions"],
-    queryFn: async () => {
-      const res = await fetch("/api/discussions", { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to fetch discussions");
-      return res.json();
-    },
-    enabled: !!user,
+    enabled: isAuthenticated,
   });
+  const discussions = discussionsData?.discussions ?? [];
 
   const createMutation = useMutation({
     mutationFn: async (data: { title: string; content: string }) => {
-      const res = await fetch("/api/discussions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify(data),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body?.error || `Failed to create discussion (HTTP ${res.status})`);
-      }
+      const res = await apiRequest("POST", "/api/discussions", data);
       return res.json();
     },
     onSuccess: () => {
@@ -63,7 +62,7 @@ export default function MemberDiscussions() {
     },
   });
 
-  if (authLoading) {
+  if (!isLoaded) {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -73,7 +72,7 @@ export default function MemberDiscussions() {
     );
   }
 
-  if (!user) {
+  if (!isSignedIn || !user) {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -82,7 +81,7 @@ export default function MemberDiscussions() {
               <h2 className="font-serif text-2xl text-white mb-4">Members Only</h2>
               <p className="text-muted-foreground mb-6">Please log in to access the community.</p>
               <Button asChild className="bg-primary">
-                <Link href="/login" data-testid="button-login">Log In</Link>
+                <Link href="/sign-in" data-testid="button-login">Log In</Link>
               </Button>
             </CardContent>
           </Card>
@@ -179,9 +178,9 @@ export default function MemberDiscussions() {
               <div className="flex justify-center py-12">
                 <Loader2 className="h-8 w-8 animate-spin text-primary" />
               </div>
-            ) : discussionsData?.discussions?.length > 0 ? (
-              <div className="space-y-4">
-                {discussionsData.discussions.map((discussion: any) => (
+            ) : discussions.length > 0 ? (
+              <div className="space-y-4" data-testid="discussions-loaded">
+                {discussions.map((discussion) => (
                   <motion.div key={discussion.id} {...fadeIn}>
                     <Link href={`/member/discussions/${discussion.id}`}>
                       <Card className="hover:border-primary/50 transition-colors cursor-pointer" data-testid={`card-discussion-${discussion.id}`}>
@@ -210,7 +209,7 @@ export default function MemberDiscussions() {
                 ))}
               </div>
             ) : (
-              <Card>
+              <Card data-testid="discussions-loaded">
                 <CardContent className="py-12 text-center">
                   <MessageCircle className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
                   <h3 className="text-lg font-semibold text-white mb-2">No discussions yet</h3>

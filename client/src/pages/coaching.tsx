@@ -23,6 +23,7 @@ import { useState } from "react";
 import { motion } from "framer-motion";
 import { Compass, Users, MessageSquare, Flame, Target, ArrowRight } from "lucide-react";
 import { images } from "@/lib/data";
+import { apiRequest } from "@/lib/queryClient";
 
 const formSchema = z.object({
   name: z.string().min(2, "Name is required"),
@@ -83,15 +84,7 @@ export default function Coaching() {
   const submitMutation = useMutation({
     mutationFn: async (values: FormValues) => {
       const { consent: _consent, ...payload } = values;
-      const res = await fetch("/api/coaching/inquiries", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify(payload),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body?.error || `Failed to submit (HTTP ${res.status})`);
-      }
+      const res = await apiRequest("POST", "/api/coaching/inquiries", payload);
       return res.json();
     },
     onSuccess: () => {

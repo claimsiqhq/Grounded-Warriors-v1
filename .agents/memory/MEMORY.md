@@ -1,1 +1,2 @@
 - [Render deploys must use pnpm](render-deploy-pnpm.md) — pnpm-only project; stale npm lockfile/node_modules leftovers broke Render builds and caused phantom tsc type errors.
+- [Clerk identity bridge](clerk-identity-bridge.md) — local authorization must use the sessionClaims.userId bridge claim exclusively; never fall back to Clerk's native auth.userId.

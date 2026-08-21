@@ -4,6 +4,7 @@ import { Link } from "wouter";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle, Loader2 } from "lucide-react";
 import { SITE_CONTACT_EMAIL } from "@/lib/site";
+import { apiRequest } from "@/lib/queryClient";
 
 export default function RegistrationSuccess() {
   const searchParams = new URLSearchParams(window.location.search);
@@ -12,8 +13,7 @@ export default function RegistrationSuccess() {
   const { data: sessionData, isLoading, isError } = useQuery({
     queryKey: ["checkout-session", sessionId],
     queryFn: async () => {
-      const response = await fetch(`/api/checkout/session/${sessionId}`);
-      if (!response.ok) throw new Error("Failed to fetch session");
+      const response = await apiRequest("GET", `/api/checkout/session/${sessionId}`);
       return response.json();
     },
     enabled: !!sessionId,
@@ -92,7 +92,7 @@ export default function RegistrationSuccess() {
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 justify-center pt-6">
-              <Link href="/login?mode=register">
+              <Link href="/sign-up">
                 <Button
                   className="bg-primary text-primary-foreground hover:bg-white hover:text-black"
                   data-testid="button-create-account"

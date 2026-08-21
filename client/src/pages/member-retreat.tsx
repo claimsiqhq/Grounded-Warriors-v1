@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout";
-import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth, useUser } from "@clerk/react";
+import { apiRequest } from "@/lib/queryClient";
 import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,7 +28,9 @@ interface RetreatInfo {
 }
 
 export default function MemberRetreat() {
-  const { user, isLoading: authLoading } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
+  const isAuthenticated = isLoaded && isSignedIn && !!user;
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const params = useParams<{ id: string }>();
@@ -39,8 +42,7 @@ export default function MemberRetreat() {
   const accessQuery = useQuery({
     queryKey: ["/api/retreats", retreatId],
     queryFn: async () => {
-      const res = await fetch(`/api/retreats/${retreatId}`, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to load retreat");
+      const res = await apiRequest("GET", `/api/retreats/${retreatId}`);
       return res.json() as Promise<{
         retreat: RetreatInfo;
         canAccess: boolean;
@@ -48,7 +50,7 @@ export default function MemberRetreat() {
         isAdmin: boolean;
       }>;
     },
-    enabled: !!user && !!retreatId,
+    enabled: isAuthenticated && !!retreatId,
   });
 
   const canAccess = accessQuery.data?.canAccess ?? false;
@@ -57,27 +59,18 @@ export default function MemberRetreat() {
   const discussionsQuery = useQuery({
     queryKey: ["/api/discussions", { retreatId }],
     queryFn: async () => {
-      const res = await fetch(`/api/discussions?retreatId=${retreatId}`, {
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to fetch discussions");
+      const res = await apiRequest("GET", `/api/discussions?retreatId=${retreatId}`);
       return res.json();
     },
-    enabled: !!user && canAccess,
+    enabled: isAuthenticated && canAccess,
   });
 
   const createMutation = useMutation({
     mutationFn: async (data: { title: string; content: string }) => {
-      const res = await fetch("/api/discussions", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ ...data, retreatId }),
+      const res = await apiRequest("POST", "/api/discussions", {
+        ...data,
+        retreatId,
       });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body?.error || `Couldn't create the post (HTTP ${res.status})`);
-      }
       return res.json();
     },
     onSuccess: () => {
@@ -92,7 +85,7 @@ export default function MemberRetreat() {
     },
   });
 
-  if (authLoading || accessQuery.isLoading) {
+  if (!isLoaded || accessQuery.isLoading) {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -102,7 +95,7 @@ export default function MemberRetreat() {
     );
   }
 
-  if (!user) {
+  if (!isSignedIn || !user) {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -111,7 +104,7 @@ export default function MemberRetreat() {
               <h2 className="font-serif text-2xl text-white mb-4">Members Only</h2>
               <p className="text-muted-foreground mb-6">Please log in to enter the retreat container.</p>
               <Button asChild className="bg-primary">
-                <Link href="/login" data-testid="button-login">Log In</Link>
+                <Link href="/sign-in" data-testid="button-login">Log In</Link>
               </Button>
             </CardContent>
           </Card>

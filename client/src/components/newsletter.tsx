@@ -3,6 +3,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/hooks/use-toast";
 import { useMutation } from "@tanstack/react-query";
+import { apiRequest } from "@/lib/queryClient";
 
 export function NewsletterSignup() {
   const [email, setEmail] = useState("");
@@ -10,17 +11,7 @@ export function NewsletterSignup() {
 
   const subscribeMutation = useMutation({
     mutationFn: async (email: string) => {
-      const response = await fetch("/api/newsletter", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ email }),
-      });
-
-      if (!response.ok) {
-        const error = await response.json();
-        throw new Error(error.error || "Failed to subscribe");
-      }
-
+      const response = await apiRequest("POST", "/api/newsletter", { email });
       return response.json();
     },
     onSuccess: () => {

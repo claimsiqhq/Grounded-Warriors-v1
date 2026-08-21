@@ -1,7 +1,16 @@
-import { Switch, Route, Redirect, useLocation } from "wouter";
-import { lazy, Suspense, useEffect } from "react";
+import { Switch, Route, Redirect, useLocation, Router as WouterRouter } from "wouter";
+import { lazy, Suspense, useEffect, useRef } from "react";
+import {
+  ClerkProvider,
+  Show,
+  SignIn,
+  SignUp,
+  useClerk,
+} from "@clerk/react";
+import { publishableKeyFromHost } from "@clerk/react/internal";
+import { shadcn } from "@clerk/themes";
 import { queryClient } from "./lib/queryClient";
-import { QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider, useQueryClient } from "@tanstack/react-query";
 import { Toaster } from "@/components/ui/toaster";
 import { TooltipProvider } from "@/components/ui/tooltip";
 import { Seo } from "@/components/seo";
@@ -28,7 +37,74 @@ const MemberDiscussionDetail = lazy(() => import("@/pages/member-discussion-deta
 const MemberResources = lazy(() => import("@/pages/member-resources"));
 const MemberRetreat = lazy(() => import("@/pages/member-retreat"));
 const AdminPage = lazy(() => import("@/pages/admin"));
-const Login = lazy(() => import("@/pages/login"));
+
+const clerkPubKey = publishableKeyFromHost(
+  window.location.hostname,
+  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
+);
+
+const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
+
+const basePath = import.meta.env.BASE_URL.replace(/\/$/, "");
+
+function stripBase(path: string): string {
+  return basePath && path.startsWith(basePath)
+    ? path.slice(basePath.length) || "/"
+    : path;
+}
+
+if (!clerkPubKey) {
+  throw new Error("Missing VITE_CLERK_PUBLISHABLE_KEY in .env file");
+}
+
+const clerkAppearance = {
+  theme: shadcn,
+  cssLayerName: "clerk",
+  options: {
+    logoPlacement: "inside" as const,
+    logoLinkUrl: basePath || "/",
+    logoImageUrl: `${window.location.origin}${basePath}/logo.svg`,
+  },
+  variables: {
+    colorPrimary: "#c9b896",
+    colorForeground: "#c9b896",
+    colorMutedForeground: "#8fa68f",
+    colorDanger: "#dc6c62",
+    colorBackground: "#1e3328",
+    colorInput: "#0f1a14",
+    colorInputForeground: "#f5ead7",
+    colorNeutral: "#3d5a47",
+    fontFamily: "'Inter', sans-serif",
+    borderRadius: "0px",
+  },
+  elements: {
+    rootBox: "w-full flex justify-center",
+    cardBox: "bg-[#1e3328] border border-[#3d5a47] w-[440px] max-w-full overflow-hidden",
+    card: "!shadow-none !border-0 !bg-transparent !rounded-none",
+    footer: "!shadow-none !border-0 !bg-transparent !rounded-none",
+    headerTitle: "font-serif text-[#f5ead7]",
+    headerSubtitle: "text-[#8fa68f]",
+    socialButtonsBlockButtonText: "text-[#f5ead7]",
+    formFieldLabel: "text-[#c9b896] uppercase tracking-wider text-xs",
+    footerActionLink: "text-[#c9b896]",
+    footerActionText: "text-[#8fa68f]",
+    dividerText: "text-[#8fa68f]",
+    identityPreviewEditButton: "text-[#c9b896]",
+    formFieldSuccessText: "text-[#8fa68f]",
+    alertText: "text-[#f5ead7]",
+    logoBox: "py-4",
+    logoImage: "h-16 w-16 object-contain",
+    socialButtonsBlockButton: "border-[#3d5a47] bg-[#0f1a14] hover:bg-[#3d5a47]",
+    formButtonPrimary: "bg-[#c9b896] text-[#0f1a14] hover:bg-[#f5ead7]",
+    formFieldInput: "border-[#3d5a47] bg-[#0f1a14] text-[#f5ead7]",
+    footerAction: "border-t border-[#3d5a47]",
+    dividerLine: "bg-[#3d5a47]",
+    alert: "border-[#3d5a47] bg-[#0f1a14]",
+    otpCodeFieldInput: "border-[#3d5a47] bg-[#0f1a14] text-[#f5ead7]",
+    formFieldRow: "gap-2",
+    main: "gap-5",
+  },
+};
 
 function ScrollToTop() {
   const [location] = useLocation();
@@ -45,7 +121,7 @@ function RouteFallback() {
 // Private routes get a generic title and a noindex directive so crawlers
 // don't index the login page, member portal, or admin area.
 const PRIVATE_ROUTE_TITLES: Array<[RegExp, string]> = [
-  [/^\/login$/, "Member Login | Grounded Warriors"],
+  [/^\/(login|sign-in|sign-up)/, "Member Login | Grounded Warriors"],
   [/^\/member/, "Member Portal | Grounded Warriors"],
   [/^\/admin$/, "Admin | Grounded Warriors"],
   [/^\/registration\/success$/, "Registration Complete | Grounded Warriors"],
@@ -58,11 +134,48 @@ function PrivateRouteSeo() {
   return <Seo title={match[1]} noindex />;
 }
 
+function SignInPage() {
+  return (
+    <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
+      <SignIn
+        routing="path"
+        path={`${basePath}/sign-in`}
+        signUpUrl={`${basePath}/sign-up`}
+      />
+    </div>
+  );
+}
+
+function SignUpPage() {
+  return (
+    <div className="flex min-h-[100dvh] items-center justify-center bg-background px-4">
+      <SignUp
+        routing="path"
+        path={`${basePath}/sign-up`}
+        signInUrl={`${basePath}/sign-in`}
+      />
+    </div>
+  );
+}
+
+function HomeRoute() {
+  return (
+    <>
+      <Show when="signed-in">
+        <Redirect to="/member" />
+      </Show>
+      <Show when="signed-out">
+        <Home />
+      </Show>
+    </>
+  );
+}
+
 function Router() {
   return (
     <Suspense fallback={<RouteFallback />}>
       <Switch>
-        <Route path="/" component={Home} />
+        <Route path="/" component={HomeRoute} />
         <Route path="/about" component={About} />
         <Route path="/experience" component={Experience} />
         <Route path="/retreats" component={Retreats} />
@@ -86,7 +199,11 @@ function Router() {
         <Route path="/contact" component={Contact} />
         <Route path="/coaching" component={Coaching} />
         <Route path="/registration/success" component={RegistrationSuccess} />
-        <Route path="/login" component={Login} />
+        <Route path="/sign-in/*?" component={SignInPage} />
+        <Route path="/sign-up/*?" component={SignUpPage} />
+        <Route path="/login">
+          <Redirect to="/sign-in" />
+        </Route>
         <Route path="/member" component={MemberDashboard} />
         <Route path="/member/discussions" component={MemberDiscussions} />
         <Route path="/member/discussions/:id" component={MemberDiscussionDetail} />
@@ -99,16 +216,72 @@ function Router() {
   );
 }
 
+function ClerkQueryClientCacheInvalidator() {
+  const { addListener } = useClerk();
+  const queryClient = useQueryClient();
+  const previousUserId = useRef<string | null | undefined>(undefined);
+
+  useEffect(() => {
+    return addListener(({ user }) => {
+      const userId = user?.id ?? null;
+      if (
+        previousUserId.current !== undefined &&
+        previousUserId.current !== userId
+      ) {
+        queryClient.clear();
+      }
+      previousUserId.current = userId;
+    });
+  }, [addListener, queryClient]);
+
+  return null;
+}
+
+function ClerkProviderWithRoutes() {
+  const [, setLocation] = useLocation();
+
+  return (
+    <ClerkProvider
+      publishableKey={clerkPubKey}
+      proxyUrl={clerkProxyUrl}
+      appearance={clerkAppearance}
+      signInUrl={`${basePath}/sign-in`}
+      signUpUrl={`${basePath}/sign-up`}
+      localization={{
+        signIn: {
+          start: {
+            title: "Welcome back",
+            subtitle: "Sign in to access your member portal",
+          },
+        },
+        signUp: {
+          start: {
+            title: "Join the circle",
+            subtitle: "Create your member account",
+          },
+        },
+      }}
+      routerPush={(to) => setLocation(stripBase(to))}
+      routerReplace={(to) => setLocation(stripBase(to), { replace: true })}
+    >
+      <QueryClientProvider client={queryClient}>
+        <ClerkQueryClientCacheInvalidator />
+        <TooltipProvider>
+          <Toaster />
+          <ScrollToTop />
+          <PrivateRouteSeo />
+          <Router />
+        </TooltipProvider>
+      </QueryClientProvider>
+    </ClerkProvider>
+  );
+}
+
 function App() {
   return (
-    <QueryClientProvider client={queryClient}>
-      <TooltipProvider>
-        <Toaster />
-        <ScrollToTop />
-        <PrivateRouteSeo />
-        <Router />
-      </TooltipProvider>
-    </QueryClientProvider>
+    <WouterRouter base={basePath}>
+      <ClerkProviderWithRoutes />
+    </WouterRouter>
   );
 }
 

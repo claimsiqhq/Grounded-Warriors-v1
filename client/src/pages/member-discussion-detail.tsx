@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout";
-import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth, useUser } from "@clerk/react";
+import { apiRequest } from "@/lib/queryClient";
 import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
@@ -12,7 +13,9 @@ import { ArrowLeft, Loader2, User, Send } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 
 export default function MemberDiscussionDetail() {
-  const { user, isLoading: authLoading } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
+  const isAuthenticated = isLoaded && isSignedIn && !!user;
   const { toast } = useToast();
   const queryClient = useQueryClient();
   const params = useParams();
@@ -22,28 +25,27 @@ export default function MemberDiscussionDetail() {
   const { data, isLoading, error } = useQuery({
     queryKey: ["/api/discussions", discussionId],
     queryFn: async () => {
-      const res = await fetch(`/api/discussions/${discussionId}`, { credentials: "include" });
-      if (res.status === 403) throw new Error("forbidden");
-      if (res.status === 404) throw new Error("not_found");
-      if (!res.ok) throw new Error("Failed to fetch discussion");
-      return res.json();
+      try {
+        const res = await apiRequest("GET", `/api/discussions/${discussionId}`);
+        return res.json();
+      } catch (error) {
+        const message = error instanceof Error ? error.message : "";
+        if (message.startsWith("403:")) throw new Error("forbidden");
+        if (message.startsWith("404:")) throw new Error("not_found");
+        throw error;
+      }
     },
-    enabled: !!user && !!discussionId,
+    enabled: isAuthenticated && !!discussionId,
     retry: false,
   });
 
   const replyMutation = useMutation({
     mutationFn: async (content: string) => {
-      const res = await fetch(`/api/discussions/${discussionId}/replies`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ content }),
-      });
-      if (!res.ok) {
-        const body = await res.json().catch(() => ({}));
-        throw new Error(body?.error || `Failed to post reply (HTTP ${res.status})`);
-      }
+      const res = await apiRequest(
+        "POST",
+        `/api/discussions/${discussionId}/replies`,
+        { content },
+      );
       return res.json();
     },
     onSuccess: () => {
@@ -56,7 +58,7 @@ export default function MemberDiscussionDetail() {
     },
   });
 
-  if (authLoading || isLoading) {
+  if (!isLoaded || isLoading) {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -66,7 +68,7 @@ export default function MemberDiscussionDetail() {
     );
   }
 
-  if (!user) {
+  if (!isSignedIn || !user) {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -75,7 +77,7 @@ export default function MemberDiscussionDetail() {
               <h2 className="font-serif text-2xl text-white mb-4">Members Only</h2>
               <p className="text-muted-foreground mb-6">Please log in to access the community.</p>
               <Button asChild className="bg-primary">
-                <Link href="/login" data-testid="button-login">Log In</Link>
+                <Link href="/sign-in" data-testid="button-login">Log In</Link>
               </Button>
             </CardContent>
           </Card>

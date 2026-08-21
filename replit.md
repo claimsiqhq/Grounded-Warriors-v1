@@ -32,7 +32,8 @@ Preferred communication style: Simple, everyday language.
 - `attached_assets/` - Static images and design assets
 
 ### Data Models
-- **Users**: Basic authentication schema (id, username, password)
+- **Users**: Clerk manages identity and authentication; the existing local users table keeps application roles, access relationships, and legacy IDs.
+- **Sessions**: Legacy session-table schema remains declared to preserve existing database data; browser sessions are managed by Clerk.
 - **Contact Submissions**: Form submissions with name, email, message, timestamp
 - **Newsletter Subscriptions**: Email subscriptions with timestamp
 
@@ -45,7 +46,11 @@ Preferred communication style: Simple, everyday language.
 ### Database
 - **PostgreSQL**: Primary database accessed via `DATABASE_URL` environment variable
 - **Drizzle ORM**: Type-safe database queries and schema management
-- **connect-pg-simple**: PostgreSQL session storage (available but not currently used)
+
+### Authentication
+- **Clerk Auth**: Replit-managed Clerk provides sign-in, sign-up, and browser session cookies.
+- **Authorization bridge**: Protected API routes validate the Clerk session, then resolve or just-in-time provision the matching local user record using the preserved user ID.
+- **Client routing**: Dedicated `/sign-in/*?` and `/sign-up/*?` routes provide the branded authentication screens.
 
 ### Frontend Libraries
 - **@tanstack/react-query**: Data fetching and caching

@@ -10,7 +10,7 @@ export default defineConfig({
   plugins: [
     react(),
     runtimeErrorOverlay(),
-    tailwindcss(),
+    tailwindcss({ optimize: false }),
     metaImagesPlugin(),
     VitePWA({
       registerType: "autoUpdate",

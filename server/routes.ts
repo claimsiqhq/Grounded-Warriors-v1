@@ -6,19 +6,34 @@ import { isFlodeskConfigured, upsertFlodeskSubscriber } from "./flodeskClient";
 import { fromZodError } from "zod-validation-error";
 import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
 import { sendContactFormEmail, sendNewsletterWelcomeEmail, sendCoachingInquiryNotification, sendCoachingInquiryAutoReply } from "./sendgridClient";
-import { setupAuth, registerAuthRoutes, isAuthenticated } from "./auth";
+import { requireAuth } from "./middlewares/requireAuth";
 import { fulfillCheckoutSession } from "./fulfillment";
 import { publicFormLimiter } from "./rateLimit";
 import { z } from "zod";
-import { db } from "./db";
-import { users } from "@shared/models/auth";
-import { eq } from "drizzle-orm";
 import { RETREATS, getRetreat, isValidRetreatId, getRetreatPrice } from "./retreats";
 
 async function getUserFromSession(req: Request) {
-  if (!req.session.userId) return null;
-  const [user] = await db.select().from(users).where(eq(users.id, req.session.userId));
-  return user || null;
+  return req.dbUser || null;
+}
+
+function getDisplayIdentity(req: Request, user: { email: string }) {
+  const firstName =
+    typeof req.sessionClaims?.firstName === "string"
+      ? req.sessionClaims.firstName
+      : "";
+  const lastName =
+    typeof req.sessionClaims?.lastName === "string"
+      ? req.sessionClaims.lastName
+      : "";
+  const email =
+    typeof req.sessionClaims?.email === "string"
+      ? req.sessionClaims.email
+      : user.email;
+
+  return {
+    email,
+    userName: `${firstName} ${lastName}`.trim() || email || "Member",
+  };
 }
 
 // Returns true if the user is allowed inside a specific retreat container.
@@ -69,10 +84,6 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
-  // Setup authentication BEFORE other routes
-  setupAuth(app);
-  await registerAuthRoutes(app);
-
   app.get("/robots.txt", (req, res) => {
     const baseUrl = getPublicBaseUrl(req);
     res.type("text/plain").send(
@@ -100,6 +111,19 @@ export async function registerRoutes(
       `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls}\n</urlset>\n`,
     );
   });
+
+  app.get("/api/me", requireAuth, (req, res) => {
+    const user = req.dbUser;
+    if (!user) return res.status(401).json({ error: "Not authenticated" });
+
+    res.json({
+      user: {
+        id: user.id,
+        role: user.role,
+      },
+    });
+  });
+
   // Contact form submission endpoint
   app.post("/api/contact", publicFormLimiter, async (req, res) => {
     try {
@@ -137,7 +161,7 @@ export async function registerRoutes(
   });
 
   // Get all contact submissions (admin only - contains PII)
-  app.get("/api/contact", requireAdmin, async (req, res) => {
+  app.get("/api/contact", requireAuth, requireAdmin, async (req, res) => {
     try {
       const submissions = await storage.getContactSubmissions();
       res.json({ success: true, submissions });
@@ -362,7 +386,7 @@ export async function registerRoutes(
   // ?retreatId=<n>  -> scoped to that retreat's private container
   // (no param)      -> General Commons (visible to all members)
   // ------------------------------------------------------------------
-  app.get("/api/discussions", isAuthenticated, async (req, res) => {
+  app.get("/api/discussions", requireAuth, async (req, res) => {
     try {
       const user = await getUserFromSession(req);
       if (!user) return res.status(401).json({ error: "Not authenticated" });
@@ -387,7 +411,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/discussions", isAuthenticated, async (req: any, res) => {
+  app.post("/api/discussions", requireAuth, async (req: any, res) => {
     try {
       const user = await getUserFromSession(req);
       if (!user) return res.status(401).json({ error: "Not authenticated" });
@@ -405,7 +429,7 @@ export async function registerRoutes(
         retreatId = parsed;
       }
 
-      const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || 'Member';
+      const { userName } = getDisplayIdentity(req, user);
 
       const validatedData = insertDiscussionSchema.parse({
         title: req.body?.title,
@@ -413,7 +437,7 @@ export async function registerRoutes(
         retreatId,
         userId: user.id,
         userName,
-        userImage: user.profileImageUrl,
+        userImage: null,
       });
       const discussion = await storage.createDiscussion(validatedData);
       res.status(201).json({ discussion });
@@ -427,7 +451,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/discussions/:id", isAuthenticated, async (req, res) => {
+  app.get("/api/discussions/:id", requireAuth, async (req, res) => {
     try {
       const user = await getUserFromSession(req);
       if (!user) return res.status(401).json({ error: "Not authenticated" });
@@ -449,7 +473,7 @@ export async function registerRoutes(
     }
   });
 
-  app.post("/api/discussions/:id/replies", isAuthenticated, async (req: any, res) => {
+  app.post("/api/discussions/:id/replies", requireAuth, async (req: any, res) => {
     try {
       const user = await getUserFromSession(req);
       if (!user) return res.status(401).json({ error: "Not authenticated" });
@@ -460,14 +484,14 @@ export async function registerRoutes(
         return res.status(403).json({ error: "You don't have access to this retreat" });
       }
 
-      const userName = `${user.firstName || ''} ${user.lastName || ''}`.trim() || user.email || 'Member';
+      const { userName } = getDisplayIdentity(req, user);
 
       const validatedData = insertDiscussionReplySchema.parse({
         ...req.body,
         discussionId: discussion.id,
         userId: user.id,
         userName,
-        userImage: user.profileImageUrl
+        userImage: null
       });
       const reply = await storage.createDiscussionReply(validatedData);
       res.status(201).json({ reply });
@@ -484,13 +508,13 @@ export async function registerRoutes(
   // ------------------------------------------------------------------
   // Retreat containers: list + access check + admin staff management
   // ------------------------------------------------------------------
-  app.get("/api/retreats", isAuthenticated, async (_req, res) => {
+  app.get("/api/retreats", requireAuth, async (_req, res) => {
     res.json({ retreats: RETREATS });
   });
 
   // List the retreat containers the current user can actually enter
   // (admin -> all; otherwise registered or designated staff).
-  app.get("/api/member/my-retreats", isAuthenticated, async (req, res) => {
+  app.get("/api/member/my-retreats", requireAuth, async (req, res) => {
     try {
       const user = await getUserFromSession(req);
       if (!user) return res.status(401).json({ error: "Not authenticated" });
@@ -510,7 +534,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/retreats/:id", isAuthenticated, async (req, res) => {
+  app.get("/api/retreats/:id", requireAuth, async (req, res) => {
     try {
       const user = await getUserFromSession(req);
       if (!user) return res.status(401).json({ error: "Not authenticated" });
@@ -534,7 +558,7 @@ export async function registerRoutes(
   });
 
   // Admin: list staff for a retreat (with user info hydrated)
-  app.get("/api/admin/retreats/:id/staff", requireAdmin, async (req, res) => {
+  app.get("/api/admin/retreats/:id/staff", requireAuth, requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (!isValidRetreatId(id)) return res.status(404).json({ error: "Retreat not found" });
@@ -558,7 +582,7 @@ export async function registerRoutes(
   });
 
   // Admin: designate a member as staff for a retreat (by email).
-  app.post("/api/admin/retreats/:id/staff", requireAdmin, async (req: any, res) => {
+  app.post("/api/admin/retreats/:id/staff", requireAuth, requireAdmin, async (req: any, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (!isValidRetreatId(id)) return res.status(404).json({ error: "Retreat not found" });
@@ -586,7 +610,7 @@ export async function registerRoutes(
   });
 
   // Admin: remove a staff designation.
-  app.delete("/api/admin/retreats/:id/staff/:userId", requireAdmin, async (req, res) => {
+  app.delete("/api/admin/retreats/:id/staff/:userId", requireAuth, requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (!isValidRetreatId(id)) return res.status(404).json({ error: "Retreat not found" });
@@ -625,7 +649,7 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/admin/coaching/inquiries", requireAdmin, async (_req, res) => {
+  app.get("/api/admin/coaching/inquiries", requireAuth, requireAdmin, async (_req, res) => {
     try {
       const inquiries = await storage.listCoachingInquiries();
       res.json({ inquiries });
@@ -635,7 +659,7 @@ export async function registerRoutes(
     }
   });
 
-  app.patch("/api/admin/coaching/inquiries/:id", requireAdmin, async (req, res) => {
+  app.patch("/api/admin/coaching/inquiries/:id", requireAuth, requireAdmin, async (req, res) => {
     try {
       const id = parseInt(req.params.id, 10);
       if (Number.isNaN(id)) return res.status(400).json({ error: "Invalid id" });
@@ -653,7 +677,7 @@ export async function registerRoutes(
   });
 
   // Member Portal: Registrations
-  app.get("/api/member/registrations", isAuthenticated, async (req: any, res) => {
+  app.get("/api/member/registrations", requireAuth, async (req: any, res) => {
     try {
       const user = await getUserFromSession(req);
       if (!user) return res.status(401).json({ error: "Not authenticated" });
@@ -671,7 +695,7 @@ export async function registerRoutes(
   // self-registration is intentionally disabled here because granting a
   // registration also grants access to that retreat's private container.
   // Real paid registrations are created server-side by the Stripe flow.
-  app.post("/api/member/registrations", requireAdmin, async (req: any, res) => {
+  app.post("/api/member/registrations", requireAuth, requireAdmin, async (req: any, res) => {
     try {
       const adminUser = req.currentUser;
 

@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { motion } from "framer-motion";
 import { Layout } from "@/components/layout";
-import { useAuth } from "@/hooks/use-auth";
 import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import { useAuth, useUser } from "@clerk/react";
+import { apiRequest } from "@/lib/queryClient";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -31,26 +32,18 @@ function StaffPanel({ retreat }: { retreat: Retreat }) {
   const queryClient = useQueryClient();
   const [email, setEmail] = useState("");
 
-  const staffQuery = useQuery({
+  const staffQuery = useQuery<{ staff: StaffEntry[] }>({
     queryKey: ["/api/admin/retreats", retreat.id, "staff"],
-    queryFn: async () => {
-      const res = await fetch(`/api/admin/retreats/${retreat.id}/staff`, { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to load staff");
-      return res.json() as Promise<{ staff: StaffEntry[] }>;
-    },
   });
 
   const addMutation = useMutation({
     mutationFn: async (targetEmail: string) => {
-      const res = await fetch(`/api/admin/retreats/${retreat.id}/staff`, {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ email: targetEmail }),
-      });
-      const body = await res.json();
-      if (!res.ok) throw new Error(body.error || "Failed to add staff");
-      return body;
+      const res = await apiRequest(
+        "POST",
+        `/api/admin/retreats/${retreat.id}/staff`,
+        { email: targetEmail },
+      );
+      return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/retreats", retreat.id, "staff"] });
@@ -64,11 +57,7 @@ function StaffPanel({ retreat }: { retreat: Retreat }) {
 
   const removeMutation = useMutation({
     mutationFn: async (userId: string) => {
-      const res = await fetch(`/api/admin/retreats/${retreat.id}/staff/${userId}`, {
-        method: "DELETE",
-        credentials: "include",
-      });
-      if (!res.ok) throw new Error("Failed to remove");
+      await apiRequest("DELETE", `/api/admin/retreats/${retreat.id}/staff/${userId}`);
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/retreats", retreat.id, "staff"] });
@@ -167,26 +156,18 @@ function CoachingInquiriesPanel() {
   const { toast } = useToast();
   const queryClient = useQueryClient();
 
-  const inquiriesQuery = useQuery({
+  const inquiriesQuery = useQuery<{ inquiries: CoachingInquiry[] }>({
     queryKey: ["/api/admin/coaching/inquiries"],
-    queryFn: async () => {
-      const res = await fetch("/api/admin/coaching/inquiries", { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to load inquiries");
-      return res.json() as Promise<{ inquiries: CoachingInquiry[] }>;
-    },
   });
 
   const updateMutation = useMutation({
     mutationFn: async ({ id, status }: { id: number; status: CoachingStatus }) => {
-      const res = await fetch(`/api/admin/coaching/inquiries/${id}`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        credentials: "include",
-        body: JSON.stringify({ status }),
-      });
-      const body = await res.json();
-      if (!res.ok) throw new Error(body.error || "Failed to update");
-      return body;
+      const res = await apiRequest(
+        "PATCH",
+        `/api/admin/coaching/inquiries/${id}`,
+        { status },
+      );
+      return res.json();
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["/api/admin/coaching/inquiries"] });
@@ -295,19 +276,23 @@ function CoachingInquiriesPanel() {
 }
 
 export default function AdminPage() {
-  const { user, isLoading } = useAuth();
+  const { isLoaded, isSignedIn } = useAuth();
+  const { user } = useUser();
+  const isAuthenticated = isLoaded && isSignedIn && !!user;
 
-  const retreatsQuery = useQuery({
-    queryKey: ["/api/retreats"],
-    queryFn: async () => {
-      const res = await fetch("/api/retreats", { credentials: "include" });
-      if (!res.ok) throw new Error("Failed to load retreats");
-      return res.json() as Promise<{ retreats: Retreat[] }>;
-    },
-    enabled: !!user && user.role === "admin",
+  const { data: memberData } = useQuery<{
+    user: { id: string; role: "member" | "admin" };
+  }>({
+    queryKey: ["/api/me"],
+    enabled: isAuthenticated,
   });
 
-  if (isLoading) {
+  const retreatsQuery = useQuery<{ retreats: Retreat[] }>({
+    queryKey: ["/api/retreats"],
+    enabled: isAuthenticated && memberData?.user.role === "admin",
+  });
+
+  if (!isLoaded) {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
@@ -317,7 +302,7 @@ export default function AdminPage() {
     );
   }
 
-  if (!user || user.role !== "admin") {
+  if (!isSignedIn || !user || memberData?.user.role !== "admin") {
     return (
       <Layout>
         <div className="min-h-screen bg-background flex items-center justify-center">
