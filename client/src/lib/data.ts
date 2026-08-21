@@ -175,6 +175,17 @@ export const retreats = [
     registrationOpen: true,
   },
   {
+    id: 8,
+    title: "Costa Rica Volunteer Trip",
+    date: "2nd week of December 2026 · 7 days",
+    location: "Upala, Costa Rica + Caribbean coast",
+    image: hikingImg,
+    depositAmount: 500,
+    fullAmount: 3000,
+    registrationOpen: false,
+    priceDisplay: "$3,000 CAD · $500 deposit · Flights not included",
+  },
+  {
     id: 4,
     title: "Spring Awakening",
     date: "April 30 – May 3, 2027",

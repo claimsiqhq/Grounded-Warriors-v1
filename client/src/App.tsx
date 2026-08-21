@@ -22,6 +22,7 @@ const About = lazy(() => import("@/pages/about"));
 const Experience = lazy(() => import("@/pages/experience"));
 const Retreats = lazy(() => import("@/pages/retreats"));
 const RetreatMarmora = lazy(() => import("@/pages/retreat-marmora"));
+const CostaRicaVolunteerTrip = lazy(() => import("@/pages/costa-rica-volunteer-trip"));
 const VeteransRetreat = lazy(() => import("@/pages/retreats/veterans"));
 const EventDinner = lazy(() => import("@/pages/event-dinner"));
 const EventPlunge = lazy(() => import("@/pages/event-plunge"));
@@ -180,6 +181,7 @@ function Router() {
         <Route path="/experience" component={Experience} />
         <Route path="/retreats" component={Retreats} />
         <Route path="/retreats/marmora" component={RetreatMarmora} />
+        <Route path="/retreats/costa-rica-volunteer-trip" component={CostaRicaVolunteerTrip} />
         <Route path="/events/mens-dinner" component={EventDinner} />
         <Route path="/events/train-breath-plunge" component={EventPlunge} />
         {/* Renamed/retired pages keep working via redirects */}

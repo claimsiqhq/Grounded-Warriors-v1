@@ -31,6 +31,8 @@ export const RETREATS: RetreatContainer[] = [
   // (getRetreatPrice returns null for deposit, so the server rejects it).
   { id: 6, name: "Grounded Warriors Men's Dinner", date: "August 20, 2026",   isPast: false, depositAmount: 0, fullAmount: 100 },
   { id: 7, name: "GW Train, Breath & Plunge",      date: "September 12, 2026", isPast: false, depositAmount: 0, fullAmount: 150 },
+  // Planning is open, but this trip is not available for online payment yet.
+  { id: 8, name: "Costa Rica Volunteer Trip",     date: "Second week of December 2026", isPast: false, depositAmount: 500, fullAmount: 3000 },
 ];
 
 export type PaymentType = "deposit" | "full";

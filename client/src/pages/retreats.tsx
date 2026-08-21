@@ -10,6 +10,7 @@ import { RegistrationModal } from "@/components/registration-modal";
 // Detail pages for retreats in the live catalog (ids match server/retreats.ts).
 const retreatSlugs: Record<number, string> = {
   3: "/retreats/marmora",
+  8: "/retreats/costa-rica-volunteer-trip",
   6: "/events/mens-dinner",
   7: "/events/train-breath-plunge",
 };
@@ -92,20 +93,35 @@ export default function Retreats() {
                           </p>
                         ) : (
                           <p className="text-white/80 text-sm mb-6 italic">
-                            Dates and pricing coming soon.
-                          </p>
+                             {"priceDisplay" in retreat && retreat.priceDisplay
+                               ? retreat.priceDisplay
+                               : "Dates and pricing coming soon."}
+                           </p>
                         )}
 
                         <div className="flex gap-3">
                           {isPlaceholder ? (
-                            <Link href="/contact" className="flex-1">
-                              <Button 
-                                className="w-full bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
-                                data-testid={`button-apply-${retreat.id}`}
-                              >
-                                Express Interest
-                              </Button>
-                            </Link>
+                            <>
+                              {hasDetailPage && (
+                                <Link href={detailSlug} className="flex-1">
+                                  <Button
+                                    variant="outline"
+                                    className="w-full border-primary/30 text-primary hover:bg-primary hover:text-primary-foreground rounded-none uppercase tracking-widest py-6"
+                                    data-testid={`button-details-${retreat.id}`}
+                                  >
+                                    Learn More
+                                  </Button>
+                                </Link>
+                              )}
+                              <Link href="/contact" className="flex-1">
+                                <Button 
+                                  className="w-full bg-primary text-primary-foreground hover:bg-white hover:text-black rounded-none uppercase tracking-widest py-6"
+                                  data-testid={`button-apply-${retreat.id}`}
+                                >
+                                  Express Interest
+                                </Button>
+                              </Link>
+                            </>
                           ) : (
                             <>
                               {hasDetailPage && (
