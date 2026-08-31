@@ -7,7 +7,6 @@ import {
   SignUp,
   useClerk,
 } from "@clerk/react";
-import { publishableKeyFromHost } from "@clerk/react/internal";
 import { shadcn } from "@clerk/themes";
 import { queryClient } from "./lib/queryClient";
 import { QueryClientProvider, useQueryClient } from "@tanstack/react-query";
@@ -39,10 +38,7 @@ const MemberResources = lazy(() => import("@/pages/member-resources"));
 const MemberRetreat = lazy(() => import("@/pages/member-retreat"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 
-const clerkPubKey = publishableKeyFromHost(
-  window.location.hostname,
-  import.meta.env.VITE_CLERK_PUBLISHABLE_KEY,
-);
+const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
 
 const clerkProxyUrl = import.meta.env.VITE_CLERK_PROXY_URL;
 
