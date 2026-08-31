@@ -61,7 +61,7 @@ export function serveStatic(app: Express) {
     }),
   );
 
-  app.use("*", (req, res) => {
+  app.use((req, res) => {
     const status = isKnownClientRoute(req.baseUrl || req.originalUrl.split("?")[0]) ? 200 : 404;
     res
       .status(status)
