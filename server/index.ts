@@ -7,9 +7,9 @@ import { publishableKeyFromHost } from "@clerk/shared/keys";
 import { registerRoutes } from "./routes";
 import { serveStatic } from "./static";
 import { createServer } from "http";
-import { runMigrations } from 'stripe-replit-sync';
-import { getStripeSync } from "./stripeClient";
+import { validateStripeConfiguration } from "./stripeClient";
 import { WebhookHandlers } from "./webhookHandlers";
+import { pool } from "./db";
 import {
   CLERK_PROXY_PATH,
   clerkProxyMiddleware,
@@ -34,7 +34,17 @@ app.use(
   }),
 );
 app.use(compression());
-app.use(cors({ credentials: true, origin: true }));
+app.use(cors({
+  credentials: true,
+  origin(origin, callback) {
+    if (!origin) return callback(null, true);
+    const allowedOrigins = [
+      process.env.APP_URL,
+      process.env.RENDER_EXTERNAL_URL,
+    ].filter(Boolean);
+    callback(null, allowedOrigins.includes(origin));
+  },
+}));
 
 declare module "http" {
   interface IncomingMessage {
@@ -53,56 +63,26 @@ export function log(message: string, source = "express") {
   console.log(`${formattedTime} [${source}] ${message}`);
 }
 
-async function initStripe() {
-  const databaseUrl = process.env.DATABASE_URL;
-
-  if (!databaseUrl) {
-    console.log('DATABASE_URL not available, skipping Stripe initialization');
-    return;
+function validateProductionConfiguration() {
+  if (process.env.NODE_ENV !== "production") return;
+  const appUrl = process.env.APP_URL;
+  if (!appUrl || !appUrl.startsWith("https://")) {
+    throw new Error("APP_URL must be a canonical HTTPS URL in production");
   }
-
-  try {
-    console.log('Initializing Stripe schema...');
-    // Migrations always target the 'stripe' schema; the config only takes
-    // a connection string (see stripe-replit-sync MigrationConfig).
-    await runMigrations({ databaseUrl });
-    console.log('Stripe schema ready');
-
-    const stripeSync = await getStripeSync();
-
-    console.log('Setting up managed webhook...');
-    const webhookBaseUrl =
-      process.env.APP_URL ||
-      process.env.RENDER_EXTERNAL_URL ||
-      (process.env.REPLIT_DOMAINS ? `https://${process.env.REPLIT_DOMAINS.split(',')[0]}` : '');
-    if (!webhookBaseUrl) {
-      console.log('Webhook setup skipped: no public base URL configured (set APP_URL).');
-      return;
-    }
-    try {
-      const result = await stripeSync.findOrCreateManagedWebhook(
-        `${webhookBaseUrl}/api/stripe/webhook`);
-      if (result?.webhook?.url) {
-        console.log(`Webhook configured: ${result.webhook.url}`);
-      } else {
-        console.log('Webhook setup completed (URL not returned)');
-      }
-    } catch (webhookError: any) {
-      console.log('Webhook setup skipped:', webhookError.message);
-    }
-
-    console.log('Syncing Stripe data...');
-    stripeSync.syncBackfill()
-      .then(() => {
-        console.log('Stripe data synced');
-      })
-      .catch((err: any) => {
-        console.error('Error syncing Stripe data:', err);
-      });
-  } catch (error: any) {
-    console.log('Stripe initialization skipped:', error.message);
+  for (const name of ["CLERK_PUBLISHABLE_KEY", "CLERK_SECRET_KEY"]) {
+    if (!process.env[name]) throw new Error(`${name} is required in production`);
   }
+  validateStripeConfiguration();
 }
+
+app.get("/healthz", async (_req, res) => {
+  try {
+    await pool.query("SELECT 1");
+    res.status(200).json({ status: "ok" });
+  } catch {
+    res.status(503).json({ status: "unavailable" });
+  }
+});
 
 app.post(
   '/api/stripe/webhook',
@@ -169,7 +149,7 @@ app.use((req, res, next) => {
 });
 
 (async () => {
-  await initStripe();
+  validateProductionConfiguration();
   await registerRoutes(httpServer, app);
 
   app.use((err: any, _req: Request, res: Response, _next: NextFunction) => {

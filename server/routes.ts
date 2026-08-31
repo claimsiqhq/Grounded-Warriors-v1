@@ -4,13 +4,18 @@ import { storage } from "./storage";
 import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema, insertCoachingInquirySchema, COACHING_STATUSES, type CoachingStatus } from "@shared/schema";
 import { isFlodeskConfigured, upsertFlodeskSubscriber } from "./flodeskClient";
 import { fromZodError } from "zod-validation-error";
-import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { getStripeClient } from "./stripeClient";
 import { sendContactFormEmail, sendNewsletterWelcomeEmail, sendCoachingInquiryNotification, sendCoachingInquiryAutoReply } from "./sendgridClient";
 import { requireAuth } from "./middlewares/requireAuth";
-import { fulfillCheckoutSession } from "./fulfillment";
 import { publicFormLimiter } from "./rateLimit";
 import { z } from "zod";
 import { RETREATS, getRetreat, isValidRetreatId, getRetreatPrice } from "./retreats";
+import {
+  attachStripeSession,
+  failOrder,
+  getPublicOrder,
+  reserveOrder,
+} from "./payments";
 
 async function getUserFromSession(req: Request) {
   return req.dbUser || null;
@@ -215,54 +220,11 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/stripe/publishable-key", async (req, res) => {
-    try {
-      const key = await getStripePublishableKey();
-      res.json({ publishableKey: key });
-    } catch (error) {
-      console.error("Error getting Stripe publishable key:", error);
-      res.status(500).json({ error: "Failed to get Stripe configuration" });
-    }
-  });
-
-  app.get("/api/products", async (req, res) => {
-    try {
-      const rows = await storage.listProductsWithPrices();
-      
-      const productsMap = new Map();
-      for (const row of rows as any[]) {
-        if (!productsMap.has(row.product_id)) {
-          productsMap.set(row.product_id, {
-            id: row.product_id,
-            name: row.product_name,
-            description: row.product_description,
-            active: row.product_active,
-            metadata: row.product_metadata,
-            prices: []
-          });
-        }
-        if (row.price_id) {
-          productsMap.get(row.product_id).prices.push({
-            id: row.price_id,
-            unit_amount: row.unit_amount,
-            currency: row.currency,
-            active: row.price_active,
-          });
-        }
-      }
-
-      res.json({ data: Array.from(productsMap.values()) });
-    } catch (error) {
-      console.error("Error listing products:", error);
-      res.status(500).json({ error: "Failed to list products" });
-    }
-  });
-
   const checkoutSchema = z.object({
     customerEmail: z.string().email("A valid email is required").max(320),
     customerName: z.string().max(200).optional().default(""),
     retreatId: z.union([z.number(), z.string()]),
-    paymentType: z.enum(["deposit", "full"]),
+    paymentType: z.literal("full"),
   });
 
   app.post("/api/checkout", publicFormLimiter, async (req, res) => {
@@ -293,8 +255,15 @@ export async function registerRoutes(
       const baseCents = Math.round(baseAmount * 100);
       const hstCents = Math.round(baseCents * 0.13);
 
-      const stripe = await getUncachableStripeClient();
+      const stripe = getStripeClient();
       const baseUrl = getPublicBaseUrl(req);
+      const order = await reserveOrder({
+        retreatId: parsedId,
+        customerEmail: customerEmail.trim().toLowerCase(),
+        customerName: customerName.trim(),
+        subtotalCents: baseCents,
+        taxCents: hstCents,
+      });
 
       const lineItems = [
         {
@@ -303,9 +272,7 @@ export async function registerRoutes(
             unit_amount: baseCents,
             product_data: {
               name: retreat.name,
-              description: paymentType === 'deposit'
-                ? 'Deposit to reserve your spot'
-                : 'Full retreat payment',
+              description: 'Full retreat payment',
             },
           },
           quantity: 1,
@@ -323,60 +290,76 @@ export async function registerRoutes(
         },
       ];
 
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: lineItems,
-        mode: 'payment',
-        success_url: `${baseUrl}/registration/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${baseUrl}/retreats`,
-        customer_email: customerEmail,
-        metadata: {
-          customerName: customerName || '',
-          retreatId: String(parsedId),
-          retreatName: retreat.name,
-          paymentType,
-        },
-      });
+      let session;
+      try {
+        session = await stripe.checkout.sessions.create(
+          {
+            payment_method_types: ['card'],
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: `${baseUrl}/registration/success?order=${order.publicId}`,
+            cancel_url: `${baseUrl}/retreats`,
+            customer_email: order.customerEmail,
+            client_reference_id: order.publicId,
+            expires_at: Math.floor(order.holdExpiresAt.getTime() / 1000),
+            metadata: {
+              orderId: order.publicId,
+              customerName: order.customerName,
+              retreatId: String(parsedId),
+              retreatName: retreat.name,
+              retreatDate: retreat.date,
+              paymentType,
+            },
+            payment_intent_data: {
+              metadata: {
+                orderId: order.publicId,
+                retreatId: String(parsedId),
+              },
+            },
+          },
+          { idempotencyKey: `checkout-${order.publicId}` },
+        );
+        await attachStripeSession(order.publicId, session.id);
+      } catch (error) {
+        await failOrder(order.publicId);
+        throw error;
+      }
 
       res.json({ url: session.url });
     } catch (error: any) {
       console.error("Error creating checkout session:", error);
-      res.status(500).json({ error: error.message || "Failed to create checkout session" });
+      const message =
+        error?.message === "This offering is sold out." ||
+        error?.message === "Online registration is not open for this offering."
+          ? error.message
+          : "Failed to create checkout session";
+      res.status(message.includes("sold out") ? 409 : message.includes("not open") ? 400 : 500)
+        .json({ error: message });
     }
   });
 
-  app.get("/api/checkout/session/:sessionId", async (req, res) => {
+  app.get("/api/checkout/order/:publicId", async (req, res) => {
     try {
-      const { sessionId } = req.params;
-      if (!/^cs_[a-zA-Z0-9_]+$/.test(sessionId)) {
-        return res.status(400).json({ error: "Invalid session id" });
+      const { publicId } = req.params;
+      if (!/^[a-f0-9]{32}$/.test(publicId)) {
+        return res.status(400).json({ error: "Invalid order id" });
       }
-      const stripe = await getUncachableStripeClient();
-      const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-      // Backup fulfillment path: if the webhook hasn't landed yet (or isn't
-      // configured in this environment), create the registration now. The
-      // session came from Stripe via our secret key, so it's trusted.
-      try {
-        await fulfillCheckoutSession(session);
-      } catch (fulfillError) {
-        console.error("Success-page fulfillment error:", fulfillError);
-      }
-
-      // Only expose what the success page needs — never the raw session.
+      const order = await getPublicOrder(publicId);
+      if (!order) return res.status(404).json({ error: "Order not found" });
+      const retreat = getRetreat(order.retreat_id);
+      res.setHeader("Cache-Control", "no-store");
       res.json({
-        session: {
-          id: session.id,
-          payment_status: session.payment_status,
-          customer_email: session.customer_details?.email || session.customer_email,
-          amount_total: session.amount_total,
-          currency: session.currency,
-          retreatName: session.metadata?.retreatName || null,
+        order: {
+          id: order.public_id,
+          status: order.status,
+          amount_total: order.total_cents,
+          currency: order.currency,
+          retreatName: retreat?.name ?? null,
         },
       });
     } catch (error: any) {
-      console.error("Error retrieving checkout session:", error);
-      res.status(500).json({ error: "Failed to retrieve session" });
+      console.error("Error retrieving checkout order:", error);
+      res.status(500).json({ error: "Failed to retrieve order" });
     }
   });
 

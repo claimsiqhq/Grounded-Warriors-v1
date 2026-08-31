@@ -264,7 +264,7 @@ export default function MemberDashboard() {
                           <p className="text-xs text-muted-foreground">{reg.retreatDate}</p>
                         </div>
                         <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          reg.paymentStatus === 'completed' ? 'bg-green-500/20 text-green-400' :
+                          ['paid', 'completed', 'deposit_paid'].includes(reg.paymentStatus) ? 'bg-green-500/20 text-green-400' :
                           reg.paymentStatus === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
                           'bg-gray-500/20 text-gray-400'
                         }`}>

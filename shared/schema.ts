@@ -1,4 +1,4 @@
-import { pgTable, text, serial, timestamp, integer } from "drizzle-orm/pg-core";
+import { pgTable, text, serial, timestamp, integer, varchar } from "drizzle-orm/pg-core";
 import { createInsertSchema } from "drizzle-zod";
 import { z } from "zod";
 
@@ -57,6 +57,7 @@ export const retreatRegistrations = pgTable("retreat_registrations", {
   paymentAmount: text("payment_amount"),
   // Unique so webhook + success-page fulfillment can't double-register.
   stripeSessionId: text("stripe_session_id").unique(),
+  purchaseOrderId: integer("purchase_order_id").unique(),
   createdAt: timestamp("created_at").defaultNow().notNull(),
 });
 
@@ -85,6 +86,43 @@ export const insertRetreatRegistrationSchema = createInsertSchema(retreatRegistr
 
 export type InsertRetreatRegistration = z.infer<typeof insertRetreatRegistrationSchema>;
 export type RetreatRegistration = typeof retreatRegistrations.$inferSelect;
+
+// Durable payment state and seat holds. A pending order consumes capacity
+// until holdExpiresAt; paid orders consume capacity until refunded.
+export const purchaseOrders = pgTable("purchase_orders", {
+  id: serial("id").primaryKey(),
+  publicId: varchar("public_id", { length: 64 }).notNull().unique(),
+  retreatId: integer("retreat_id").notNull(),
+  customerEmail: text("customer_email").notNull(),
+  customerName: text("customer_name").notNull().default(""),
+  status: varchar("status", { length: 32 }).notNull().default("pending"),
+  subtotalCents: integer("subtotal_cents").notNull(),
+  taxCents: integer("tax_cents").notNull(),
+  totalCents: integer("total_cents").notNull(),
+  currency: varchar("currency", { length: 3 }).notNull().default("cad"),
+  stripeCheckoutSessionId: text("stripe_checkout_session_id").unique(),
+  stripePaymentIntentId: text("stripe_payment_intent_id"),
+  stripeChargeId: text("stripe_charge_id"),
+  stripeCustomerId: text("stripe_customer_id"),
+  holdExpiresAt: timestamp("hold_expires_at").notNull(),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
+
+export type PurchaseOrder = typeof purchaseOrders.$inferSelect;
+
+// Stripe retries events, so every event is durably recorded and processed
+// idempotently. Failed events remain retryable and retain their last error.
+export const stripeWebhookEvents = pgTable("stripe_webhook_events", {
+  eventId: varchar("event_id", { length: 255 }).primaryKey(),
+  type: varchar("type", { length: 255 }).notNull(),
+  status: varchar("status", { length: 32 }).notNull().default("processing"),
+  attempts: integer("attempts").notNull().default(1),
+  lastError: text("last_error"),
+  processedAt: timestamp("processed_at"),
+  createdAt: timestamp("created_at").defaultNow().notNull(),
+  updatedAt: timestamp("updated_at").defaultNow().notNull(),
+});
 
 // Discussion board.
 // retreatId = null  -> General Commons (visible to all logged-in members).

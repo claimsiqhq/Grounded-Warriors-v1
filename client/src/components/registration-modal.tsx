@@ -28,13 +28,12 @@ export function RegistrationModal({
   const { toast } = useToast();
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
-  const fullPaymentOnly = depositAmount <= 0;
-  const [paymentType, setPaymentType] = useState<"deposit" | "full">(
-    fullPaymentOnly ? "full" : "deposit",
-  );
+  // Deposits stay disabled until balance collection is implemented.
+  const fullPaymentOnly = true;
+  const [paymentType, setPaymentType] = useState<"deposit" | "full">("full");
 
   const HST_RATE = 0.13;
-  const selectedAmount = paymentType === "deposit" ? depositAmount : fullAmount;
+  const selectedAmount = fullAmount;
   const hstAmount = Math.round(selectedAmount * HST_RATE * 100) / 100;
   const totalAmount = selectedAmount + hstAmount;
 
