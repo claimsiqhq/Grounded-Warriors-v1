@@ -16,6 +16,7 @@ export interface ReservedOrder {
   totalCents: number;
   currency: string;
   holdExpiresAt: Date;
+  stripeCheckoutSessionId: string | null;
 }
 
 export async function reserveOrder(input: {
@@ -40,6 +41,43 @@ export async function reserveOrder(input: {
        WHERE retreat_id = $1 AND status = 'pending' AND hold_expires_at <= now()`,
       [input.retreatId],
     );
+    const existingResult = await client.query<{
+      public_id: string;
+      retreat_id: number;
+      customer_email: string;
+      customer_name: string;
+      subtotal_cents: number;
+      tax_cents: number;
+      total_cents: number;
+      currency: string;
+      hold_expires_at: Date;
+      stripe_checkout_session_id: string | null;
+    }>(
+      `SELECT public_id, retreat_id, customer_email, customer_name,
+              subtotal_cents, tax_cents, total_cents, currency,
+              hold_expires_at, stripe_checkout_session_id
+       FROM purchase_orders
+       WHERE retreat_id = $1 AND customer_email = $2
+         AND status = 'pending' AND hold_expires_at > now()
+       ORDER BY created_at DESC LIMIT 1`,
+      [input.retreatId, input.customerEmail],
+    );
+    const existing = existingResult.rows[0];
+    if (existing) {
+      await client.query("COMMIT");
+      return {
+        publicId: existing.public_id,
+        retreatId: existing.retreat_id,
+        customerEmail: existing.customer_email,
+        customerName: existing.customer_name,
+        subtotalCents: existing.subtotal_cents,
+        taxCents: existing.tax_cents,
+        totalCents: existing.total_cents,
+        currency: existing.currency,
+        holdExpiresAt: existing.hold_expires_at,
+        stripeCheckoutSessionId: existing.stripe_checkout_session_id,
+      };
+    }
 
     const capacityResult = await client.query<{ occupied: string }>(
       `SELECT (
@@ -89,6 +127,7 @@ export async function reserveOrder(input: {
       totalCents,
       currency: "cad",
       holdExpiresAt,
+      stripeCheckoutSessionId: null,
     };
   } catch (error) {
     await client.query("ROLLBACK");

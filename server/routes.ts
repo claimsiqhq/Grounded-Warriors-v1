@@ -264,6 +264,18 @@ export async function registerRoutes(
         subtotalCents: baseCents,
         taxCents: hstCents,
       });
+      if (order.stripeCheckoutSessionId) {
+        const existingSession = await stripe.checkout.sessions.retrieve(
+          order.stripeCheckoutSessionId,
+        );
+        if (existingSession.status === "open" && existingSession.url) {
+          return res.json({ url: existingSession.url });
+        }
+        await failOrder(order.publicId);
+        return res.status(409).json({
+          error: "Your previous checkout expired. Please try again.",
+        });
+      }
 
       const lineItems = [
         {
@@ -321,6 +333,11 @@ export async function registerRoutes(
         );
         await attachStripeSession(order.publicId, session.id);
       } catch (error) {
+        if (session?.id) {
+          await stripe.checkout.sessions.expire(session.id).catch((expireError) => {
+            console.error("Failed to expire orphaned Checkout Session:", expireError);
+          });
+        }
         await failOrder(order.publicId);
         throw error;
       }
