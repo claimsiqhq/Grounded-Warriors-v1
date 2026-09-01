@@ -174,7 +174,9 @@ app.use((req, res, next) => {
     {
       port,
       host: "0.0.0.0",
-      reusePort: true,
+      // SO_REUSEPORT is supported on Render's Linux runtime but not by
+      // Node's TCP listener on macOS.
+      reusePort: process.platform !== "darwin",
     },
     () => {
       log(`serving on port ${port}`);

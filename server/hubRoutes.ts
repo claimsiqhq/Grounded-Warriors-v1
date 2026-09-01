@@ -61,6 +61,7 @@ import {
   signPhotoUrl,
   verifyPhotoObject,
 } from "./supabaseMedia";
+import { isValidBuddyPair } from "@shared/hubPolicy";
 
 const contentTypes = [
   "announcement",
@@ -818,12 +819,27 @@ export function registerHubRoutes(app: Express) {
     const access = await assertRetreatManager(req, res);
     if (!access) return;
     const input = z.object({ userOneId: z.string().min(1), userTwoId: z.string().min(1) }).safeParse(req.body);
-    if (!input.success || input.data.userOneId === input.data.userTwoId) return badRequest(res, "Choose two different members");
+    if (
+      !input.success ||
+      !isValidBuddyPair({
+        userOneId: input.data.userOneId,
+        userTwoId: input.data.userTwoId,
+        bothOptedIn: true,
+        eitherAlreadyMatched: false,
+      })
+    ) return badRequest(res, "Choose two different members");
     const optIns = await db
       .select({ userId: buddyOptIns.userId })
       .from(buddyOptIns)
       .where(and(eq(buddyOptIns.retreatId, access.retreatId), inArray(buddyOptIns.userId, [input.data.userOneId, input.data.userTwoId])));
-    if (optIns.length !== 2) return badRequest(res, "Both members must be opted in");
+    if (
+      !isValidBuddyPair({
+        userOneId: input.data.userOneId,
+        userTwoId: input.data.userTwoId,
+        bothOptedIn: optIns.length === 2,
+        eitherAlreadyMatched: false,
+      })
+    ) return badRequest(res, "Both members must be opted in");
     try {
       const match = await db.transaction(async (tx) => {
         await tx.execute(sql`select pg_advisory_xact_lock(${900000 + access.retreatId})`);

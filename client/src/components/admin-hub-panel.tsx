@@ -8,6 +8,7 @@ import {
   Clock3,
   Image,
   Loader2,
+  Pencil,
   Plus,
   RefreshCw,
   Sparkles,
@@ -40,8 +41,10 @@ interface ContentItem {
   description?: string;
   startsAt?: string;
   externalUrl?: string;
+  location?: string;
   phase?: string;
   daysAfter?: number;
+  sortOrder?: number;
   status?: string;
   caption?: string;
   url?: string;
@@ -68,6 +71,8 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
   const [numberValue, setNumberValue] = useState("30");
   const [userOne, setUserOne] = useState("");
   const [userTwo, setUserTwo] = useState("");
+  const [editingId, setEditingId] = useState<number | null>(null);
+  const [globalMode, setGlobalMode] = useState(false);
 
   useEffect(() => {
     if (retreatId === null && retreats[0]) setRetreatId(retreats[0].id);
@@ -77,6 +82,11 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
     queryKey: ["/api/hub/retreats", retreatId, "overview"],
     queryFn: async () => (await apiRequest("GET", `/api/hub/retreats/${retreatId}/overview`)).json(),
     enabled: retreatId !== null,
+  });
+  const globalQuery = useQuery<any>({
+    queryKey: ["/api/hub/manage/global"],
+    queryFn: async () => (await apiRequest("GET", "/api/hub/manage/global")).json(),
+    enabled: globalMode,
   });
   const buddyQuery = useQuery<any>({
     queryKey: ["/api/hub/manage/retreats", retreatId, "buddies"],
@@ -95,6 +105,7 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
     queryClient.invalidateQueries({ queryKey: ["/api/hub/manage/retreats", retreatId, "buddies"] });
     queryClient.invalidateQueries({ queryKey: ["/api/hub/retreats", retreatId, "photos"] });
     queryClient.invalidateQueries({ queryKey: ["/api/hub/manage/reports"] });
+    queryClient.invalidateQueries({ queryKey: ["/api/hub/manage/global"] });
   };
 
   const initializeMutation = useMutation({
@@ -104,7 +115,8 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
 
   const createMutation = useMutation({
     mutationFn: async () => {
-      if (!retreatId) throw new Error("Choose a retreat");
+      if (!retreatId && !globalMode) throw new Error("Choose a retreat");
+      const contentScope = globalMode ? "global" : retreatId;
       let payload: Record<string, unknown>;
       if (type === "announcement") payload = { title, body: details, isPinned: false, isPublished: true };
       else if (type === "resource") payload = { title, description: details, category: "guide", externalUrl: locationOrUrl, sortOrder: 0, isPublished: true };
@@ -112,10 +124,17 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
       else if (type === "event") payload = { title, description: details, location: locationOrUrl, meetingUrl: null, startsAt, endsAt: null };
       else if (type === "checklist") payload = { title, description: details, phase: "prepare", dueAt: null, sortOrder: Number(numberValue) || 0, isActive: true };
       else payload = { title, description: details, daysAfter: Number(numberValue), sortOrder: Number(numberValue), isActive: true };
-      await apiRequest("POST", `/api/hub/manage/${retreatId}/${type}`, payload);
+      await apiRequest(
+        editingId ? "PUT" : "POST",
+        editingId
+          ? `/api/hub/manage/${contentScope}/${type}/${editingId}`
+          : `/api/hub/manage/${contentScope}/${type}`,
+        payload,
+      );
     },
     onSuccess: () => {
       setTitle(""); setDetails(""); setLocationOrUrl(""); setStartsAt("");
+      setEditingId(null);
       invalidate();
       toast({ title: `${contentMeta[type].label} updated` });
     },
@@ -124,7 +143,7 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
 
   const deleteMutation = useMutation({
     mutationFn: ({ itemType, id }: { itemType: ContentType; id: number }) =>
-      apiRequest("DELETE", `/api/hub/manage/${retreatId}/${itemType}/${id}`),
+      apiRequest("DELETE", `/api/hub/manage/${globalMode ? "global" : retreatId}/${itemType}/${id}`),
     onSuccess: () => { invalidate(); toast({ title: "Item removed" }); },
   });
 
@@ -152,7 +171,7 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
   });
 
   const currentItems: ContentItem[] = useMemo(() => {
-    const data = overviewQuery.data;
+    const data = globalMode ? globalQuery.data : overviewQuery.data;
     if (!data) return [];
     return {
       announcement: data.announcements,
@@ -162,7 +181,7 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
       checklist: data.checklist,
       milestone: data.milestones,
     }[type] ?? [];
-  }, [overviewQuery.data, type]);
+  }, [globalMode, globalQuery.data, overviewQuery.data, type]);
 
   const selectedRetreat = retreats.find((retreat) => retreat.id === retreatId);
   const TypeIcon = contentMeta[type].icon;
@@ -182,9 +201,14 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
             <SelectContent>{retreats.map((retreat) => <SelectItem key={retreat.id} value={retreat.id.toString()}>{retreat.name} · {retreat.date}</SelectItem>)}</SelectContent>
           </Select>
         </div>
-        <Button variant="outline" onClick={() => initializeMutation.mutate()} disabled={initializeMutation.isPending}>
-          <RefreshCw className="mr-2 h-4 w-4" /> Initialize defaults
-        </Button>
+        <div className="flex flex-wrap gap-2">
+          <Button variant={globalMode ? "default" : "outline"} onClick={() => { setGlobalMode((value) => !value); setEditingId(null); if (type === "itinerary") setType("announcement"); }}>
+            <Sparkles className="mr-2 h-4 w-4" /> {globalMode ? "Managing alumni content" : "Manage alumni content"}
+          </Button>
+          <Button variant="outline" onClick={() => initializeMutation.mutate()} disabled={initializeMutation.isPending || globalMode}>
+            <RefreshCw className="mr-2 h-4 w-4" /> Initialize defaults
+          </Button>
+        </div>
       </div>
 
       <Tabs defaultValue="content">
@@ -197,9 +221,9 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
 
         <TabsContent value="content" className="space-y-6 pt-4">
           <div className="flex flex-wrap gap-2">
-            {(Object.keys(contentMeta) as ContentType[]).map((itemType) => {
+            {(Object.keys(contentMeta) as ContentType[]).filter((itemType) => !globalMode || itemType !== "itinerary").map((itemType) => {
               const Icon = contentMeta[itemType].icon;
-              return <Button key={itemType} variant={type === itemType ? "default" : "outline"} size="sm" onClick={() => setType(itemType)}><Icon className="mr-2 h-4 w-4" />{contentMeta[itemType].label}</Button>;
+              return <Button key={itemType} variant={type === itemType ? "default" : "outline"} size="sm" onClick={() => { setType(itemType); setEditingId(null); setTitle(""); setDetails(""); setLocationOrUrl(""); setStartsAt(""); }}><Icon className="mr-2 h-4 w-4" />{contentMeta[itemType].label}</Button>;
             })}
           </div>
           <Card>
@@ -211,7 +235,7 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
               {needsDate && <div className="space-y-2"><Label>Start date and time</Label><Input type="datetime-local" value={startsAt} onChange={(event) => setStartsAt(event.target.value)} /></div>}
               {needsNumber && <div className="space-y-2"><Label>{type === "milestone" ? "Days after retreat" : "Display order"}</Label><Input type="number" min="0" max={type === "milestone" ? 730 : 10000} value={numberValue} onChange={(event) => setNumberValue(event.target.value)} /></div>}
               <Button className="w-fit" onClick={() => createMutation.mutate()} disabled={createMutation.isPending || title.trim().length < 2 || (needsDate && !startsAt)}>
-                {createMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <Plus className="mr-2 h-4 w-4" />} Add item
+                {createMutation.isPending ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : editingId ? <Pencil className="mr-2 h-4 w-4" /> : <Plus className="mr-2 h-4 w-4" />} {editingId ? "Save changes" : "Add item"}
               </Button>
             </CardContent>
           </Card>
@@ -225,11 +249,21 @@ export function AdminHubPanel({ retreats }: { retreats: Retreat[] }) {
                     {item.startsAt && <p className="mt-2 text-xs text-primary">{new Date(item.startsAt).toLocaleString()}</p>}
                     {typeof item.daysAfter === "number" && <Badge className="mt-2">Day {item.daysAfter}</Badge>}
                   </div>
-                  <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate({ itemType: type, id: item.id })} aria-label={`Delete ${item.title}`}><Trash2 className="h-4 w-4" /></Button>
+                  <div className="flex gap-1">
+                    <Button variant="ghost" size="icon" onClick={() => {
+                      setEditingId(item.id);
+                      setTitle(item.title);
+                      setDetails(item.body || item.description || "");
+                      setLocationOrUrl(item.externalUrl || item.location || "");
+                      setStartsAt(item.startsAt ? new Date(item.startsAt).toISOString().slice(0, 16) : "");
+                      setNumberValue(String(item.daysAfter ?? item.sortOrder ?? 0));
+                    }} aria-label={`Edit ${item.title}`}><Pencil className="h-4 w-4" /></Button>
+                    <Button variant="ghost" size="icon" onClick={() => deleteMutation.mutate({ itemType: type, id: item.id })} aria-label={`Delete ${item.title}`}><Trash2 className="h-4 w-4" /></Button>
+                  </div>
                 </CardContent>
               </Card>
             ))}
-            {!currentItems.length && <p className="py-8 text-center text-sm text-muted-foreground">No {contentMeta[type].label.toLowerCase()} for {selectedRetreat?.name} yet.</p>}
+            {!currentItems.length && <p className="py-8 text-center text-sm text-muted-foreground">No {contentMeta[type].label.toLowerCase()} for {globalMode ? "the alumni community" : selectedRetreat?.name} yet.</p>}
           </div>
         </TabsContent>
 

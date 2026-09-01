@@ -3,6 +3,10 @@ import { and, eq, inArray } from "drizzle-orm";
 import { db } from "./db";
 import { retreatRegistrations, retreatStaff, type User } from "@shared/schema";
 import { isValidRetreatId } from "./retreats";
+import {
+  canAccessRetreatFromFacts,
+  canManageRetreatFromFacts,
+} from "@shared/hubPolicy";
 
 const ACCESS_PAYMENT_STATUSES = ["paid", "completed", "deposit_paid"];
 
@@ -44,15 +48,24 @@ export async function userHasPaidRetreat(userId: string, retreatId?: number) {
 }
 
 export async function userCanAccessRetreat(user: User, retreatId: number) {
-  return (
-    user.role === "admin" ||
-    (await userHasPaidRetreat(user.id, retreatId)) ||
-    (await userIsRetreatStaff(user.id, retreatId))
-  );
+  if (user.role === "admin") return true;
+  const [hasPaidRegistration, isAssignedStaff] = await Promise.all([
+    userHasPaidRetreat(user.id, retreatId),
+    userIsRetreatStaff(user.id, retreatId),
+  ]);
+  return canAccessRetreatFromFacts({
+    role: user.role,
+    hasPaidRegistration,
+    isAssignedStaff,
+  });
 }
 
 export async function userCanManageRetreat(user: User, retreatId: number) {
-  return user.role === "admin" || userIsRetreatStaff(user.id, retreatId);
+  if (user.role === "admin") return true;
+  return canManageRetreatFromFacts({
+    role: user.role,
+    isAssignedStaff: await userIsRetreatStaff(user.id, retreatId),
+  });
 }
 
 export async function requireAdmin(
