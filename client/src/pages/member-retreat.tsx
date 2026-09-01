@@ -168,10 +168,13 @@ export default function MemberRetreat() {
         contentType: "image/webp",
         byteSize: blob.size,
       }).then((response) => response.json());
+      const form = new FormData();
+      form.append("cacheControl", "3600");
+      form.append("", blob, "retreat-photo.webp");
       const uploaded = await fetch(upload.signedUrl, {
         method: "PUT",
-        headers: { "Content-Type": "image/webp" },
-        body: blob,
+        headers: { "x-upsert": "false" },
+        body: form,
       });
       if (!uploaded.ok) throw new Error("The photo upload did not complete");
       await apiRequest("POST", `/api/hub/retreats/${retreatId}/photos`, {

@@ -323,6 +323,23 @@ async function updateContent(
   }
 }
 
+async function getContentScope(type: ContentType, id: number) {
+  switch (type) {
+    case "announcement":
+      return (await db.select({ retreatId: hubAnnouncements.retreatId }).from(hubAnnouncements).where(eq(hubAnnouncements.id, id)).limit(1))[0];
+    case "itinerary":
+      return (await db.select({ retreatId: hubItineraryItems.retreatId }).from(hubItineraryItems).where(eq(hubItineraryItems.id, id)).limit(1))[0];
+    case "resource":
+      return (await db.select({ retreatId: hubResources.retreatId }).from(hubResources).where(eq(hubResources.id, id)).limit(1))[0];
+    case "event":
+      return (await db.select({ retreatId: hubEvents.retreatId }).from(hubEvents).where(eq(hubEvents.id, id)).limit(1))[0];
+    case "checklist":
+      return (await db.select({ retreatId: hubChecklistItems.retreatId }).from(hubChecklistItems).where(eq(hubChecklistItems.id, id)).limit(1))[0];
+    case "milestone":
+      return (await db.select({ retreatId: integrationMilestones.retreatId }).from(integrationMilestones).where(eq(integrationMilestones.id, id)).limit(1))[0];
+  }
+}
+
 async function deleteContent(type: ContentType, id: number) {
   switch (type) {
     case "announcement":
@@ -408,6 +425,15 @@ export function registerHubRoutes(app: Express) {
       db.select().from(hubEvents).where(isNull(hubEvents.retreatId)).orderBy(asc(hubEvents.startsAt)),
     ]);
     res.json({ announcements, resources, events });
+  });
+
+  app.get("/api/hub/resources", requireAuth, async (_req, res) => {
+    const resources = await db
+      .select()
+      .from(hubResources)
+      .where(and(isNull(hubResources.retreatId), eq(hubResources.isPublished, true)))
+      .orderBy(asc(hubResources.sortOrder), asc(hubResources.title));
+    res.json({ resources });
   });
 
   app.get("/api/hub/retreats/:retreatId/overview", requireAuth, async (req, res) => {
@@ -702,6 +728,17 @@ export function registerHubRoutes(app: Express) {
     res.json({ initialized: inserted });
   });
 
+  app.get("/api/hub/manage/global", requireAuth, requireAdmin, async (_req, res) => {
+    const [announcements, resources, events, checklist, milestones] = await Promise.all([
+      db.select().from(hubAnnouncements).where(isNull(hubAnnouncements.retreatId)).orderBy(desc(hubAnnouncements.createdAt)),
+      db.select().from(hubResources).where(isNull(hubResources.retreatId)).orderBy(asc(hubResources.sortOrder)),
+      db.select().from(hubEvents).where(isNull(hubEvents.retreatId)).orderBy(asc(hubEvents.startsAt)),
+      db.select().from(hubChecklistItems).where(isNull(hubChecklistItems.retreatId)).orderBy(asc(hubChecklistItems.sortOrder)),
+      db.select().from(integrationMilestones).where(isNull(integrationMilestones.retreatId)).orderBy(asc(integrationMilestones.sortOrder)),
+    ]);
+    res.json({ announcements, resources, events, checklist, milestones });
+  });
+
   app.post("/api/hub/manage/:scope/:type", requireAuth, async (req, res) => {
     try {
       const user = getSessionUser(req)!;
@@ -732,6 +769,8 @@ export function registerHubRoutes(app: Express) {
       if (scope === null ? user.role !== "admin" : !(await userCanManageRetreat(user, scope))) {
         return res.status(403).json({ error: "Not permitted" });
       }
+      const current = await getContentScope(type.data, id.data);
+      if (!current || current.retreatId !== scope) return res.status(404).json({ error: "Content not found" });
       const record = await updateContent(type.data, id.data, req.body);
       if (!record) return res.status(404).json({ error: "Content not found" });
       res.json({ record });
@@ -751,6 +790,8 @@ export function registerHubRoutes(app: Express) {
     if (scope === null ? user.role !== "admin" : !(await userCanManageRetreat(user, scope))) {
       return res.status(403).json({ error: "Not permitted" });
     }
+    const current = await getContentScope(type.data, id.data);
+    if (!current || current.retreatId !== scope) return res.status(404).json({ error: "Content not found" });
     await deleteContent(type.data, id.data);
     res.json({ success: true });
   });
@@ -869,6 +910,9 @@ export function registerHubRoutes(app: Express) {
     if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
       return res.status(403).json({ error: "Not permitted" });
     }
+    if (discussion.retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+      return res.status(403).json({ error: "Alumni access requires a completed registration" });
+    }
     const where = and(
       eq(discussionReactions.discussionId, discussion.id),
       eq(discussionReactions.userId, user.id),
@@ -909,6 +953,9 @@ export function registerHubRoutes(app: Express) {
     if (!discussion || discussion.deletedAt) return res.status(404).json({ error: "Discussion not found" });
     if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
       return res.status(403).json({ error: "Not permitted" });
+    }
+    if (discussion.retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+      return res.status(403).json({ error: "Alumni access requires a completed registration" });
     }
     await db.insert(discussionReports).values({
       discussionId: discussion.id,

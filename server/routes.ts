@@ -21,6 +21,7 @@ import {
   requireAdmin,
   userCanAccessRetreat,
   userCanManageRetreat,
+  userHasPaidRetreat,
 } from "./memberAccess";
 import { registerHubRoutes } from "./hubRoutes";
 import { db } from "./db";
@@ -395,6 +396,9 @@ export async function registerRoutes(
         }
         retreatId = parsed;
       }
+      if (retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+        return res.status(403).json({ error: "Alumni access requires a completed registration" });
+      }
 
       const discussions = await storage.getDiscussions(retreatId);
       res.json({ discussions });
@@ -420,6 +424,9 @@ export async function registerRoutes(
           return res.status(403).json({ error: "You don't have access to this retreat" });
         }
         retreatId = parsed;
+      }
+      if (retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+        return res.status(403).json({ error: "Alumni access requires a completed registration" });
       }
 
       const { userName } = getDisplayIdentity(req, user);
@@ -457,6 +464,9 @@ export async function registerRoutes(
       if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
         return res.status(403).json({ error: "You don't have access to this retreat" });
       }
+      if (discussion.retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+        return res.status(403).json({ error: "Alumni access requires a completed registration" });
+      }
       if (discussion.isHidden) {
         const canModerate =
           discussion.retreatId === null
@@ -484,6 +494,9 @@ export async function registerRoutes(
       if (!discussion) return res.status(404).json({ error: "Discussion not found" });
       if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
         return res.status(403).json({ error: "You don't have access to this retreat" });
+      }
+      if (discussion.retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+        return res.status(403).json({ error: "Alumni access requires a completed registration" });
       }
       if (discussion.isLocked) {
         return res.status(409).json({ error: "This discussion is closed to new replies" });
