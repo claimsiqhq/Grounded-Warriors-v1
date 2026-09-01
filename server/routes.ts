@@ -1,7 +1,7 @@
-import type { Express, Request, Response, NextFunction } from "express";
+import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema, insertCoachingInquirySchema, COACHING_STATUSES, type CoachingStatus } from "@shared/schema";
+import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema, insertCoachingInquirySchema, COACHING_STATUSES, type CoachingStatus, hubNotifications } from "@shared/schema";
 import { isFlodeskConfigured, upsertFlodeskSubscriber } from "./flodeskClient";
 import { fromZodError } from "zod-validation-error";
 import { getStripeClient } from "./stripeClient";
@@ -16,9 +16,17 @@ import {
   getPublicOrder,
   reserveOrder,
 } from "./payments";
+import {
+  getSessionUser,
+  requireAdmin,
+  userCanAccessRetreat,
+  userCanManageRetreat,
+} from "./memberAccess";
+import { registerHubRoutes } from "./hubRoutes";
+import { db } from "./db";
 
 async function getUserFromSession(req: Request) {
-  return req.dbUser || null;
+  return getSessionUser(req);
 }
 
 function getDisplayIdentity(req: Request, user: { email: string }) {
@@ -39,23 +47,6 @@ function getDisplayIdentity(req: Request, user: { email: string }) {
     email,
     userName: `${firstName} ${lastName}`.trim() || email || "Member",
   };
-}
-
-// Returns true if the user is allowed inside a specific retreat container.
-async function userCanAccessRetreat(user: { id: string; role: string }, retreatId: number) {
-  if (user.role === "admin") return true;
-  if (await storage.userHasRegistrationForRetreat(user.id, retreatId)) return true;
-  if (await storage.isUserRetreatStaff(user.id, retreatId)) return true;
-  return false;
-}
-
-// Express middleware: only admins may pass.
-async function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const user = await getUserFromSession(req);
-  if (!user) return res.status(401).json({ error: "Not authenticated" });
-  if (user.role !== "admin") return res.status(403).json({ error: "Admin only" });
-  (req as any).currentUser = user;
-  next();
 }
 
 // Public, indexable routes for the sitemap (keep in sync with client/src/App.tsx).
@@ -89,6 +80,8 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  registerHubRoutes(app);
+
   app.get("/robots.txt", (req, res) => {
     const baseUrl = getPublicBaseUrl(req);
     res.type("text/plain").send(
@@ -464,6 +457,15 @@ export async function registerRoutes(
       if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
         return res.status(403).json({ error: "You don't have access to this retreat" });
       }
+      if (discussion.isHidden) {
+        const canModerate =
+          discussion.retreatId === null
+            ? user.role === "admin"
+            : await userCanManageRetreat(user, discussion.retreatId);
+        if (!canModerate && discussion.userId !== user.id) {
+          return res.status(404).json({ error: "Discussion not found" });
+        }
+      }
       const replies = await storage.getRepliesForDiscussion(discussion.id);
       const retreat = discussion.retreatId !== null ? getRetreat(discussion.retreatId) : null;
       res.json({ discussion, replies, retreat });
@@ -483,6 +485,12 @@ export async function registerRoutes(
       if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
         return res.status(403).json({ error: "You don't have access to this retreat" });
       }
+      if (discussion.isLocked) {
+        return res.status(409).json({ error: "This discussion is closed to new replies" });
+      }
+      if (discussion.isHidden) {
+        return res.status(404).json({ error: "Discussion not found" });
+      }
 
       const { userName } = getDisplayIdentity(req, user);
 
@@ -494,6 +502,14 @@ export async function registerRoutes(
         userImage: null
       });
       const reply = await storage.createDiscussionReply(validatedData);
+      if (discussion.userId !== user.id) {
+        await db.insert(hubNotifications).values({
+          userId: discussion.userId,
+          type: "reply",
+          title: `${userName} replied to your post`,
+          href: `/member/discussions/${discussion.id}`,
+        });
+      }
       res.status(201).json({ reply });
     } catch (error: any) {
       if (error.name === "ZodError") {

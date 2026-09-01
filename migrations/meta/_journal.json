@@ -15,6 +15,13 @@
       "when": 1788205200000,
       "tag": "0001_payment_hardening",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1788239700000,
+      "tag": "0002_retreat_community_hub",
+      "breakpoints": true
     }
   ]
 }

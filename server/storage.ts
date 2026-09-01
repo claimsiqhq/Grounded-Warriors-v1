@@ -84,19 +84,29 @@ export class DatabaseStorage implements IStorage {
   }
 
   async getDiscussions(retreatId: number | null): Promise<Discussion[]> {
-    const where =
+    const scope =
       retreatId === null
         ? isNull(discussions.retreatId)
         : eq(discussions.retreatId, retreatId);
     return await db
       .select()
       .from(discussions)
-      .where(where)
-      .orderBy(desc(discussions.createdAt));
+      .where(
+        and(
+          scope,
+          isNull(discussions.deletedAt),
+          eq(discussions.isHidden, false),
+        ),
+      )
+      .orderBy(desc(discussions.isPinned), desc(discussions.createdAt))
+      .limit(50);
   }
 
   async getDiscussion(id: number): Promise<Discussion | undefined> {
-    const [discussion] = await db.select().from(discussions).where(eq(discussions.id, id));
+    const [discussion] = await db
+      .select()
+      .from(discussions)
+      .where(and(eq(discussions.id, id), isNull(discussions.deletedAt)));
     return discussion;
   }
 
