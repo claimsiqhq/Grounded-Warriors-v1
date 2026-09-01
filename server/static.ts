@@ -31,6 +31,9 @@ const CLIENT_ROUTES: RegExp[] = [
   /^\/member\/discussions\/\d+$/,
   /^\/member\/resources$/,
   /^\/member\/retreats\/\d+$/,
+  /^\/member\/alumni$/,
+  /^\/member\/activity$/,
+  /^\/member\/profile$/,
   /^\/admin$/,
 ];
 

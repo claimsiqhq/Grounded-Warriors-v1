@@ -36,6 +36,9 @@ const MemberDiscussions = lazy(() => import("@/pages/member-discussions"));
 const MemberDiscussionDetail = lazy(() => import("@/pages/member-discussion-detail"));
 const MemberResources = lazy(() => import("@/pages/member-resources"));
 const MemberRetreat = lazy(() => import("@/pages/member-retreat"));
+const MemberAlumni = lazy(() => import("@/pages/member-alumni"));
+const MemberActivity = lazy(() => import("@/pages/member-activity"));
+const MemberProfile = lazy(() => import("@/pages/member-profile"));
 const AdminPage = lazy(() => import("@/pages/admin"));
 
 const clerkPubKey = import.meta.env.VITE_CLERK_PUBLISHABLE_KEY;
@@ -207,6 +210,9 @@ function Router() {
         <Route path="/member/discussions/:id" component={MemberDiscussionDetail} />
         <Route path="/member/resources" component={MemberResources} />
         <Route path="/member/retreats/:id" component={MemberRetreat} />
+        <Route path="/member/alumni" component={MemberAlumni} />
+        <Route path="/member/activity" component={MemberActivity} />
+        <Route path="/member/profile" component={MemberProfile} />
         <Route path="/admin" component={AdminPage} />
         <Route component={NotFound} />
       </Switch>
