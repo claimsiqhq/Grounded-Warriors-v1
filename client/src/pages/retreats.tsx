@@ -22,7 +22,7 @@ export default function Retreats() {
     <Layout>
       <Seo
         title="Upcoming Expeditions | Grounded Warriors"
-        description="Upcoming Grounded Warriors events and expeditions — the Men's Dinner in Toronto, Train Breath & Plunge, the Marmora gathering, and backcountry trips. Spots are strictly limited."
+        description="Upcoming Grounded Warriors events and expeditions — the Men's Dinner in Toronto, Grounded Warriors Port Credit, the Marmora gathering, and international volunteer trips. Spots are strictly limited."
         path="/retreats"
       />
       <div className="pt-32 pb-20 bg-background min-h-screen">

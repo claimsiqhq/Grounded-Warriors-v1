@@ -156,12 +156,12 @@ export const retreats = [
   },
   {
     id: 7,
-    title: "GW Train, Breath & Plunge",
+    title: "Grounded Warriors — Port Credit",
     date: "Sat, Sep 12, 2026 · 6–9 AM",
-    location: "Toronto / Mississauga (details to follow)",
+    location: "Port Credit, Mississauga",
     image: dawnPlungeImg,
     depositAmount: 0,
-    fullAmount: 150,
+    fullAmount: 79,
     registrationOpen: true,
   },
   {

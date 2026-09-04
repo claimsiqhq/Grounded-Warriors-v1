@@ -18,7 +18,7 @@ const fadeIn = {
 
 // Keep in sync with server/retreats.ts (id 7 — canonical pricing lives there).
 const RETREAT_ID = 7;
-const TICKET_AMOUNT = 150;
+const TICKET_AMOUNT = 79;
 
 export default function EventPlunge() {
   const [showModal, setShowModal] = useState(false);
@@ -27,16 +27,16 @@ export default function EventPlunge() {
   const eventJsonLd = {
     "@context": "https://schema.org",
     "@type": "Event",
-    name: "GW Train, Breath & Plunge",
+    name: "Grounded Warriors — Port Credit",
     description:
-      "A three-hour dawn session of training, coached breathwork, and cold-water immersion with the Grounded Warriors crew in the Toronto/Mississauga area.",
+      "A morning of movement with SWAT Health, challenge, breathwork, cold immersion, connection, brotherhood, and a healthy meal in Port Credit.",
     startDate: "2026-09-12T06:00:00-04:00",
     endDate: "2026-09-12T09:00:00-04:00",
     eventAttendanceMode: "https://schema.org/OfflineEventAttendanceMode",
     location: {
       "@type": "Place",
-      name: "Toronto / Mississauga (details to follow)",
-      address: { "@type": "PostalAddress", addressLocality: "Toronto", addressRegion: "ON", addressCountry: "CA" },
+      name: "Port Credit, Mississauga",
+      address: { "@type": "PostalAddress", addressLocality: "Mississauga", addressRegion: "ON", addressCountry: "CA" },
     },
     organizer: { "@type": "Organization", name: "Grounded Warriors" },
     offers: {
@@ -50,8 +50,8 @@ export default function EventPlunge() {
   return (
     <Layout>
       <Seo
-        title="Train, Breath & Plunge — September 2026 | Grounded Warriors"
-        description="Three hours at dawn: training, coached breathwork, and cold-water immersion. Saturday, September 12, 2026, 6–9 AM, Toronto/Mississauga. $150 + HST."
+        title="Grounded Warriors Port Credit — September 12, 2026"
+        description="A morning of movement with SWAT Health, challenge, breathwork, cold immersion, connection, brotherhood, and a healthy meal. September 12 in Port Credit. $79 + HST."
         path="/events/train-breath-plunge"
         image={images.dawnPlunge}
         jsonLd={eventJsonLd}
@@ -77,10 +77,10 @@ export default function EventPlunge() {
             >
               <span className="text-primary text-sm uppercase tracking-[0.3em] mb-4 block font-semibold">Saturday, September 12, 2026 · 6–9 AM</span>
               <h1 className="font-serif text-5xl md:text-7xl font-bold text-white mb-6 tracking-tight">
-                Train, Breath &amp; Plunge
+                Grounded Warriors — Port Credit
               </h1>
               <p className="text-xl md:text-2xl text-muted-foreground mb-8 max-w-2xl mx-auto">
-                Three hours at dawn. Move hard, breathe with intent, and meet the cold water head-on — before most of the city is awake.
+                A morning of movement, challenge, breathwork, cold immersion, connection, brotherhood, and a healthy meal.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
@@ -99,7 +99,7 @@ export default function EventPlunge() {
         {/* Countdown */}
         <section className="py-16 bg-card border-y border-white/5">
           <div className="container px-6 mx-auto text-center">
-            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-6 font-semibold">First Plunge In</h2>
+            <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-6 font-semibold">The Morning Begins In</h2>
             <Countdown targetDate={eventDate} />
           </div>
         </section>
@@ -111,7 +111,7 @@ export default function EventPlunge() {
               {[
                 { icon: Calendar, label: "Date", value: "Sat, Sep 12, 2026" },
                 { icon: Clock, label: "Time", value: "6:00 – 9:00 AM" },
-                { icon: MapPin, label: "Location", value: "Toronto / Mississauga" },
+                { icon: MapPin, label: "Location", value: "Port Credit" },
                 { icon: Users, label: "Spots", value: "Limited" },
               ].map((item, i) => (
                 <motion.div key={i} {...fadeIn} className="text-center">
@@ -134,9 +134,9 @@ export default function EventPlunge() {
           <div className="container px-6 mx-auto">
             <motion.div {...fadeIn} className="text-center mb-16">
               <h2 className="text-primary text-sm uppercase tracking-[0.3em] mb-4 font-semibold">The Session</h2>
-              <h3 className="font-serif text-3xl md:text-5xl text-white mb-6">Three Hours, Three Disciplines</h3>
+              <h3 className="font-serif text-3xl md:text-5xl text-white mb-6">A Few Powerful Hours to Reset</h3>
               <p className="text-muted-foreground max-w-3xl mx-auto text-lg">
-                This is the core Grounded Warriors protocol — the same training, breathwork, and cold-water practice we run on every expedition, condensed into one dawn session close to home.
+                Step away from the noise and start the day with deliberate movement, a real challenge, and a crew ready to meet it together.
               </p>
             </motion.div>
 
@@ -144,18 +144,18 @@ export default function EventPlunge() {
               {[
                 {
                   icon: Dumbbell,
-                  title: "Train",
-                  desc: "A full-body outdoor session — bodyweight work, carries, and partner drills. Scaled to the man, never watered down. Come with a base of fitness and a willingness to push."
+                  title: "Move",
+                  desc: "A purposeful movement session with SWAT Health, built to challenge the body, sharpen focus, and set the tone for the morning."
                 },
                 {
                   icon: Wind,
-                  title: "Breathe",
-                  desc: "Coached breathwork protocols for cold exposure, exertion, and recovery — the same techniques used by free-divers and arctic swimmers. Tools you keep for life."
+                  title: "Breathe & Connect",
+                  desc: "Guided breathwork followed by space to slow down, connect honestly, and stand alongside other men without the usual noise."
                 },
                 {
                   icon: Droplets,
-                  title: "Plunge",
-                  desc: "Cold-water immersion with coached entry, controlled exposure, and proper re-warming. First-timers welcome — you'll be readier than you think."
+                  title: "Meet the Cold",
+                  desc: "Coached cold immersion with controlled entry and proper re-warming, followed by brotherhood and a healthy shared meal."
                 },
               ].map((item, i) => (
                 <motion.div
@@ -187,23 +187,23 @@ export default function EventPlunge() {
               {[
                 {
                   time: "6:00 AM",
-                  title: "Muster & Warm-Up",
-                  desc: "Arrive in the dark, meet the crew, and get moving. Mobility and activation while the sun comes up over the water."
+                  title: "Arrive & Connect",
+                  desc: "Meet the crew in Port Credit, settle in, and get ready to move as the city wakes up."
                 },
                 {
-                  time: "6:30 AM",
-                  title: "The Training Block",
-                  desc: "A hard outdoor session — carries, bodyweight strength, and partner work. Earn the water."
+                  time: "6:15 AM",
+                  title: "Movement with SWAT Health",
+                  desc: "A coached movement session designed to challenge the body and bring everyone fully into the morning."
                 },
                 {
-                  time: "7:45 AM",
+                  time: "7:15 AM",
                   title: "Breathwork & Plunge",
-                  desc: "Coached breathing protocols on the shoreline, then controlled cold-water immersion. Multiple rounds for those who want them."
+                  desc: "Guided breathwork followed by controlled cold immersion, with coaching and support from the crew."
                 },
                 {
-                  time: "8:30 AM",
-                  title: "Hot Drinks & Debrief",
-                  desc: "Re-warm, refuel, and close out the morning with the crew. Walk into your Saturday sharper than you've been all year."
+                  time: "8:15 AM",
+                  title: "Brotherhood & Healthy Meal",
+                  desc: "Re-warm, share a healthy meal, connect with the men around you, and step back into the day reset."
                 },
               ].map((item, i) => (
                 <motion.div
@@ -239,12 +239,12 @@ export default function EventPlunge() {
             <div className="max-w-2xl mx-auto">
               <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                 {[
-                  "Full 3-hour coached session",
-                  "Guided training block",
-                  "Breathwork instruction",
+                  "Movement session with SWAT Health",
+                  "Guided physical challenge",
+                  "Coached breathwork",
                   "Coached cold-water immersion",
-                  "Hot drinks and post-session fuel",
-                  "Gear list sent before the event",
+                  "Connection and brotherhood",
+                  "Healthy post-session meal",
                 ].map((item, i) => (
                   <motion.div
                     key={i}
@@ -280,10 +280,10 @@ export default function EventPlunge() {
           <div className="container px-6 mx-auto text-center">
             <motion.div {...fadeIn}>
               <h2 className="font-serif text-3xl md:text-5xl text-white mb-6">
-                Meet the Cold Head-On
+                Step Away From the Noise
               </h2>
               <p className="text-muted-foreground max-w-xl mx-auto mb-8 text-lg">
-                Three hours at dawn that will reset your whole week. Bring your nerve — we'll coach the rest.
+                A few powerful hours to move, breathe, meet the cold, connect, and reset.
               </p>
               <div className="flex flex-col sm:flex-row gap-4 justify-center">
                 <Button
@@ -313,7 +313,7 @@ export default function EventPlunge() {
           isOpen={showModal}
           onClose={() => setShowModal(false)}
           retreatId={RETREAT_ID}
-          retreatTitle="GW Train, Breath & Plunge"
+          retreatTitle="Grounded Warriors — Port Credit"
           depositAmount={0}
           fullAmount={TICKET_AMOUNT}
         />
