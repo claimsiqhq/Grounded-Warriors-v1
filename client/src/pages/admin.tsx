@@ -12,6 +12,8 @@ import { useToast } from "@/hooks/use-toast";
 import { ArrowLeft, Loader2, Shield, Trash2, UserPlus, Mail, Phone } from "lucide-react";
 import { formatDistanceToNow } from "date-fns";
 import type { CoachingInquiry, CoachingStatus } from "@shared/schema";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { AdminHubPanel } from "@/components/admin-hub-panel";
 
 interface Retreat {
   id: number;
@@ -333,27 +335,32 @@ export default function AdminPage() {
                 <ArrowLeft className="w-4 h-4" /> Back to Dashboard
               </Link>
               <span className="text-primary text-sm uppercase tracking-[0.3em] mb-2 block font-semibold">Admin</span>
-              <h1 className="font-serif text-4xl md:text-5xl font-bold text-white tracking-tight">Retreat Staff</h1>
+              <h1 className="font-serif text-4xl md:text-5xl font-bold text-white tracking-tight">Community Operations</h1>
               <p className="text-muted-foreground mt-3 max-w-2xl">
-                Designate which members get staff access to each retreat container. Staff can read and post inside the container alongside attendees.
+                Publish each retreat journey, connect participants, and keep every private container healthy.
               </p>
             </motion.div>
           </div>
         </section>
 
-        <section className="py-8 pb-12">
-          <div className="container px-6 mx-auto space-y-6">
+        <section className="py-8 pb-24">
+          <div className="container px-6 mx-auto">
             {retreatsQuery.isLoading ? (
               <Loader2 className="h-8 w-8 animate-spin text-primary mx-auto" />
             ) : (
-              retreats.map((r) => <StaffPanel key={r.id} retreat={r} />)
+              <Tabs defaultValue="hub">
+                <TabsList className="mb-8 h-auto flex-wrap">
+                  <TabsTrigger value="hub">Retreat hubs</TabsTrigger>
+                  <TabsTrigger value="staff">Staff access</TabsTrigger>
+                  <TabsTrigger value="coaching">Coaching inquiries</TabsTrigger>
+                </TabsList>
+                <TabsContent value="hub"><AdminHubPanel retreats={retreats} /></TabsContent>
+                <TabsContent value="staff" className="space-y-6">
+                  {retreats.map((r) => <StaffPanel key={r.id} retreat={r} />)}
+                </TabsContent>
+                <TabsContent value="coaching"><CoachingInquiriesPanel /></TabsContent>
+              </Tabs>
             )}
-          </div>
-        </section>
-
-        <section className="py-8 pb-24 border-t border-white/5">
-          <div className="container px-6 mx-auto">
-            <CoachingInquiriesPanel />
           </div>
         </section>
       </div>

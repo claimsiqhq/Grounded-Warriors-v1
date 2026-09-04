@@ -1,299 +1,141 @@
-import { motion } from "framer-motion";
-import { Layout } from "@/components/layout";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth, useClerk, useUser } from "@clerk/react";
 import { Link } from "wouter";
+import { useUser } from "@clerk/react";
+import {
+  ArrowRight,
+  Bell,
+  CalendarDays,
+  CircleUserRound,
+  Lock,
+  MessageCircle,
+  Mountain,
+  Users,
+} from "lucide-react";
+import { MemberShell } from "@/components/member-shell";
+import { Card, CardContent } from "@/components/ui/card";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Users, BookOpen, Calendar, Settings, MessageCircle, Loader2, Lock, Shield } from "lucide-react";
 
-const fadeIn = {
-  initial: { opacity: 0, y: 20 },
-  whileInView: { opacity: 1, y: 0 },
-  viewport: { once: true },
-  transition: { duration: 0.8 }
-};
+interface RetreatAccess {
+  id: number;
+  name: string;
+  date: string;
+  isPast: boolean;
+  isStaff: boolean;
+  isAttendee: boolean;
+}
 
 export default function MemberDashboard() {
-  const { isLoaded, isSignedIn } = useAuth();
   const { user } = useUser();
-  const { signOut } = useClerk();
-  const isAuthenticated = isLoaded && isSignedIn;
-
-  const { data: memberData } = useQuery<{
-    user: { id: string; role: "member" | "admin" };
-  }>({
-    queryKey: ["/api/me"],
-    enabled: isAuthenticated,
-  });
-
-  const { data: registrationsData } = useQuery<{
-    registrations: Array<{
-      id: number;
-      retreatName: string;
-      retreatDate: string;
-      paymentStatus: string;
-    }>;
-  }>({
-    queryKey: ["/api/member/registrations"],
-    enabled: isAuthenticated,
-  });
-
-  const { data: myRetreatsData } = useQuery<{
-    retreats: { id: number; name: string; date: string; isPast: boolean; isStaff: boolean; isAttendee: boolean }[];
-  }>({
+  const retreatsQuery = useQuery<{ retreats: RetreatAccess[] }>({
     queryKey: ["/api/member/my-retreats"],
-    enabled: isAuthenticated,
   });
-
-  if (!isLoaded) {
-    return (
-      <Layout>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      </Layout>
-    );
-  }
-
-  if (!isSignedIn || !user) {
-    return (
-      <Layout>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <Card className="max-w-md mx-auto">
-            <CardContent className="pt-6 text-center">
-              <h2 className="font-serif text-2xl text-white mb-4">Members Only</h2>
-              <p className="text-muted-foreground mb-6">Please log in to access the member portal.</p>
-              <Button asChild className="bg-primary">
-                <Link href="/sign-in" data-testid="button-login">Log In</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </Layout>
-    );
-  }
-
-  const email = user.primaryEmailAddress?.emailAddress;
-  const firstName = user.firstName || email?.split("@")[0] || "Warrior";
-  const registrations = registrationsData?.registrations ?? [];
+  const registrationsQuery = useQuery<{
+    registrations: Array<{ id: number; retreatName: string; retreatDate: string; paymentStatus: string }>;
+  }>({ queryKey: ["/api/member/registrations"] });
+  const activityQuery = useQuery<{ notifications: Array<{ id: number; readAt?: string }> }>({
+    queryKey: ["/api/hub/notifications"],
+    refetchInterval: 30_000,
+  });
+  const unread = activityQuery.data?.notifications.filter((item) => !item.readAt).length ?? 0;
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-background">
-        {/* Hero Section */}
-        <section className="pt-32 pb-16 bg-gradient-to-b from-card to-background">
-          <div className="container px-6 mx-auto">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-              className="flex flex-col sm:flex-row sm:items-center gap-4 sm:gap-6"
-            >
-              {user.imageUrl && (
-                <img 
-                  src={user.imageUrl}
-                  alt={firstName}
-                  className="w-20 h-20 rounded-full border-2 border-primary flex-shrink-0"
-                />
-              )}
-              <div>
-                <span className="text-primary text-sm uppercase tracking-[0.3em] mb-2 block font-semibold">Member Portal</span>
-                <h1 className="font-serif text-4xl md:text-5xl font-bold text-white tracking-tight">
-                  Welcome back, {firstName}
-                </h1>
-              </div>
-            </motion.div>
-          </div>
-        </section>
+    <MemberShell eyebrow="Member Portal">
+      <section className="border-b border-white/5 bg-[radial-gradient(circle_at_20%_20%,rgba(201,184,150,0.11),transparent_30%)]">
+        <div className="container mx-auto px-6 py-12 md:py-16">
+          <p className="text-xs uppercase tracking-[0.3em] text-primary">Your path</p>
+          <h1 className="mt-3 max-w-3xl font-serif text-4xl leading-tight text-white md:text-6xl">
+            Preparation, brotherhood, and the work that follows.
+          </h1>
+          <p className="mt-4 max-w-2xl text-muted-foreground">
+            Everything for your retreat journey lives here—from arrival details to the circle you carry home.
+          </p>
+        </div>
+      </section>
 
-        {/* Quick Actions */}
-        <section className="py-12">
-          <div className="container px-6 mx-auto">
-            <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
-              <motion.div {...fadeIn} transition={{ delay: 0.1 }}>
-                <Link href="/member/discussions">
-                  <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full" data-testid="card-discussions">
-                    <CardHeader className="flex flex-row items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <MessageCircle className="w-6 h-6 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">General Commons</CardTitle>
-                        <p className="text-sm text-muted-foreground">All members, broader sharing</p>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                </Link>
-              </motion.div>
-
-              <motion.div {...fadeIn} transition={{ delay: 0.2 }}>
-                <Link href="/member/resources">
-                  <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full" data-testid="card-resources">
-                    <CardHeader className="flex flex-row items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <BookOpen className="w-6 h-6 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">Resources</CardTitle>
-                        <p className="text-sm text-muted-foreground">Preparation guides</p>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                </Link>
-              </motion.div>
-
-              <motion.div {...fadeIn} transition={{ delay: 0.3 }}>
-                <Link href="/retreats">
-                  <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full" data-testid="card-retreats">
-                    <CardHeader className="flex flex-row items-center gap-4">
-                      <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                        <Calendar className="w-6 h-6 text-primary" />
-                      </div>
-                      <div>
-                        <CardTitle className="text-lg">Retreats</CardTitle>
-                        <p className="text-sm text-muted-foreground">Upcoming events</p>
-                      </div>
-                    </CardHeader>
-                  </Card>
-                </Link>
-              </motion.div>
-
-              {memberData?.user.role === "admin" ? (
-                <motion.div {...fadeIn} transition={{ delay: 0.4 }}>
-                  <Link href="/admin">
-                    <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full border-primary/30" data-testid="card-admin">
-                      <CardHeader className="flex flex-row items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Shield className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-lg">Admin</CardTitle>
-                          <p className="text-sm text-muted-foreground">Designate retreat staff</p>
-                        </div>
-                      </CardHeader>
-                    </Card>
-                  </Link>
-                </motion.div>
-              ) : (
-                <motion.div {...fadeIn} transition={{ delay: 0.4 }}>
-                  <Link href="/team">
-                    <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full" data-testid="card-team">
-                      <CardHeader className="flex flex-row items-center gap-4">
-                        <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                          <Users className="w-6 h-6 text-primary" />
-                        </div>
-                        <div>
-                          <CardTitle className="text-lg">Your Guides</CardTitle>
-                          <p className="text-sm text-muted-foreground">Meet the team</p>
-                        </div>
-                      </CardHeader>
-                    </Card>
-                  </Link>
-                </motion.div>
-              )}
+      <div className="container mx-auto space-y-12 px-6 py-10">
+        <section>
+          <div className="mb-5 flex items-end justify-between gap-4">
+            <div>
+              <h2 className="font-serif text-3xl text-white">My retreat containers</h2>
+              <p className="mt-1 text-sm text-muted-foreground">Private spaces for the cohorts you walked with.</p>
             </div>
+            <Button asChild variant="ghost"><Link href="/retreats">Explore retreats <ArrowRight className="ml-2 h-4 w-4" /></Link></Button>
           </div>
-        </section>
-
-        {/* My Retreat Containers */}
-        <section className="py-12">
-          <div className="container px-6 mx-auto">
-            <motion.div {...fadeIn}>
-              <h2 className="font-serif text-2xl text-white mb-2">My Retreat Containers</h2>
-              <p className="text-muted-foreground mb-6 text-sm">
-                Closed circles for the brothers who walked together. Tap to enter.
-              </p>
-              {myRetreatsData && (
-                <div data-testid="member-retreats-loaded">
-                  {myRetreatsData.retreats.length > 0 ? (
-                    <div className="grid md:grid-cols-2 gap-4">
-                      {myRetreatsData.retreats.map((r) => (
-                        <Link key={r.id} href={`/member/retreats/${r.id}`}>
-                          <Card className="hover:border-primary/50 transition-colors cursor-pointer h-full" data-testid={`card-container-${r.id}`}>
-                            <CardContent className="flex items-center justify-between py-5">
-                              <div className="flex items-center gap-4">
-                                <div className="w-12 h-12 rounded-full bg-primary/10 flex items-center justify-center">
-                                  <Lock className="w-5 h-5 text-primary" />
-                                </div>
-                                <div>
-                                  <h3 className="font-semibold text-white">{r.name}</h3>
-                                  <p className="text-sm text-muted-foreground">{r.date}</p>
-                                </div>
-                              </div>
-                              {r.isStaff && (
-                                <span className="px-2 py-1 rounded text-xs bg-primary/20 text-primary">Staff</span>
-                              )}
-                            </CardContent>
-                          </Card>
-                        </Link>
-                      ))}
-                    </div>
-                  ) : (
-                    <Card>
-                      <CardContent className="py-8 text-center">
-                        <Lock className="w-12 h-12 mx-auto mb-4 text-muted-foreground" />
-                        <p className="text-muted-foreground mb-2">No retreat containers yet.</p>
-                        <p className="text-sm text-muted-foreground mb-4">
-                          Containers open up after you register for a retreat or are designated as staff.
-                        </p>
-                        <Button asChild>
-                          <Link href="/retreats" data-testid="button-browse-retreats">Browse Retreats</Link>
-                        </Button>
-                      </CardContent>
-                    </Card>
-                  )}
-                </div>
-              )}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Registration receipts */}
-        {registrations.length > 0 && (
-          <section className="py-6">
-            <div className="container px-6 mx-auto">
-              <motion.div {...fadeIn}>
-                <h2 className="font-serif text-xl text-white mb-4">Registrations</h2>
-                <div className="grid gap-3">
-                  {registrations.map((reg) => (
-                    <Card key={reg.id} data-testid={`card-registration-${reg.id}`}>
-                      <CardContent className="flex items-center justify-between py-3">
-                        <div>
-                          <h3 className="font-medium text-white text-sm">{reg.retreatName}</h3>
-                          <p className="text-xs text-muted-foreground">{reg.retreatDate}</p>
+          {retreatsQuery.data?.retreats.length ? (
+            <div className="grid gap-5 md:grid-cols-2">
+              {retreatsQuery.data.retreats.map((retreat) => (
+                <Link key={retreat.id} href={`/member/retreats/${retreat.id}`}>
+                  <Card className="group h-full cursor-pointer overflow-hidden border-primary/10 bg-[linear-gradient(135deg,rgba(30,51,40,0.9),rgba(15,26,20,0.95))] transition-all hover:-translate-y-0.5 hover:border-primary/40">
+                    <CardContent className="flex items-center justify-between gap-5 p-6">
+                      <div className="flex items-center gap-4">
+                        <div className="flex h-12 w-12 items-center justify-center rounded-full border border-primary/20 bg-primary/10">
+                          <Mountain className="h-5 w-5 text-primary" />
                         </div>
-                        <span className={`px-2 py-1 rounded-full text-xs font-medium ${
-                          reg.paymentStatus === 'completed' ? 'bg-green-500/20 text-green-400' :
-                          reg.paymentStatus === 'pending' ? 'bg-yellow-500/20 text-yellow-400' :
-                          'bg-gray-500/20 text-gray-400'
-                        }`}>
-                          {reg.paymentStatus}
-                        </span>
-                      </CardContent>
-                    </Card>
-                  ))}
-                </div>
-              </motion.div>
+                        <div>
+                          <div className="flex items-center gap-2"><h3 className="font-serif text-xl text-white">{retreat.name}</h3>{retreat.isStaff && <Badge>Staff</Badge>}</div>
+                          <p className="mt-1 text-sm text-muted-foreground">{retreat.date}</p>
+                        </div>
+                      </div>
+                      <ArrowRight className="h-5 w-5 text-muted-foreground transition-transform group-hover:translate-x-1 group-hover:text-primary" />
+                    </CardContent>
+                  </Card>
+                </Link>
+              ))}
+            </div>
+          ) : (
+            <Card className="border-dashed">
+              <CardContent className="py-12 text-center">
+                <Lock className="mx-auto mb-4 h-9 w-9 text-primary/60" />
+                <h3 className="font-serif text-xl text-white">No retreat container yet</h3>
+                <p className="mt-2 text-sm text-muted-foreground">Your private hub opens after a paid registration or staff assignment.</p>
+              </CardContent>
+            </Card>
+          )}
+        </section>
+
+        <section className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+          {[
+            { href: "/member/alumni", title: "Alumni Commons", body: "Stay connected across cohorts", icon: Users },
+            { href: "/member/discussions", title: "General Commons", body: "Share and ask for support", icon: MessageCircle },
+            { href: "/member/activity", title: "Activity", body: unread ? `${unread} unread update${unread === 1 ? "" : "s"}` : "You’re all caught up", icon: Bell },
+            { href: "/member/profile", title: "My Profile", body: "Control visibility and consent", icon: CircleUserRound },
+          ].map(({ href, title, body, icon: Icon }) => (
+            <Link key={href} href={href}>
+              <Card className="h-full cursor-pointer transition-colors hover:border-primary/30">
+                <CardContent className="p-5">
+                  <Icon className="mb-4 h-6 w-6 text-primary" />
+                  <h3 className="font-semibold text-white">{title}</h3>
+                  <p className="mt-1 text-sm text-muted-foreground">{body}</p>
+                </CardContent>
+              </Card>
+            </Link>
+          ))}
+        </section>
+
+        {registrationsQuery.data?.registrations.length ? (
+          <section>
+            <h2 className="mb-4 font-serif text-2xl text-white">Registration receipts</h2>
+            <div className="grid gap-3 md:grid-cols-2">
+              {registrationsQuery.data.registrations.map((registration) => (
+                <Card key={registration.id}>
+                  <CardContent className="flex items-center justify-between gap-4 p-4">
+                    <div>
+                      <p className="font-medium text-white">{registration.retreatName}</p>
+                      <p className="mt-1 flex items-center gap-1 text-xs text-muted-foreground"><CalendarDays className="h-3 w-3" />{registration.retreatDate}</p>
+                    </div>
+                    <Badge variant="outline">{registration.paymentStatus}</Badge>
+                  </CardContent>
+                </Card>
+              ))}
             </div>
           </section>
-        )}
+        ) : null}
 
-        {/* Account Actions */}
-        <section className="py-12 pb-24">
-          <div className="container px-6 mx-auto">
-            <motion.div {...fadeIn}>
-              <Button
-                variant="outline"
-                onClick={() => signOut({ redirectUrl: "/" })}
-                data-testid="button-logout"
-              >
-                Log Out
-              </Button>
-            </motion.div>
-          </div>
-        </section>
+        <p className="pb-6 text-xs text-muted-foreground">
+          Signed in as {user?.primaryEmailAddress?.emailAddress}
+        </p>
       </div>
-    </Layout>
+    </MemberShell>
   );
 }

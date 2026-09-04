@@ -1,19 +1,33 @@
-import type { Express, Request, Response, NextFunction } from "express";
+import type { Express, Request } from "express";
 import { createServer, type Server } from "http";
 import { storage } from "./storage";
-import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema, insertCoachingInquirySchema, COACHING_STATUSES, type CoachingStatus } from "@shared/schema";
+import { insertContactSubmissionSchema, insertNewsletterSubscriptionSchema, insertDiscussionSchema, insertDiscussionReplySchema, insertRetreatRegistrationSchema, insertCoachingInquirySchema, COACHING_STATUSES, type CoachingStatus, hubNotifications } from "@shared/schema";
 import { isFlodeskConfigured, upsertFlodeskSubscriber } from "./flodeskClient";
 import { fromZodError } from "zod-validation-error";
-import { getUncachableStripeClient, getStripePublishableKey } from "./stripeClient";
+import { getStripeClient } from "./stripeClient";
 import { sendContactFormEmail, sendNewsletterWelcomeEmail, sendCoachingInquiryNotification, sendCoachingInquiryAutoReply } from "./sendgridClient";
 import { requireAuth } from "./middlewares/requireAuth";
-import { fulfillCheckoutSession } from "./fulfillment";
 import { publicFormLimiter } from "./rateLimit";
 import { z } from "zod";
 import { RETREATS, getRetreat, isValidRetreatId, getRetreatPrice } from "./retreats";
+import {
+  attachStripeSession,
+  failOrder,
+  getPublicOrder,
+  reserveOrder,
+} from "./payments";
+import {
+  getSessionUser,
+  requireAdmin,
+  userCanAccessRetreat,
+  userCanManageRetreat,
+  userHasPaidRetreat,
+} from "./memberAccess";
+import { registerHubRoutes } from "./hubRoutes";
+import { db } from "./db";
 
 async function getUserFromSession(req: Request) {
-  return req.dbUser || null;
+  return getSessionUser(req);
 }
 
 function getDisplayIdentity(req: Request, user: { email: string }) {
@@ -34,23 +48,6 @@ function getDisplayIdentity(req: Request, user: { email: string }) {
     email,
     userName: `${firstName} ${lastName}`.trim() || email || "Member",
   };
-}
-
-// Returns true if the user is allowed inside a specific retreat container.
-async function userCanAccessRetreat(user: { id: string; role: string }, retreatId: number) {
-  if (user.role === "admin") return true;
-  if (await storage.userHasRegistrationForRetreat(user.id, retreatId)) return true;
-  if (await storage.isUserRetreatStaff(user.id, retreatId)) return true;
-  return false;
-}
-
-// Express middleware: only admins may pass.
-async function requireAdmin(req: Request, res: Response, next: NextFunction) {
-  const user = await getUserFromSession(req);
-  if (!user) return res.status(401).json({ error: "Not authenticated" });
-  if (user.role !== "admin") return res.status(403).json({ error: "Admin only" });
-  (req as any).currentUser = user;
-  next();
 }
 
 // Public, indexable routes for the sitemap (keep in sync with client/src/App.tsx).
@@ -84,6 +81,8 @@ export async function registerRoutes(
   httpServer: Server,
   app: Express
 ): Promise<Server> {
+  registerHubRoutes(app);
+
   app.get("/robots.txt", (req, res) => {
     const baseUrl = getPublicBaseUrl(req);
     res.type("text/plain").send(
@@ -215,54 +214,11 @@ export async function registerRoutes(
     }
   });
 
-  app.get("/api/stripe/publishable-key", async (req, res) => {
-    try {
-      const key = await getStripePublishableKey();
-      res.json({ publishableKey: key });
-    } catch (error) {
-      console.error("Error getting Stripe publishable key:", error);
-      res.status(500).json({ error: "Failed to get Stripe configuration" });
-    }
-  });
-
-  app.get("/api/products", async (req, res) => {
-    try {
-      const rows = await storage.listProductsWithPrices();
-      
-      const productsMap = new Map();
-      for (const row of rows as any[]) {
-        if (!productsMap.has(row.product_id)) {
-          productsMap.set(row.product_id, {
-            id: row.product_id,
-            name: row.product_name,
-            description: row.product_description,
-            active: row.product_active,
-            metadata: row.product_metadata,
-            prices: []
-          });
-        }
-        if (row.price_id) {
-          productsMap.get(row.product_id).prices.push({
-            id: row.price_id,
-            unit_amount: row.unit_amount,
-            currency: row.currency,
-            active: row.price_active,
-          });
-        }
-      }
-
-      res.json({ data: Array.from(productsMap.values()) });
-    } catch (error) {
-      console.error("Error listing products:", error);
-      res.status(500).json({ error: "Failed to list products" });
-    }
-  });
-
   const checkoutSchema = z.object({
     customerEmail: z.string().email("A valid email is required").max(320),
     customerName: z.string().max(200).optional().default(""),
     retreatId: z.union([z.number(), z.string()]),
-    paymentType: z.enum(["deposit", "full"]),
+    paymentType: z.literal("full"),
   });
 
   app.post("/api/checkout", publicFormLimiter, async (req, res) => {
@@ -293,8 +249,27 @@ export async function registerRoutes(
       const baseCents = Math.round(baseAmount * 100);
       const hstCents = Math.round(baseCents * 0.13);
 
-      const stripe = await getUncachableStripeClient();
+      const stripe = getStripeClient();
       const baseUrl = getPublicBaseUrl(req);
+      const order = await reserveOrder({
+        retreatId: parsedId,
+        customerEmail: customerEmail.trim().toLowerCase(),
+        customerName: customerName.trim(),
+        subtotalCents: baseCents,
+        taxCents: hstCents,
+      });
+      if (order.stripeCheckoutSessionId) {
+        const existingSession = await stripe.checkout.sessions.retrieve(
+          order.stripeCheckoutSessionId,
+        );
+        if (existingSession.status === "open" && existingSession.url) {
+          return res.json({ url: existingSession.url });
+        }
+        await failOrder(order.publicId);
+        return res.status(409).json({
+          error: "Your previous checkout expired. Please try again.",
+        });
+      }
 
       const lineItems = [
         {
@@ -303,9 +278,7 @@ export async function registerRoutes(
             unit_amount: baseCents,
             product_data: {
               name: retreat.name,
-              description: paymentType === 'deposit'
-                ? 'Deposit to reserve your spot'
-                : 'Full retreat payment',
+              description: 'Full retreat payment',
             },
           },
           quantity: 1,
@@ -323,60 +296,81 @@ export async function registerRoutes(
         },
       ];
 
-      const session = await stripe.checkout.sessions.create({
-        payment_method_types: ['card'],
-        line_items: lineItems,
-        mode: 'payment',
-        success_url: `${baseUrl}/registration/success?session_id={CHECKOUT_SESSION_ID}`,
-        cancel_url: `${baseUrl}/retreats`,
-        customer_email: customerEmail,
-        metadata: {
-          customerName: customerName || '',
-          retreatId: String(parsedId),
-          retreatName: retreat.name,
-          paymentType,
-        },
-      });
+      let session;
+      try {
+        session = await stripe.checkout.sessions.create(
+          {
+            payment_method_types: ['card'],
+            line_items: lineItems,
+            mode: 'payment',
+            success_url: `${baseUrl}/registration/success?order=${order.publicId}`,
+            cancel_url: `${baseUrl}/retreats`,
+            customer_email: order.customerEmail,
+            client_reference_id: order.publicId,
+            expires_at: Math.floor(order.holdExpiresAt.getTime() / 1000),
+            metadata: {
+              orderId: order.publicId,
+              customerName: order.customerName,
+              retreatId: String(parsedId),
+              retreatName: retreat.name,
+              retreatDate: retreat.date,
+              paymentType,
+            },
+            payment_intent_data: {
+              metadata: {
+                orderId: order.publicId,
+                retreatId: String(parsedId),
+              },
+            },
+          },
+          { idempotencyKey: `checkout-${order.publicId}` },
+        );
+        await attachStripeSession(order.publicId, session.id);
+      } catch (error) {
+        if (session?.id) {
+          await stripe.checkout.sessions.expire(session.id).catch((expireError) => {
+            console.error("Failed to expire orphaned Checkout Session:", expireError);
+          });
+        }
+        await failOrder(order.publicId);
+        throw error;
+      }
 
       res.json({ url: session.url });
     } catch (error: any) {
       console.error("Error creating checkout session:", error);
-      res.status(500).json({ error: error.message || "Failed to create checkout session" });
+      const message =
+        error?.message === "This offering is sold out." ||
+        error?.message === "Online registration is not open for this offering."
+          ? error.message
+          : "Failed to create checkout session";
+      res.status(message.includes("sold out") ? 409 : message.includes("not open") ? 400 : 500)
+        .json({ error: message });
     }
   });
 
-  app.get("/api/checkout/session/:sessionId", async (req, res) => {
+  app.get("/api/checkout/order/:publicId", async (req, res) => {
     try {
-      const { sessionId } = req.params;
-      if (!/^cs_[a-zA-Z0-9_]+$/.test(sessionId)) {
-        return res.status(400).json({ error: "Invalid session id" });
+      const { publicId } = req.params;
+      if (!/^[a-f0-9]{32}$/.test(publicId)) {
+        return res.status(400).json({ error: "Invalid order id" });
       }
-      const stripe = await getUncachableStripeClient();
-      const session = await stripe.checkout.sessions.retrieve(sessionId);
-
-      // Backup fulfillment path: if the webhook hasn't landed yet (or isn't
-      // configured in this environment), create the registration now. The
-      // session came from Stripe via our secret key, so it's trusted.
-      try {
-        await fulfillCheckoutSession(session);
-      } catch (fulfillError) {
-        console.error("Success-page fulfillment error:", fulfillError);
-      }
-
-      // Only expose what the success page needs — never the raw session.
+      const order = await getPublicOrder(publicId);
+      if (!order) return res.status(404).json({ error: "Order not found" });
+      const retreat = getRetreat(order.retreat_id);
+      res.setHeader("Cache-Control", "no-store");
       res.json({
-        session: {
-          id: session.id,
-          payment_status: session.payment_status,
-          customer_email: session.customer_details?.email || session.customer_email,
-          amount_total: session.amount_total,
-          currency: session.currency,
-          retreatName: session.metadata?.retreatName || null,
+        order: {
+          id: order.public_id,
+          status: order.status,
+          amount_total: order.total_cents,
+          currency: order.currency,
+          retreatName: retreat?.name ?? null,
         },
       });
     } catch (error: any) {
-      console.error("Error retrieving checkout session:", error);
-      res.status(500).json({ error: "Failed to retrieve session" });
+      console.error("Error retrieving checkout order:", error);
+      res.status(500).json({ error: "Failed to retrieve order" });
     }
   });
 
@@ -401,6 +395,9 @@ export async function registerRoutes(
           return res.status(403).json({ error: "You don't have access to this retreat" });
         }
         retreatId = parsed;
+      }
+      if (retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+        return res.status(403).json({ error: "Alumni access requires a completed registration" });
       }
 
       const discussions = await storage.getDiscussions(retreatId);
@@ -427,6 +424,9 @@ export async function registerRoutes(
           return res.status(403).json({ error: "You don't have access to this retreat" });
         }
         retreatId = parsed;
+      }
+      if (retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+        return res.status(403).json({ error: "Alumni access requires a completed registration" });
       }
 
       const { userName } = getDisplayIdentity(req, user);
@@ -464,6 +464,18 @@ export async function registerRoutes(
       if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
         return res.status(403).json({ error: "You don't have access to this retreat" });
       }
+      if (discussion.retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+        return res.status(403).json({ error: "Alumni access requires a completed registration" });
+      }
+      if (discussion.isHidden) {
+        const canModerate =
+          discussion.retreatId === null
+            ? user.role === "admin"
+            : await userCanManageRetreat(user, discussion.retreatId);
+        if (!canModerate && discussion.userId !== user.id) {
+          return res.status(404).json({ error: "Discussion not found" });
+        }
+      }
       const replies = await storage.getRepliesForDiscussion(discussion.id);
       const retreat = discussion.retreatId !== null ? getRetreat(discussion.retreatId) : null;
       res.json({ discussion, replies, retreat });
@@ -483,6 +495,15 @@ export async function registerRoutes(
       if (discussion.retreatId !== null && !(await userCanAccessRetreat(user, discussion.retreatId))) {
         return res.status(403).json({ error: "You don't have access to this retreat" });
       }
+      if (discussion.retreatId === null && user.role !== "admin" && !(await userHasPaidRetreat(user.id))) {
+        return res.status(403).json({ error: "Alumni access requires a completed registration" });
+      }
+      if (discussion.isLocked) {
+        return res.status(409).json({ error: "This discussion is closed to new replies" });
+      }
+      if (discussion.isHidden) {
+        return res.status(404).json({ error: "Discussion not found" });
+      }
 
       const { userName } = getDisplayIdentity(req, user);
 
@@ -494,6 +515,14 @@ export async function registerRoutes(
         userImage: null
       });
       const reply = await storage.createDiscussionReply(validatedData);
+      if (discussion.userId !== user.id) {
+        await db.insert(hubNotifications).values({
+          userId: discussion.userId,
+          type: "reply",
+          title: `${userName} replied to your post`,
+          href: `/member/discussions/${discussion.id}`,
+        });
+      }
       res.status(201).json({ reply });
     } catch (error: any) {
       if (error.name === "ZodError") {

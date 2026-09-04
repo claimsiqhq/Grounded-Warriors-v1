@@ -1,237 +1,119 @@
 import { useState } from "react";
-import { motion } from "framer-motion";
-import { Layout } from "@/components/layout";
-import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
-import { useAuth, useUser } from "@clerk/react";
+import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
+import { formatDistanceToNow } from "date-fns";
+import { ArrowLeft, Flag, Heart, Loader2, Pencil, Send, Trash2, User } from "lucide-react";
+import { Link, useLocation, useParams } from "wouter";
+import { MemberShell } from "@/components/member-shell";
 import { apiRequest } from "@/lib/queryClient";
-import { Link, useParams } from "wouter";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { Badge } from "@/components/ui/badge";
 import { useToast } from "@/hooks/use-toast";
-import { ArrowLeft, Loader2, User, Send } from "lucide-react";
-import { formatDistanceToNow } from "date-fns";
 
 export default function MemberDiscussionDetail() {
-  const { isLoaded, isSignedIn } = useAuth();
-  const { user } = useUser();
-  const isAuthenticated = isLoaded && isSignedIn && !!user;
-  const { toast } = useToast();
+  const params = useParams<{ id: string }>();
+  const discussionId = Number(params.id);
   const queryClient = useQueryClient();
-  const params = useParams();
-  const discussionId = params.id;
-  const [replyContent, setReplyContent] = useState("");
+  const { toast } = useToast();
+  const [, setLocation] = useLocation();
+  const [reply, setReply] = useState("");
+  const [editing, setEditing] = useState(false);
+  const [editTitle, setEditTitle] = useState("");
+  const [editContent, setEditContent] = useState("");
 
-  const { data, isLoading, error } = useQuery({
+  const detailQuery = useQuery<any>({
     queryKey: ["/api/discussions", discussionId],
-    queryFn: async () => {
-      try {
-        const res = await apiRequest("GET", `/api/discussions/${discussionId}`);
-        return res.json();
-      } catch (error) {
-        const message = error instanceof Error ? error.message : "";
-        if (message.startsWith("403:")) throw new Error("forbidden");
-        if (message.startsWith("404:")) throw new Error("not_found");
-        throw error;
-      }
-    },
-    enabled: isAuthenticated && !!discussionId,
+    queryFn: async () => (await apiRequest("GET", `/api/discussions/${discussionId}`)).json(),
     retry: false,
+    refetchInterval: 30_000,
   });
+  const meQuery = useQuery<{ user: { id: string; role: string } }>({ queryKey: ["/api/me"] });
 
+  const refresh = () => queryClient.invalidateQueries({ queryKey: ["/api/discussions", discussionId] });
   const replyMutation = useMutation({
-    mutationFn: async (content: string) => {
-      const res = await apiRequest(
-        "POST",
-        `/api/discussions/${discussionId}/replies`,
-        { content },
-      );
-      return res.json();
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ["/api/discussions", discussionId] });
-      setReplyContent("");
-      toast({ title: "Reply posted!" });
-    },
-    onError: (error: Error) => {
-      toast({ title: "Error", description: error.message, variant: "destructive" });
-    },
+    mutationFn: () => apiRequest("POST", `/api/discussions/${discussionId}/replies`, { content: reply }),
+    onSuccess: () => { setReply(""); refresh(); },
+    onError: (error: Error) => toast({ title: "Could not reply", description: error.message, variant: "destructive" }),
+  });
+  const reactionMutation = useMutation({
+    mutationFn: (kind: string) => apiRequest("POST", `/api/discussions/${discussionId}/reactions`, { kind }),
+    onSuccess: () => toast({ title: "Response shared" }),
+  });
+  const editMutation = useMutation({
+    mutationFn: () => apiRequest("PUT", `/api/discussions/${discussionId}`, { title: editTitle, content: editContent }),
+    onSuccess: () => { setEditing(false); refresh(); toast({ title: "Post updated" }); },
+  });
+  const deleteMutation = useMutation({
+    mutationFn: () => apiRequest("DELETE", `/api/discussions/${discussionId}`),
+    onSuccess: () => setLocation(detailQuery.data?.retreat ? `/member/retreats/${detailQuery.data.retreat.id}` : "/member/discussions"),
+  });
+  const reportMutation = useMutation({
+    mutationFn: () => apiRequest("POST", `/api/discussions/${discussionId}/reports`, { reason: "Please review this post for community safety." }),
+    onSuccess: () => toast({ title: "Report sent privately to staff" }),
   });
 
-  if (!isLoaded || isLoading) {
-    return (
-      <Layout>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <Loader2 className="h-8 w-8 animate-spin text-primary" />
-        </div>
-      </Layout>
-    );
+  if (detailQuery.isLoading) {
+    return <MemberShell eyebrow="Community Conversation"><div className="flex min-h-[50vh] items-center justify-center"><Loader2 className="h-8 w-8 animate-spin text-primary" /></div></MemberShell>;
+  }
+  if (!detailQuery.data) {
+    return <MemberShell eyebrow="Community Conversation"><div className="container mx-auto max-w-3xl px-6 py-16"><Card><CardContent className="p-10 text-center text-muted-foreground">This conversation is unavailable or belongs to another private retreat.</CardContent></Card></div></MemberShell>;
   }
 
-  if (!isSignedIn || !user) {
-    return (
-      <Layout>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <Card className="max-w-md mx-auto">
-            <CardContent className="pt-6 text-center">
-              <h2 className="font-serif text-2xl text-white mb-4">Members Only</h2>
-              <p className="text-muted-foreground mb-6">Please log in to access the community.</p>
-              <Button asChild className="bg-primary">
-                <Link href="/sign-in" data-testid="button-login">Log In</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </Layout>
-    );
-  }
-
-  if (error) {
-    const msg = (error as Error).message;
-    return (
-      <Layout>
-        <div className="min-h-screen bg-background flex items-center justify-center">
-          <Card className="max-w-md mx-auto">
-            <CardContent className="pt-6 text-center">
-              <h2 className="font-serif text-2xl text-white mb-2">
-                {msg === "forbidden" ? "Closed Container" : "Not Found"}
-              </h2>
-              <p className="text-muted-foreground mb-6">
-                {msg === "forbidden"
-                  ? "This conversation lives inside a private retreat container you don't have access to."
-                  : "This discussion no longer exists."}
-              </p>
-              <Button asChild>
-                <Link href="/member">Back to Dashboard</Link>
-              </Button>
-            </CardContent>
-          </Card>
-        </div>
-      </Layout>
-    );
-  }
-
-  const { discussion, replies, retreat } = data || {};
+  const { discussion, replies, retreat } = detailQuery.data;
+  const owner = meQuery.data?.user.id === discussion.userId;
   const backHref = retreat ? `/member/retreats/${retreat.id}` : "/member/discussions";
-  const backLabel = retreat ? `Back to ${retreat.name}` : "Back to General Commons";
-
-  const handleReply = (e: React.FormEvent) => {
-    e.preventDefault();
-    if (replyContent.trim()) {
-      replyMutation.mutate(replyContent);
-    }
-  };
 
   return (
-    <Layout>
-      <div className="min-h-screen bg-background">
-        {/* Header */}
-        <section className="pt-32 pb-8 bg-gradient-to-b from-card to-background">
-          <div className="container px-6 mx-auto max-w-3xl">
-            <motion.div
-              initial={{ opacity: 0, y: 30 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 1 }}
-            >
-              <Link href={backHref} className="inline-flex items-center gap-2 text-muted-foreground hover:text-white mb-6" data-testid="link-back">
-                <ArrowLeft className="w-4 h-4" />
-                {backLabel}
-              </Link>
-              {retreat && (
-                <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-primary/10 text-primary text-xs uppercase tracking-wider mb-2">
-                  Private container · {retreat.name}
-                </div>
-              )}
-            </motion.div>
-          </div>
-        </section>
-
-        {/* Discussion */}
-        {discussion && (
-          <section className="pb-8">
-            <div className="container px-6 mx-auto max-w-3xl">
-              <Card>
-                <CardContent className="py-6">
-                  <div className="flex items-start gap-4">
-                    {discussion.userImage ? (
-                      <img src={discussion.userImage} alt={discussion.userName} className="w-12 h-12 rounded-full" />
-                    ) : (
-                      <div className="w-12 h-12 rounded-full bg-primary/20 flex items-center justify-center">
-                        <User className="w-6 h-6 text-primary" />
-                      </div>
-                    )}
-                    <div className="flex-1">
-                      <h1 className="font-serif text-2xl text-white mb-2">{discussion.title}</h1>
-                      <div className="flex items-center gap-4 text-sm text-muted-foreground mb-4">
-                        <span className="font-medium text-primary">{discussion.userName}</span>
-                        <span>{formatDistanceToNow(new Date(discussion.createdAt), { addSuffix: true })}</span>
-                      </div>
-                      <p className="text-muted-foreground whitespace-pre-wrap">{discussion.content}</p>
-                    </div>
+    <MemberShell eyebrow={retreat ? `Private Circle · ${retreat.name}` : "General Commons"}>
+      <div className="container mx-auto max-w-3xl px-6 py-10">
+        <Link href={backHref} className="mb-6 inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-white"><ArrowLeft className="h-4 w-4" /> Back to the circle</Link>
+        <Card className="border-primary/15">
+          <CardContent className="p-6">
+            <div className="flex items-start gap-4">
+              <div className="flex h-11 w-11 shrink-0 items-center justify-center rounded-full bg-primary/10"><User className="h-5 w-5 text-primary" /></div>
+              <div className="min-w-0 flex-1">
+                {editing ? (
+                  <div className="space-y-3">
+                    <Input value={editTitle} onChange={(event) => setEditTitle(event.target.value)} maxLength={160} />
+                    <Textarea value={editContent} onChange={(event) => setEditContent(event.target.value)} rows={6} maxLength={10000} />
+                    <div className="flex gap-2"><Button onClick={() => editMutation.mutate()}>Save</Button><Button variant="outline" onClick={() => setEditing(false)}>Cancel</Button></div>
                   </div>
-                </CardContent>
-              </Card>
-            </div>
-          </section>
-        )}
-
-        {/* Replies */}
-        <section className="pb-8">
-          <div className="container px-6 mx-auto max-w-3xl">
-            <h2 className="text-lg font-semibold text-white mb-4">{replies?.length || 0} Replies</h2>
-            
-            {replies?.length > 0 ? (
-              <div className="space-y-4 mb-8">
-                {replies.map((reply: any) => (
-                  <Card key={reply.id} data-testid={`card-reply-${reply.id}`}>
-                    <CardContent className="py-4">
-                      <div className="flex items-start gap-3">
-                        {reply.userImage ? (
-                          <img src={reply.userImage} alt={reply.userName} className="w-8 h-8 rounded-full" />
-                        ) : (
-                          <div className="w-8 h-8 rounded-full bg-primary/20 flex items-center justify-center">
-                            <User className="w-4 h-4 text-primary" />
-                          </div>
-                        )}
-                        <div className="flex-1">
-                          <div className="flex items-center gap-3 mb-1">
-                            <span className="text-sm font-medium text-white">{reply.userName}</span>
-                            <span className="text-xs text-muted-foreground">
-                              {formatDistanceToNow(new Date(reply.createdAt), { addSuffix: true })}
-                            </span>
-                          </div>
-                          <p className="text-muted-foreground text-sm whitespace-pre-wrap">{reply.content}</p>
-                        </div>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
+                ) : (
+                  <>
+                    <div className="flex flex-wrap items-center gap-2">{discussion.isPinned && <Badge>Pinned</Badge>}<h1 className="font-serif text-3xl text-white">{discussion.title}</h1></div>
+                    <p className="mt-2 text-xs text-muted-foreground">{discussion.userName} · {formatDistanceToNow(new Date(discussion.createdAt), { addSuffix: true })}{discussion.editedAt ? " · edited" : ""}</p>
+                    <p className="mt-5 whitespace-pre-wrap leading-relaxed text-muted-foreground">{discussion.content}</p>
+                  </>
+                )}
               </div>
-            ) : (
-              <p className="text-muted-foreground mb-8">No replies yet. Be the first to respond!</p>
+            </div>
+            {!editing && (
+              <div className="mt-6 flex flex-wrap gap-2 border-t border-white/5 pt-4">
+                {["support", "strength", "gratitude"].map((kind) => <Button key={kind} variant="ghost" size="sm" onClick={() => reactionMutation.mutate(kind)}><Heart className="mr-2 h-4 w-4" />{kind}</Button>)}
+                {owner && <Button variant="ghost" size="sm" onClick={() => { setEditTitle(discussion.title); setEditContent(discussion.content); setEditing(true); }}><Pencil className="mr-2 h-4 w-4" />Edit</Button>}
+                {owner && <Button variant="ghost" size="sm" onClick={() => deleteMutation.mutate()}><Trash2 className="mr-2 h-4 w-4" />Delete</Button>}
+                {!owner && <Button variant="ghost" size="sm" onClick={() => reportMutation.mutate()}><Flag className="mr-2 h-4 w-4" />Report</Button>}
+              </div>
             )}
+          </CardContent>
+        </Card>
 
-            {/* Reply Form */}
-            <Card>
-              <CardContent className="py-4">
-                <form onSubmit={handleReply} className="flex gap-3">
-                  <Textarea
-                    placeholder="Write a reply..."
-                    value={replyContent}
-                    onChange={(e) => setReplyContent(e.target.value)}
-                    rows={2}
-                    className="bg-background flex-1"
-                    data-testid="input-reply"
-                  />
-                  <Button type="submit" disabled={replyMutation.isPending} className="self-end" data-testid="button-submit-reply">
-                    {replyMutation.isPending ? <Loader2 className="w-4 h-4 animate-spin" /> : <Send className="w-4 h-4" />}
-                  </Button>
-                </form>
-              </CardContent>
-            </Card>
-          </div>
-        </section>
+        <h2 className="mb-4 mt-9 font-serif text-2xl text-white">{replies.length} {replies.length === 1 ? "reply" : "replies"}</h2>
+        <div className="space-y-3">
+          {replies.map((item: any) => (
+            <Card key={item.id} className="bg-card/50"><CardContent className="p-5"><div className="flex items-start gap-3"><User className="mt-1 h-4 w-4 text-primary" /><div><p className="text-sm font-medium text-white">{item.userName}</p><p className="mt-1 whitespace-pre-wrap text-sm text-muted-foreground">{item.content}</p><p className="mt-2 text-xs text-muted-foreground">{formatDistanceToNow(new Date(item.createdAt), { addSuffix: true })}</p></div></div></CardContent></Card>
+          ))}
+        </div>
+
+        <Card className="mt-6">
+          <CardContent className="flex gap-3 p-4">
+            <Textarea value={reply} onChange={(event) => setReply(event.target.value)} placeholder={discussion.isLocked ? "This conversation is closed." : "Write a thoughtful reply…"} disabled={discussion.isLocked} maxLength={5000} rows={3} />
+            <Button size="icon" className="shrink-0 self-end" disabled={!reply.trim() || replyMutation.isPending || discussion.isLocked} onClick={() => replyMutation.mutate()}><Send className="h-4 w-4" /></Button>
+          </CardContent>
+        </Card>
       </div>
-    </Layout>
+    </MemberShell>
   );
 }

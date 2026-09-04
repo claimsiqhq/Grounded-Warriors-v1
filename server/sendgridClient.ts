@@ -112,7 +112,7 @@ export async function sendNewsletterWelcomeEmail(data: {
   const { client, fromEmail } = await getUncachableSendGridClient();
 
   const baseUrl = getPublicBaseUrl();
-  const registerLink = `${baseUrl}/login?mode=register&email=${encodeURIComponent(data.email)}`;
+  const registerLink = `${baseUrl}/sign-up?email=${encodeURIComponent(data.email)}`;
   const retreatsLink = `${baseUrl}/retreats`;
   const commonsLink = `${baseUrl}/member/discussions`;
 
@@ -417,7 +417,7 @@ export async function sendRetreatConfirmationEmail(data: {
   const baseUrl = getPublicBaseUrl();
   const portalLink = data.hasAccount
     ? `${baseUrl}/member`
-    : `${baseUrl}/login?mode=register&email=${encodeURIComponent(data.email)}`;
+    : `${baseUrl}/sign-up?email=${encodeURIComponent(data.email)}`;
   const firstName = escapeHtml((data.name || "").split(/\s+/)[0] || "Brother");
   const paymentLine =
     data.paymentType === "deposit"

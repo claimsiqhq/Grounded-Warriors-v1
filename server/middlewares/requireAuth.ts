@@ -69,6 +69,16 @@ export async function requireAuth(
       return res.status(401).json({ error: "Unable to resolve member email" });
     }
 
+    // Reuse preserved Replit accounts by their verified Clerk email. Their
+    // legacy IDs remain stable so registrations and roles stay attached.
+    if (!dbUser) {
+      [dbUser] = await db
+        .select()
+        .from(users)
+        .where(eq(users.email, email))
+        .limit(1);
+    }
+
     if (!dbUser) {
       const [inserted] = await db
         .insert(users)

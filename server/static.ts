@@ -10,6 +10,7 @@ const CLIENT_ROUTES: RegExp[] = [
   /^\/experience$/,
   /^\/retreats$/,
   /^\/retreats\/marmora$/,
+  /^\/retreats\/costa-rica-volunteer-trip$/,
   /^\/retreats\/equinox-gathering$/,
   /^\/retreats\/winter-descent$/,
   /^\/retreats\/spring-awakening$/,
@@ -22,12 +23,17 @@ const CLIENT_ROUTES: RegExp[] = [
   /^\/contact$/,
   /^\/coaching$/,
   /^\/registration\/success$/,
+  /^\/sign-in(?:\/.*)?$/,
+  /^\/sign-up(?:\/.*)?$/,
   /^\/login$/,
   /^\/member$/,
   /^\/member\/discussions$/,
   /^\/member\/discussions\/\d+$/,
   /^\/member\/resources$/,
   /^\/member\/retreats\/\d+$/,
+  /^\/member\/alumni$/,
+  /^\/member\/activity$/,
+  /^\/member\/profile$/,
   /^\/admin$/,
 ];
 
@@ -58,7 +64,7 @@ export function serveStatic(app: Express) {
     }),
   );
 
-  app.use("*", (req, res) => {
+  app.use((req, res) => {
     const status = isKnownClientRoute(req.baseUrl || req.originalUrl.split("?")[0]) ? 200 : 404;
     res
       .status(status)
